@@ -49,7 +49,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Define protected routes that require authentication
-  const protectedRoutes = ['/dashboard', '/my-assessments', '/account', '/settings', '/billing'];
+  const protectedRoutes = ['/my-assessments', '/account', '/billing', '/chat'];
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   );
@@ -62,7 +62,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect to dashboard if already logged in and accessing auth pages
+  // Redirect to my-assessments if already logged in and accessing auth pages
   const authRoutes = ['/login', '/register'];
   const isAuthRoute = authRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
@@ -70,7 +70,7 @@ export async function updateSession(request: NextRequest) {
 
   if (isAuthRoute && user) {
     const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
+    url.pathname = '/my-assessments';
     return NextResponse.redirect(url);
   }
 

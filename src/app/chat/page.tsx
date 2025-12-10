@@ -52,11 +52,12 @@ You are not alone, and help is available.`,
 };
 
 export default function ChatPage() {
-  const { isEmergency, hasSuicidalIdeation, riskLevel } = useAssessmentStore();
+  const { isEmergency, hasSuicidalIdeation, riskLevel, userId } = useAssessmentStore();
 
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId] = useState(() => crypto.randomUUID());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Check if chat should be blocked
@@ -85,34 +86,47 @@ export default function ChatPage() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = input.trim();
     setInput('');
     setIsLoading(true);
 
     try {
-      // In production, this would call the AI API with RAG
-      // const response = await fetch('/api/v1/chat', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ message: input, context: assessmentContext }),
-      // });
+      // Build conversation history for context
+      const conversationHistory = messages
+        .filter(m => m.role !== 'system')
+        .slice(-6)
+        .map(m => ({ role: m.role, content: m.content }));
 
-      // Mock AI response
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch('/api/v1/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: currentInput,
+          sessionId: sessionId || crypto.randomUUID(),
+          conversationHistory,
+        }),
+      });
 
-      const mockResponses = [
-        "Thank you for sharing that with me. It sounds like you're going through a challenging time. Can you tell me more about what you're experiencing?",
-        "I understand how difficult this can be. Remember that it's okay to feel this way, and seeking help is a sign of strength. Would you like me to share some coping strategies that might help?",
-        "That's a very common experience, and you're not alone in feeling this way. Have you considered speaking with a mental health professional about these feelings?",
-        "I hear you. It takes courage to talk about these things. Based on your situation, I'd recommend trying some relaxation techniques. Would you like me to guide you through one?",
-      ];
+      const data = await response.json();
 
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: mockResponses[Math.floor(Math.random() * mockResponses.length)],
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
+      if (data.blocked) {
+        // Show crisis resources if chat is blocked
+        const systemMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'system',
+          content: data.response,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, systemMessage]);
+      } else {
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: data.response || data.fallbackResponse,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      }
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),

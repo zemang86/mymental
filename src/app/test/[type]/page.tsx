@@ -104,10 +104,34 @@ export default function DetailedAssessmentPage() {
     // Calculate score
     const result = calculateAssessmentScore(type, answers);
 
-    // In production, save to API
-    // await fetch('/api/v1/assessment/detailed', { ... });
+    // Save to database if user is logged in
+    if (userId) {
+      try {
+        const response = await fetch('/api/v1/assessment/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type,
+            score: result.score,
+            maxScore: instrument.scoring.maxScore,
+            severity: result.severity,
+            answers,
+          }),
+        });
 
-    // Navigate to results with state
+        if (response.ok) {
+          const data = await response.json();
+          // Navigate to results with assessment ID for retrieval
+          router.push(`/test/${type}/results?id=${data.assessmentId}&score=${result.score}&severity=${result.severity}`);
+          return;
+        }
+      } catch (error) {
+        console.error('Error saving assessment:', error);
+        // Continue to show results even if save fails
+      }
+    }
+
+    // Navigate to results (for non-logged in users or if save fails)
     router.push(`/test/${type}/results?score=${result.score}&severity=${result.severity}`);
   };
 

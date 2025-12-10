@@ -1,0 +1,21 @@
+I see! The detailed assessment (/test/[type]/page.tsx) has a TODO at line 107-108:
+  // In production, save to API
+  // await fetch('/api/v1/assessment/detailed', { ... });
+
+  The results page works fine - it reads score/severity from URL params. But the results are not saved to the database yet.
+
+  MVP Gaps Summary
+
+  | Gap                                    | Priority | Effort |
+  |----------------------------------------|----------|--------|
+  | Save detailed assessment results to DB | Critical | Small  |
+  | About page                             | Low      | Small  |
+  | Resources page                         | Low      | Small  |
+  | OG Image                               | Medium   | Small  |
+
+  Want me to:
+  1. Fix the critical gap - Wire up saving assessment results to Supabase
+  2. Create the missing pages - About + Resources
+  3. Both
+
+  The fix for saving to DB is quick - just need to uncomment and implement that API call in the assessment page.

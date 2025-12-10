@@ -8,6 +8,7 @@ import { Mail, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle } from 'lucide-r
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, GlassInput } from '@/components/ui';
 import { useAssessmentStore } from '@/stores/assessment-store';
+import { createClient } from '@/lib/supabase/client';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -64,18 +65,33 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      // In production, this would call Supabase auth
-      // const { data, error } = await supabase.auth.signUp({
-      //   email,
-      //   password,
-      //   options: {
-      //     data: { name, session_id: sessionId },
-      //   },
-      // });
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            session_id: sessionId,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
 
-      // Mock registration - show verification step
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setStep('verify');
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      // If email confirmation is required, show verify step
+      if (data.user && !data.session) {
+        setStep('verify');
+      } else if (data.user && data.session) {
+        // Auto-confirmed (dev mode or email confirmation disabled)
+        setUser(data.user.id, data.user.email || email);
+        router.push('/my-assessments');
+        router.refresh();
+      }
     } catch (err) {
       setError('Registration failed. Please try again.');
     } finally {
@@ -93,23 +109,49 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      // In production, this would verify the OTP
-      // const { data, error } = await supabase.auth.verifyOtp({
-      //   email,
-      //   token: otp,
-      //   type: 'email',
-      // });
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'email',
+      });
 
-      // Mock verification
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-      // Set user in store
-      setUser('mock-user-id', email);
+      if (data.user) {
+        // Set user in store
+        setUser(data.user.id, data.user.email || email);
 
-      // Redirect to results or dashboard
-      router.push('/my-assessments');
+        // Redirect to results or dashboard
+        router.push('/my-assessments');
+        router.refresh();
+      }
     } catch (err) {
       setError('Invalid verification code');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('Failed to resend code');
     } finally {
       setIsLoading(false);
     }
@@ -174,7 +216,12 @@ export default function RegisterPage() {
 
                   <p className="text-center text-sm text-neutral-500">
                     Didn&apos;t receive the code?{' '}
-                    <button className="text-primary-600 font-medium hover:underline">
+                    <button
+                      type="button"
+                      onClick={handleResendOTP}
+                      disabled={isLoading}
+                      className="text-primary-600 font-medium hover:underline disabled:opacity-50"
+                    >
                       Resend
                     </button>
                   </p>

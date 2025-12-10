@@ -208,7 +208,11 @@ export default function PreliminaryResultsPage() {
                           )}
                         </div>
                       </div>
-                      <GlassButton variant="outline" size="sm">
+                      <GlassButton
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push(`/test/${condition}`)}
+                      >
                         Take a Test
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </GlassButton>
@@ -256,6 +260,7 @@ export default function PreliminaryResultsPage() {
               <GlassButton
                 variant="primary"
                 size="lg"
+                onClick={() => router.push('/my-assessments')}
                 rightIcon={<ArrowRight className="w-5 h-5" />}
               >
                 See My Assessment

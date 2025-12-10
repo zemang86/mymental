@@ -1,16 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, GlassInput } from '@/components/ui';
 import { useAssessmentStore } from '@/stores/assessment-store';
+import { createClient } from '@/lib/supabase/client';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/my-assessments';
   const { setUser } = useAssessmentStore();
 
   const [email, setEmail] = useState('');
@@ -31,20 +34,25 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // In production, this would call Supabase auth
-      // const { data, error } = await supabase.auth.signInWithPassword({
-      //   email,
-      //   password,
-      // });
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      // Mock login for development
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-      // Set user in store (mock)
-      setUser('mock-user-id', email);
+      if (data.user) {
+        // Set user in store
+        setUser(data.user.id, data.user.email || email);
 
-      // Redirect to dashboard or previous page
-      router.push('/my-assessments');
+        // Redirect to requested page or default to my-assessments
+        router.push(redirectTo);
+        router.refresh();
+      }
     } catch (err) {
       setError('Invalid email or password');
     } finally {
@@ -53,9 +61,21 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
-    // In production, this would call Supabase OAuth
-    // await supabase.auth.signInWithOAuth({ provider: 'google' });
-    alert('Google login coming soon!');
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('Failed to connect with Google');
+    }
   };
 
   return (
@@ -203,5 +223,38 @@ export default function LoginPage() {
 
       <Footer />
     </div>
+  );
+}
+
+// Loading fallback for the form
+function LoginFormSkeleton() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 pt-24 pb-12">
+        <div className="mx-auto max-w-md px-4">
+          <div className="border bg-white/70 dark:bg-neutral-900/70 border-white/20 dark:border-neutral-700/30 backdrop-blur-lg p-6 rounded-2xl">
+            <div className="animate-pulse space-y-6">
+              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2 mx-auto" />
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4 mx-auto" />
+              <div className="space-y-4 mt-8">
+                <div className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded-xl" />
+                <div className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded-xl" />
+                <div className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded-xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFormSkeleton />}>
+      <LoginForm />
+    </Suspense>
   );
 }
