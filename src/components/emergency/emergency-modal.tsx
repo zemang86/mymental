@@ -1,0 +1,154 @@
+'use client';
+
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertTriangle, Phone, Heart, ExternalLink } from 'lucide-react';
+import { GlassButton } from '@/components/ui';
+import { MALAYSIA_HOTLINES } from '@/lib/constants/hotlines';
+
+interface EmergencyModalProps {
+  isOpen: boolean;
+  onClose?: () => void;
+  canClose?: boolean; // For imminent risk, cannot close
+}
+
+export function EmergencyModal({
+  isOpen,
+  onClose,
+  canClose = false,
+}: EmergencyModalProps) {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  // Prevent escape key for imminent risk
+  useEffect(() => {
+    if (!canClose) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && onClose) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [canClose, onClose]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Overlay */}
+          <motion.div
+            className="fixed inset-0 z-50 bg-red-900/50 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={canClose ? onClose : undefined}
+          />
+
+          {/* Modal */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              className="relative w-full max-w-lg rounded-3xl bg-white dark:bg-neutral-900 border-2 border-red-300 shadow-2xl overflow-hidden"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Red header */}
+              <div className="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+                <div className="flex items-center gap-3 text-white">
+                  <AlertTriangle className="w-8 h-8" />
+                  <div>
+                    <h2 className="text-xl font-bold">We Care About You</h2>
+                    <p className="text-red-100 text-sm">
+                      Please reach out for support
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-6">
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
+                  <Heart className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-800 dark:text-red-200">
+                    Based on your responses, we want to make sure you have access to
+                    immediate support. You are not alone, and help is available 24/7.
+                  </p>
+                </div>
+
+                {/* Hotlines */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-neutral-900 dark:text-white">
+                    Call for immediate help:
+                  </h3>
+
+                  {MALAYSIA_HOTLINES.slice(0, 3).map((hotline) => (
+                    <a
+                      key={hotline.number}
+                      href={`tel:${hotline.number.replace(/\s|-/g, '')}`}
+                      className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-primary-400 transition-colors group"
+                    >
+                      <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full group-hover:bg-primary-200 transition-colors">
+                        <Phone className="w-5 h-5 text-primary-600" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-neutral-900 dark:text-white">
+                          {hotline.name}
+                        </div>
+                        <div className="text-lg font-bold text-primary-600">
+                          {hotline.number}
+                        </div>
+                        <div className="text-xs text-neutral-500">
+                          {hotline.available}
+                        </div>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-neutral-400" />
+                    </a>
+                  ))}
+                </div>
+
+                {/* Actions */}
+                <div className="space-y-3">
+                  <a href="/emergency">
+                    <GlassButton variant="danger" className="w-full">
+                      <Phone className="w-4 h-4" />
+                      View All Emergency Resources
+                    </GlassButton>
+                  </a>
+
+                  {canClose && onClose && (
+                    <GlassButton
+                      variant="secondary"
+                      className="w-full"
+                      onClick={onClose}
+                    >
+                      I understand, continue
+                    </GlassButton>
+                  )}
+                </div>
+
+                {!canClose && (
+                  <p className="text-center text-sm text-neutral-500">
+                    Please call one of the hotlines above for immediate support
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
