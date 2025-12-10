@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, Suspense } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -10,6 +11,8 @@ import {
   Brain,
   Heart,
   MessageCircle,
+  Sparkles,
+  Loader2,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, SeverityBadge } from '@/components/ui';
@@ -79,7 +82,7 @@ const RECOMMENDATIONS: Record<string, { title: string; titleMs: string; items: {
   ],
 };
 
-export default function AssessmentResultsPage() {
+function ResultsContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -90,6 +93,50 @@ export default function AssessmentResultsPage() {
 
   const instrument = getInstrument(type);
   const typeInfo = ASSESSMENT_TYPE_INFO[type];
+
+  // AI Insights state
+  const [aiInsights, setAiInsights] = useState<string | null>(null);
+  const [isLoadingInsights, setIsLoadingInsights] = useState(false);
+  const [insightsError, setInsightsError] = useState<string | null>(null);
+
+  // Fetch AI insights on mount
+  useEffect(() => {
+    async function fetchInsights() {
+      if (!type || !severity) return;
+
+      setIsLoadingInsights(true);
+      setInsightsError(null);
+
+      try {
+        const response = await fetch('/api/v1/assessment/insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            assessmentType: type,
+            score,
+            severity,
+            riskLevel: severity.toLowerCase().includes('severe') ? 'high' : 'low',
+            detectedConditions: [type],
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setAiInsights(data.insights);
+        } else {
+          setInsightsError('Unable to generate personalized insights');
+        }
+      } catch (error) {
+        console.error('Error fetching insights:', error);
+        setInsightsError('Unable to generate personalized insights');
+      } finally {
+        setIsLoadingInsights(false);
+      }
+    }
+
+    fetchInsights();
+  }, [type, score, severity]);
 
   if (!instrument) {
     return null;
@@ -217,11 +264,47 @@ export default function AssessmentResultsPage() {
             </GlassCard>
           </motion.div>
 
-          {/* Recommendations */}
+          {/* AI-Powered Insights */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
+            className="mb-8"
+          >
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              AI-Powered Insights
+            </h2>
+            <GlassCard className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-700/30">
+              {isLoadingInsights ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 animate-spin text-amber-500 mr-3" />
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Generating personalized insights...
+                  </span>
+                </div>
+              ) : insightsError ? (
+                <div className="text-center py-6">
+                  <p className="text-neutral-500">{insightsError}</p>
+                  <p className="text-sm text-neutral-400 mt-2">
+                    See the recommendations below for general guidance.
+                  </p>
+                </div>
+              ) : aiInsights ? (
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <div className="whitespace-pre-wrap text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                    {aiInsights}
+                  </div>
+                </div>
+              ) : null}
+            </GlassCard>
+          </motion.div>
+
+          {/* Recommendations */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
             className="mb-8"
           >
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
@@ -352,5 +435,32 @@ export default function AssessmentResultsPage() {
 
       <Footer showEmergencyBanner />
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function ResultsLoading() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 pt-24 pb-12">
+        <div className="mx-auto max-w-3xl px-4">
+          <div className="animate-pulse space-y-6">
+            <div className="h-32 bg-neutral-200 dark:bg-neutral-800 rounded-xl" />
+            <div className="h-48 bg-neutral-200 dark:bg-neutral-800 rounded-xl" />
+            <div className="h-32 bg-neutral-200 dark:bg-neutral-800 rounded-xl" />
+          </div>
+        </div>
+      </main>
+      <Footer showEmergencyBanner />
+    </div>
+  );
+}
+
+export default function AssessmentResultsPage() {
+  return (
+    <Suspense fallback={<ResultsLoading />}>
+      <ResultsContent />
+    </Suspense>
   );
 }

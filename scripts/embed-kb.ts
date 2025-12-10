@@ -7,8 +7,12 @@
 
 import fs from 'fs';
 import path from 'path';
+import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
+
+// Load environment variables from .env.local
+config({ path: '.env.local' });
 
 // Initialize clients
 const supabase = createClient(
@@ -25,7 +29,7 @@ const KB_DIR = path.join(process.cwd(), 'kb');
 interface ArticleData {
   title: string;
   content: string;
-  condition: string;
+  category: string;
   language: 'en' | 'ms';
   filePath: string;
   checksum: string;
@@ -103,7 +107,7 @@ function readKBArticles(): ArticleData[] {
       articles.push({
         title,
         content,
-        condition,
+        category: condition,
         language,
         filePath,
         checksum,
@@ -154,7 +158,7 @@ async function upsertArticle(
   const articleData = {
     title: article.title,
     content: article.content,
-    condition: article.condition,
+    category: article.category,
     language: article.language,
     file_path: article.filePath,
     checksum: article.checksum,
@@ -207,7 +211,7 @@ async function main() {
 
   for (const article of articles) {
     try {
-      console.log(`Processing: ${article.condition}/${path.basename(article.filePath)}`);
+      console.log(`Processing: ${article.category}/${path.basename(article.filePath)}`);
 
       // Check if article exists and has changed
       const existing = await getExistingArticle(article.filePath);
