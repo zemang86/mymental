@@ -582,15 +582,16 @@ export function calculateAssessmentScore(
 
 /**
  * Get display info for assessment types
+ * icon: Lucide icon name (lowercase with hyphens)
  */
 export const ASSESSMENT_TYPE_INFO: Record<AssessmentType, { name: string; nameMs: string; icon: string }> = {
-  depression: { name: 'Depression', nameMs: 'Kemurungan', icon: '😔' },
-  anxiety: { name: 'Anxiety', nameMs: 'Kebimbangan', icon: '😰' },
-  ocd: { name: 'OCD', nameMs: 'OCD', icon: '🔄' },
-  ptsd: { name: 'PTSD', nameMs: 'PTSD', icon: '💭' },
-  insomnia: { name: 'Insomnia', nameMs: 'Insomnia', icon: '😴' },
-  suicidal: { name: 'Suicidal Ideation', nameMs: 'Pemikiran Bunuh Diri', icon: '⚠️' },
-  psychosis: { name: 'Psychosis', nameMs: 'Psikosis', icon: '🌀' },
-  sexual_addiction: { name: 'Sexual Addiction', nameMs: 'Ketagihan Seksual', icon: '🔞' },
-  marital_distress: { name: 'Marital Distress', nameMs: 'Tekanan Perkahwinan', icon: '💔' },
+  depression: { name: 'Depression', nameMs: 'Kemurungan', icon: 'cloud-rain' },
+  anxiety: { name: 'Anxiety', nameMs: 'Kebimbangan', icon: 'heart-pulse' },
+  ocd: { name: 'OCD', nameMs: 'OCD', icon: 'refresh-cw' },
+  ptsd: { name: 'PTSD', nameMs: 'PTSD', icon: 'shield-alert' },
+  insomnia: { name: 'Insomnia', nameMs: 'Insomnia', icon: 'moon' },
+  suicidal: { name: 'Suicidal Ideation', nameMs: 'Pemikiran Bunuh Diri', icon: 'alert-triangle' },
+  psychosis: { name: 'Psychosis', nameMs: 'Psikosis', icon: 'brain' },
+  sexual_addiction: { name: 'Sexual Addiction', nameMs: 'Ketagihan Seksual', icon: 'flame' },
+  marital_distress: { name: 'Marital Distress', nameMs: 'Tekanan Perkahwinan', icon: 'heart-crack' },
 };

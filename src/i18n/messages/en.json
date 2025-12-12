@@ -1,0 +1,210 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "close": "Close",
+    "search": "Search",
+    "notSet": "Not set",
+    "viewAll": "View All",
+    "learnMore": "Learn More"
+  },
+  "auth": {
+    "login": "Log In",
+    "logout": "Log Out",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signInWithGoogle": "Continue with Google",
+    "orContinueWith": "or continue with"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "assessments": "My Assessments",
+    "resources": "Resources",
+    "account": "Account",
+    "billing": "Billing",
+    "emergency": "Emergency Help"
+  },
+  "home": {
+    "hero": {
+      "title": "Understanding Your Mental Well-being",
+      "subtitle": "Take validated mental health screenings and get personalized insights to support your mental health journey.",
+      "startButton": "Start Free Screening",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Choose MyMental?",
+      "validated": {
+        "title": "Validated Instruments",
+        "description": "Our assessments use clinically validated screening tools like PHQ-9 and GAD-7."
+      },
+      "private": {
+        "title": "Private & Secure",
+        "description": "Your data is encrypted and protected. We never share your information."
+      },
+      "insights": {
+        "title": "Personalized Insights",
+        "description": "Get AI-powered recommendations based on your screening results."
+      }
+    }
+  },
+  "screening": {
+    "title": "Mental Health Screening",
+    "subtitle": "Answer honestly to get the most accurate results",
+    "initialScreening": "Initial Screening",
+    "socialFunction": "Social Function Assessment",
+    "progress": "Progress",
+    "questionOf": "Question {current} of {total}",
+    "yes": "Yes",
+    "no": "No",
+    "stronglyDisagree": "Strongly Disagree",
+    "disagree": "Disagree",
+    "neutral": "Neutral",
+    "agree": "Agree",
+    "stronglyAgree": "Strongly Agree",
+    "skipToResults": "Skip to Results"
+  },
+  "results": {
+    "title": "Your Results",
+    "preliminary": "Preliminary Results",
+    "riskLevel": "Risk Level",
+    "score": "Score",
+    "severity": "Severity",
+    "low": "Low",
+    "moderate": "Moderate",
+    "high": "High",
+    "imminent": "Imminent",
+    "detectedConditions": "Areas That May Need Attention",
+    "recommendations": "Recommendations",
+    "takeDetailedTest": "Take Detailed Assessment",
+    "viewAssessments": "View My Assessments"
+  },
+  "assessments": {
+    "title": "My Assessments",
+    "subtitle": "Track your mental health journey",
+    "screeningsTab": "Screenings",
+    "assessmentsTab": "Assessments",
+    "noScreenings": "No screenings yet",
+    "noAssessments": "No assessments yet",
+    "startFirst": "Take your first screening to begin tracking your mental health.",
+    "totalScreenings": "Total Screenings",
+    "totalAssessments": "Total Assessments",
+    "areasTracked": "Areas Tracked",
+    "lastActivity": "Last Activity",
+    "takeNew": "Take New Assessment",
+    "retake": "Retake",
+    "viewResults": "View Results",
+    "types": {
+      "depression": "Depression",
+      "anxiety": "Anxiety",
+      "ocd": "OCD",
+      "ptsd": "PTSD",
+      "insomnia": "Insomnia",
+      "suicidal": "Suicidal Ideation",
+      "psychosis": "Psychosis",
+      "sexual_addiction": "Sexual Addiction",
+      "marital_distress": "Marital Distress"
+    }
+  },
+  "account": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile and preferences",
+    "profile": "Profile",
+    "preferences": "Preferences",
+    "security": "Security",
+    "dangerZone": "Danger Zone",
+    "fullName": "Full Name",
+    "gender": "Gender",
+    "age": "Age",
+    "maritalStatus": "Marital Status",
+    "occupation": "Occupation",
+    "education": "Education Level",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language",
+    "changePassword": "Change Password",
+    "changePasswordDescription": "Update your password regularly",
+    "billing": "Billing & Subscription",
+    "billingDescription": "Manage your subscription plan",
+    "deleteAccount": "Delete Account",
+    "deleteAccountWarning": "Once you delete your account, there is no going back. Please be certain.",
+    "profileUpdated": "Profile updated successfully",
+    "languageSaved": "Language preference saved",
+    "passwordUpdated": "Password updated successfully",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "genderOptions": {
+      "select": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other / Prefer not to say"
+    },
+    "maritalOptions": {
+      "select": "Select status",
+      "single": "Single",
+      "married": "Married",
+      "divorced": "Divorced",
+      "widowed": "Widowed"
+    },
+    "educationOptions": {
+      "select": "Select education level",
+      "secondary": "Secondary School (SPM)",
+      "diploma": "Diploma",
+      "bachelor": "Bachelor's Degree",
+      "master": "Master's Degree",
+      "phd": "PhD / Doctorate",
+      "other": "Other"
+    }
+  },
+  "billing": {
+    "title": "Billing & Subscription",
+    "subtitle": "Manage your plan and payment methods",
+    "currentPlan": "Current Plan",
+    "freePlan": "Free Plan",
+    "premiumPlan": "Premium Plan",
+    "upgradeToPremium": "Upgrade to Premium",
+    "paymentHistory": "Payment History",
+    "noPayments": "No payment history yet"
+  },
+  "emergency": {
+    "title": "Emergency Help",
+    "subtitle": "If you're in crisis, please reach out for help immediately",
+    "callNow": "Call Now",
+    "hotlines": {
+      "talianKasih": "Talian Kasih",
+      "befrienders": "Befrienders",
+      "emergency": "Emergency"
+    },
+    "safetyPlan": "Safety Plan",
+    "resources": "Crisis Resources"
+  },
+  "chat": {
+    "title": "AI Mental Health Assistant",
+    "subtitle": "I'm here to provide support and information",
+    "placeholder": "Type your message...",
+    "send": "Send",
+    "disclaimer": "This AI provides general information only and is not a substitute for professional mental health care."
+  },
+  "footer": {
+    "tagline": "Supporting your mental health journey",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact Us",
+    "copyright": "All rights reserved."
+  }
+}

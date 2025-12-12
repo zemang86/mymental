@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, AlertTriangle, FastForward } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, ProgressBar } from '@/components/ui';
 import { YesNoToggle } from '@/components/assessment/yes-no-toggle';
 import { EmergencyModal } from '@/components/emergency/emergency-modal';
 import { useAssessmentStore } from '@/stores/assessment-store';
-import { INITIAL_SCREENING_QUESTIONS } from '@/lib/assessment/questions';
+import { INITIAL_SCREENING_QUESTIONS, SOCIAL_FUNCTION_QUESTIONS } from '@/lib/assessment/questions';
 import { evaluateSingleAnswer, evaluateTriage, detectConditions } from '@/lib/assessment/triage';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 export default function ScreeningPage() {
   const router = useRouter();
@@ -24,6 +26,8 @@ export default function ScreeningPage() {
     setStep,
     isEmergency,
     triggerEmergency,
+    setSocialFunctionAnswer,
+    calculateSocialFunctionScore,
   } = useAssessmentStore();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -116,6 +120,29 @@ export default function ScreeningPage() {
 
   const canProceed = currentAnswer !== undefined;
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+  // DEV: Skip all screening with low risk prefilled answers
+  const handleDevSkip = () => {
+    // Fill all initial screening answers with "No" (low risk)
+    INITIAL_SCREENING_QUESTIONS.forEach((q) => {
+      setInitialScreeningAnswer(q.id, false);
+    });
+
+    // Fill all social function answers with "4" (high functioning)
+    SOCIAL_FUNCTION_QUESTIONS.forEach((q) => {
+      setSocialFunctionAnswer(q.id, 4);
+    });
+
+    // Set low risk results
+    setRiskLevel('low');
+    setDetectedConditions([]);
+    setSuicidalIdeation(false);
+    setPsychosisIndicators(false);
+    calculateSocialFunctionScore();
+
+    setStep('registration');
+    router.push('/results/preliminary');
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -216,6 +243,19 @@ export default function ScreeningPage() {
               {isLastQuestion ? 'Continue to Social Function' : 'Next'}
             </GlassButton>
           </div>
+
+          {/* DEV: Skip button */}
+          {isDev && (
+            <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <button
+                onClick={handleDevSkip}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-xs text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 rounded-lg transition-colors"
+              >
+                <FastForward className="w-3 h-3" />
+                DEV: Skip to Results (Low Risk)
+              </button>
+            </div>
+          )}
         </div>
       </main>
 

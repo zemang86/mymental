@@ -5,20 +5,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Menu, X, User, Globe, ChevronDown, LogOut, LayoutDashboard, CreditCard, BookOpen, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { GlassButton } from '@/components/ui';
 import { createClient } from '@/lib/supabase/client';
+import { setLocale, useLocale } from '@/i18n/client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 interface HeaderProps {
   className?: string;
 }
-
-const navigation = [
-  { name: 'Mental Health Screening', href: '/start' },
-  { name: 'About', href: '/about' },
-];
 
 const languages = [
   { code: 'en', name: 'English', flag: 'EN' },
@@ -27,12 +24,19 @@ const languages = [
 
 export function Header({ className }: HeaderProps) {
   const router = useRouter();
+  const t = useTranslations('nav');
+  const tAuth = useTranslations('auth');
+  const currentLang = useLocale();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState('en');
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const navigation = [
+    { name: t('home'), href: '/' },
+    { name: t('about'), href: '/about' },
+  ];
 
   useEffect(() => {
     const supabase = createClient();
@@ -59,6 +63,20 @@ export function Header({ className }: HeaderProps) {
     setIsUserMenuOpen(false);
     router.push('/');
     router.refresh();
+  };
+
+  const handleLanguageChange = async (langCode: string) => {
+    setIsLangMenuOpen(false);
+    // Save to profile if user is logged in
+    if (user) {
+      const supabase = createClient();
+      await supabase
+        .from('profiles')
+        .update({ language: langCode, updated_at: new Date().toISOString() })
+        .eq('id', user.id);
+    }
+    // Set locale cookie and reload
+    setLocale(langCode);
   };
 
   return (
@@ -116,10 +134,7 @@ export function Header({ className }: HeaderProps) {
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
-                        onClick={() => {
-                          setCurrentLang(lang.code);
-                          setIsLangMenuOpen(false);
-                        }}
+                        onClick={() => handleLanguageChange(lang.code)}
                         className={cn(
                           'w-full px-4 py-2 text-left text-sm flex items-center gap-2',
                           'hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors',
@@ -185,7 +200,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
-                          My Assessments
+                          {t('assessments')}
                         </Link>
                         <Link
                           href="/interventions"
@@ -193,7 +208,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                         >
                           <BookOpen className="w-4 h-4" />
-                          Self-Help Courses
+                          {t('resources')}
                         </Link>
                         <Link
                           href="/chat"
@@ -201,7 +216,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
-                          AI Chat Support
+                          AI Chat
                         </Link>
                       </div>
                       <div className="border-t border-neutral-200 dark:border-neutral-700 py-1">
@@ -211,7 +226,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                         >
                           <User className="w-4 h-4" />
-                          Account Settings
+                          {t('account')}
                         </Link>
                         <Link
                           href="/billing"
@@ -219,14 +234,14 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                         >
                           <CreditCard className="w-4 h-4" />
-                          Billing
+                          {t('billing')}
                         </Link>
                         <button
                           onClick={handleSignOut}
                           className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         >
                           <LogOut className="w-4 h-4" />
-                          Sign Out
+                          {tAuth('logout')}
                         </button>
                       </div>
                     </motion.div>
@@ -237,7 +252,7 @@ export function Header({ className }: HeaderProps) {
               <Link href="/login">
                 <GlassButton variant="secondary" size="sm">
                   <User className="w-4 h-4" />
-                  Login
+                  {tAuth('login')}
                 </GlassButton>
               </Link>
             )}
@@ -283,7 +298,7 @@ export function Header({ className }: HeaderProps) {
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
-                        onClick={() => setCurrentLang(lang.code)}
+                        onClick={() => handleLanguageChange(lang.code)}
                         className={cn(
                           'px-3 py-1 rounded-full text-sm',
                           currentLang === lang.code
@@ -328,7 +343,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
-                          My Assessments
+                          {t('assessments')}
                         </Link>
                         <Link
                           href="/interventions"
@@ -336,7 +351,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                         >
                           <BookOpen className="w-4 h-4" />
-                          Self-Help Courses
+                          {t('resources')}
                         </Link>
                         <Link
                           href="/chat"
@@ -344,7 +359,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
-                          AI Chat Support
+                          AI Chat
                         </Link>
                         <div className="border-t border-neutral-200 dark:border-neutral-700 my-2" />
                         <Link
@@ -353,7 +368,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                         >
                           <User className="w-4 h-4" />
-                          Account Settings
+                          {t('account')}
                         </Link>
                         <Link
                           href="/billing"
@@ -361,7 +376,7 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                         >
                           <CreditCard className="w-4 h-4" />
-                          Billing
+                          {t('billing')}
                         </Link>
                         <button
                           onClick={() => {
@@ -371,14 +386,14 @@ export function Header({ className }: HeaderProps) {
                           className="flex items-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                         >
                           <LogOut className="w-4 h-4" />
-                          Sign Out
+                          {tAuth('logout')}
                         </button>
                       </>
                     ) : (
                       <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                         <GlassButton variant="secondary" className="w-full">
                           <User className="w-4 h-4" />
-                          Login
+                          {tAuth('login')}
                         </GlassButton>
                       </Link>
                     )}

@@ -20,7 +20,9 @@ import {
   calculateAssessmentScore,
   ASSESSMENT_TYPE_INFO,
 } from '@/lib/assessment/instruments';
+import { createClient } from '@/lib/supabase/client';
 import type { AssessmentType } from '@/types/assessment';
+import type { User } from '@supabase/supabase-js';
 
 export default function DetailedAssessmentPage() {
   const params = useParams();
@@ -28,7 +30,6 @@ export default function DetailedAssessmentPage() {
   const type = params.type as AssessmentType;
 
   const {
-    userId,
     hasSuicidalIdeation,
     isEmergency,
   } = useAssessmentStore();
@@ -38,8 +39,21 @@ export default function DetailedAssessmentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPaymentGate, setShowPaymentGate] = useState(false);
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   const instrument = getInstrument(type);
+  const supabase = createClient();
+
+  // Get user from Supabase Auth
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setIsLoadingUser(false);
+    }
+    getUser();
+  }, []);
 
   // Redirect if invalid type
   useEffect(() => {
@@ -57,10 +71,10 @@ export default function DetailedAssessmentPage() {
 
   // Check if user needs to pay for premium assessments
   useEffect(() => {
-    if (instrument?.isPremium && !userId) {
+    if (!isLoadingUser && instrument?.isPremium && !user) {
       setShowPaymentGate(true);
     }
-  }, [instrument, userId]);
+  }, [instrument, user, isLoadingUser]);
 
   if (!instrument) {
     return null;
@@ -105,8 +119,9 @@ export default function DetailedAssessmentPage() {
     const result = calculateAssessmentScore(type, answers);
 
     // Save to database if user is logged in
-    if (userId) {
+    if (user) {
       try {
+        console.log('Saving assessment for user:', user.id);
         const response = await fetch('/api/v1/assessment/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -121,14 +136,20 @@ export default function DetailedAssessmentPage() {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('Assessment saved successfully:', data.assessmentId);
           // Navigate to results with assessment ID for retrieval
           router.push(`/test/${type}/results?id=${data.assessmentId}&score=${result.score}&severity=${result.severity}`);
           return;
+        } else {
+          const errorData = await response.json();
+          console.error('Error saving assessment:', errorData);
         }
       } catch (error) {
         console.error('Error saving assessment:', error);
         // Continue to show results even if save fails
       }
+    } else {
+      console.log('No user logged in, skipping assessment save');
     }
 
     // Navigate to results (for non-logged in users or if save fails)

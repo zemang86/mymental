@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -36,7 +36,10 @@ export default function PreliminaryResultsPage() {
     detectedConditions,
     riskLevel,
     socialFunctionScore,
+    socialFunctionAnswers,
+    initialScreeningAnswers,
     hasSuicidalIdeation,
+    hasPsychosisIndicators,
     setUser,
   } = useAssessmentStore();
 
@@ -44,6 +47,8 @@ export default function PreliminaryResultsPage() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+  const saveAttempted = useRef(false);
 
   // Calculate functional level
   const functionalLevel = socialFunctionScore !== null
@@ -62,6 +67,48 @@ export default function PreliminaryResultsPage() {
     if (overallRisk === 'moderate') return 'moderate';
     return 'mild';
   };
+
+  // Save screening results to database on mount
+  useEffect(() => {
+    async function saveScreening() {
+      // Only save once and only if we have data
+      if (saveAttempted.current || !initialScreeningAnswers || Object.keys(initialScreeningAnswers).length === 0) {
+        return;
+      }
+      saveAttempted.current = true;
+
+      try {
+        console.log('Saving initial screening to database...');
+        const response = await fetch('/api/v1/screening/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            initialScreeningAnswers,
+            detectedConditions,
+            riskLevel: riskLevel || 'low',
+            hasSuicidalIdeation,
+            hasPsychosisIndicators,
+            socialFunctionAnswers,
+            socialFunctionScore: socialFunctionScore || 0,
+            functionalLevel,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Screening saved successfully:', data);
+          setIsSaved(true);
+        } else {
+          const errorData = await response.json();
+          console.error('Failed to save screening:', errorData);
+        }
+      } catch (err) {
+        console.error('Error saving screening:', err);
+      }
+    }
+
+    saveScreening();
+  }, [initialScreeningAnswers, detectedConditions, riskLevel, hasSuicidalIdeation, hasPsychosisIndicators, socialFunctionAnswers, socialFunctionScore, functionalLevel]);
 
   const handleRegister = async () => {
     if (!email || !email.includes('@')) {

@@ -6,6 +6,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { generateEmbedding, searchSimilarDocuments, type KBArticle } from './embeddings';
 import { SYSTEM_PROMPTS, buildChatPrompt, buildResultPrompt, CRISIS_RESPONSE } from './prompts';
+import type { AssessmentInsights } from '@/types/insights';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -252,4 +253,210 @@ export async function quickAnswer(question: string): Promise<string> {
     console.error('Error generating quick answer:', error);
     throw new Error('Failed to generate answer');
   }
+}
+
+/**
+ * Generate structured assessment insights
+ * Returns a JSON object with parsed, actionable insights
+ */
+export async function generateStructuredInsights(
+  assessmentType: string,
+  score: number,
+  maxScore: number,
+  severity: string,
+  riskLevel: string
+): Promise<AssessmentInsights> {
+  // Build search query based on assessment
+  const searchQuery = `${assessmentType} ${severity} coping strategies treatment recommendations`;
+
+  // Retrieve relevant context
+  const articles = await retrieveContext(searchQuery, 4);
+  const context = formatContext(articles);
+
+  const systemPrompt = `You are a mental health assessment analyzer. Generate structured insights in JSON format.
+Your response must be valid JSON matching the exact structure specified.
+Be compassionate but factual. Focus on actionable, helpful information.
+Provide both English and Bahasa Malaysia translations for all text fields.`;
+
+  const userPrompt = `Based on this ${assessmentType} assessment with score ${score}/${maxScore} (${severity} severity, ${riskLevel} risk level), generate structured insights.
+
+Context from knowledge base:
+${context}
+
+Return a JSON object with this EXACT structure:
+{
+  "summary": "Brief 1-2 sentence summary in English",
+  "summaryMs": "Same summary in Bahasa Malaysia",
+  "keyFindings": [
+    {"text": "Finding in English", "textMs": "Finding in Malay", "type": "positive|concern|neutral"}
+  ],
+  "recommendations": [
+    {"text": "Recommendation in English", "textMs": "Recommendation in Malay", "priority": "high|medium|low"}
+  ],
+  "copingStrategies": [
+    {"title": "Strategy title", "titleMs": "Tajuk strategi", "description": "Description", "descriptionMs": "Penerangan"}
+  ],
+  "riskFactors": [
+    {"text": "Risk factor", "textMs": "Faktor risiko", "level": "low|moderate|high"}
+  ],
+  "nextSteps": [
+    {"action": "Action to take", "actionMs": "Tindakan", "urgency": "immediate|soon|when_ready"}
+  ]
+}
+
+Guidelines:
+- keyFindings: 3-4 items based on severity
+- recommendations: 3 actionable items appropriate for severity level
+- copingStrategies: 2-3 practical self-help strategies
+- riskFactors: Only include if severity is moderate or above (empty array for minimal/mild)
+- nextSteps: 2-3 concrete next steps
+
+For ${severity} severity:
+${severity.toLowerCase().includes('severe') ? '- Include urgent professional help in nextSteps\n- Include crisis hotline in recommendations' : ''}
+${severity.toLowerCase().includes('moderate') ? '- Suggest considering professional consultation\n- Focus on self-monitoring and self-help' : ''}
+${severity.toLowerCase().includes('mild') || severity.toLowerCase().includes('minimal') ? '- Focus on maintenance and prevention\n- Encourage continued self-care practices' : ''}
+
+Return ONLY valid JSON, no markdown or explanation.`;
+
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2048,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+
+    const responseText = response.content[0].type === 'text'
+      ? response.content[0].text
+      : '';
+
+    // Parse JSON response
+    const parsed = JSON.parse(responseText);
+
+    // Return with metadata
+    return {
+      ...parsed,
+      generatedAt: new Date().toISOString(),
+      assessmentType,
+      severity,
+      score,
+    };
+  } catch (error) {
+    console.error('Error generating structured insights:', error);
+
+    // Return fallback insights if AI fails
+    return generateFallbackInsights(assessmentType, score, maxScore, severity, riskLevel);
+  }
+}
+
+/**
+ * Generate fallback insights when AI fails
+ */
+function generateFallbackInsights(
+  assessmentType: string,
+  score: number,
+  maxScore: number,
+  severity: string,
+  riskLevel: string
+): AssessmentInsights {
+  const isSevere = severity.toLowerCase().includes('severe');
+  const isModerate = severity.toLowerCase().includes('moderate');
+
+  return {
+    summary: `Your ${assessmentType} assessment indicates ${severity.toLowerCase()} symptoms. This screening provides a starting point for understanding your mental health.`,
+    summaryMs: `Penilaian ${assessmentType} anda menunjukkan gejala ${severity.toLowerCase()}. Saringan ini memberikan titik permulaan untuk memahami kesihatan mental anda.`,
+    keyFindings: [
+      {
+        text: `You scored ${score} out of ${maxScore} on the ${assessmentType} assessment`,
+        textMs: `Anda mendapat skor ${score} daripada ${maxScore} dalam penilaian ${assessmentType}`,
+        type: 'neutral',
+      },
+      {
+        text: `This falls within the ${severity} range`,
+        textMs: `Ini berada dalam julat ${severity}`,
+        type: isSevere ? 'concern' : isModerate ? 'concern' : 'positive',
+      },
+    ],
+    recommendations: isSevere ? [
+      {
+        text: 'Please consider speaking with a mental health professional',
+        textMs: 'Sila pertimbangkan untuk bercakap dengan profesional kesihatan mental',
+        priority: 'high',
+      },
+      {
+        text: 'Reach out to trusted friends or family for support',
+        textMs: 'Hubungi rakan atau keluarga yang dipercayai untuk sokongan',
+        priority: 'high',
+      },
+      {
+        text: 'Contact crisis helpline if needed: Talian Kasih 15999',
+        textMs: 'Hubungi talian krisis jika perlu: Talian Kasih 15999',
+        priority: 'high',
+      },
+    ] : [
+      {
+        text: 'Continue practicing self-care and healthy habits',
+        textMs: 'Teruskan mengamalkan penjagaan diri dan tabiat sihat',
+        priority: 'medium',
+      },
+      {
+        text: 'Monitor your symptoms and retake assessment in 2-4 weeks',
+        textMs: 'Pantau gejala anda dan ambil semula penilaian dalam 2-4 minggu',
+        priority: 'medium',
+      },
+      {
+        text: 'Consider talking to someone you trust about your feelings',
+        textMs: 'Pertimbangkan untuk bercakap dengan seseorang yang anda percayai tentang perasaan anda',
+        priority: 'low',
+      },
+    ],
+    copingStrategies: [
+      {
+        title: 'Deep Breathing',
+        titleMs: 'Pernafasan Dalam',
+        description: 'Practice 4-7-8 breathing: inhale 4 seconds, hold 7, exhale 8',
+        descriptionMs: 'Amalkan pernafasan 4-7-8: tarik nafas 4 saat, tahan 7, hembus 8',
+      },
+      {
+        title: 'Physical Activity',
+        titleMs: 'Aktiviti Fizikal',
+        description: 'Even a 10-minute walk can help improve your mood',
+        descriptionMs: 'Walaupun berjalan 10 minit boleh membantu memperbaiki mood anda',
+      },
+    ],
+    riskFactors: isSevere || isModerate ? [
+      {
+        text: `${severity} symptoms may impact daily functioning`,
+        textMs: `Gejala ${severity} mungkin memberi kesan kepada fungsi harian`,
+        level: isSevere ? 'high' : 'moderate',
+      },
+    ] : [],
+    nextSteps: isSevere ? [
+      {
+        action: 'Contact a mental health professional within the next few days',
+        actionMs: 'Hubungi profesional kesihatan mental dalam beberapa hari akan datang',
+        urgency: 'immediate',
+      },
+      {
+        action: 'Share your results with someone you trust',
+        actionMs: 'Kongsi keputusan anda dengan seseorang yang anda percayai',
+        urgency: 'soon',
+      },
+    ] : [
+      {
+        action: 'Track your mood and symptoms over the next week',
+        actionMs: 'Jejaki mood dan gejala anda sepanjang minggu depan',
+        urgency: 'soon',
+      },
+      {
+        action: 'Retake this assessment in 2-4 weeks to monitor changes',
+        actionMs: 'Ambil semula penilaian ini dalam 2-4 minggu untuk memantau perubahan',
+        urgency: 'when_ready',
+      },
+    ],
+    generatedAt: new Date().toISOString(),
+    assessmentType,
+    severity,
+    score,
+  };
 }

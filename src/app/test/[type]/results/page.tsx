@@ -13,6 +13,13 @@ import {
   MessageCircle,
   Sparkles,
   Loader2,
+  AlertTriangle,
+  CheckCircle,
+  Info,
+  TrendingUp,
+  Shield,
+  Lightbulb,
+  Target,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, SeverityBadge } from '@/components/ui';
@@ -21,66 +28,9 @@ import {
   ASSESSMENT_TYPE_INFO,
 } from '@/lib/assessment/instruments';
 import { SCREENING_DISCLAIMER } from '@/lib/constants/hotlines';
+import { createClient } from '@/lib/supabase/client';
 import type { AssessmentType } from '@/types/assessment';
-
-// Recommendations based on severity
-const RECOMMENDATIONS: Record<string, { title: string; titleMs: string; items: { text: string; textMs: string }[] }[]> = {
-  Minimal: [
-    {
-      title: 'Self-Care Tips',
-      titleMs: 'Tips Penjagaan Diri',
-      items: [
-        { text: 'Continue maintaining your current healthy habits', textMs: 'Teruskan mengekalkan tabiat sihat semasa anda' },
-        { text: 'Practice regular exercise and good sleep hygiene', textMs: 'Amalkan senaman tetap dan kebersihan tidur yang baik' },
-        { text: 'Stay connected with supportive friends and family', textMs: 'Kekal berhubung dengan rakan dan keluarga yang menyokong' },
-      ],
-    },
-  ],
-  Mild: [
-    {
-      title: 'Self-Help Strategies',
-      titleMs: 'Strategi Bantuan Diri',
-      items: [
-        { text: 'Consider mindfulness or meditation practices', textMs: 'Pertimbangkan amalan kesedaran atau meditasi' },
-        { text: 'Establish a regular routine for sleep and activities', textMs: 'Wujudkan rutin tetap untuk tidur dan aktiviti' },
-        { text: 'Talk to someone you trust about how you feel', textMs: 'Bercakap dengan seseorang yang anda percayai tentang perasaan anda' },
-      ],
-    },
-  ],
-  Moderate: [
-    {
-      title: 'Professional Support Recommended',
-      titleMs: 'Sokongan Profesional Disyorkan',
-      items: [
-        { text: 'Consider speaking with a mental health professional', textMs: 'Pertimbangkan untuk bercakap dengan profesional kesihatan mental' },
-        { text: 'Explore therapy options like CBT or counseling', textMs: 'Teroka pilihan terapi seperti CBT atau kaunseling' },
-        { text: 'Keep a mood journal to track your symptoms', textMs: 'Simpan jurnal mood untuk menjejaki gejala anda' },
-      ],
-    },
-  ],
-  'Moderately Severe': [
-    {
-      title: 'Seek Professional Help',
-      titleMs: 'Dapatkan Bantuan Profesional',
-      items: [
-        { text: 'We strongly recommend consulting a mental health professional', textMs: 'Kami sangat mengesyorkan anda berunding dengan profesional kesihatan mental' },
-        { text: 'Treatment options may include therapy and/or medication', textMs: 'Pilihan rawatan mungkin termasuk terapi dan/atau ubat' },
-        { text: 'Reach out to trusted people for support', textMs: 'Hubungi orang yang dipercayai untuk sokongan' },
-      ],
-    },
-  ],
-  Severe: [
-    {
-      title: 'Urgent: Professional Help Needed',
-      titleMs: 'Segera: Bantuan Profesional Diperlukan',
-      items: [
-        { text: 'Please seek professional help as soon as possible', textMs: 'Sila dapatkan bantuan profesional secepat mungkin' },
-        { text: 'Call Talian Kasih at 15999 or Befrienders at 03-7956 8145', textMs: 'Hubungi Talian Kasih di 15999 atau Befrienders di 03-7956 8145' },
-        { text: 'Consider visiting a psychiatrist or mental health clinic', textMs: 'Pertimbangkan untuk melawat pakar psikiatri atau klinik kesihatan mental' },
-      ],
-    },
-  ],
-};
+import type { AssessmentInsights } from '@/types/insights';
 
 function ResultsContent() {
   const params = useParams();
@@ -88,55 +38,47 @@ function ResultsContent() {
   const router = useRouter();
 
   const type = params.type as AssessmentType;
+  const assessmentId = searchParams.get('id');
   const score = parseInt(searchParams.get('score') || '0');
   const severity = searchParams.get('severity') || 'Unknown';
 
   const instrument = getInstrument(type);
   const typeInfo = ASSESSMENT_TYPE_INFO[type];
 
-  // AI Insights state
-  const [aiInsights, setAiInsights] = useState<string | null>(null);
-  const [isLoadingInsights, setIsLoadingInsights] = useState(false);
-  const [insightsError, setInsightsError] = useState<string | null>(null);
+  // Insights state
+  const [insights, setInsights] = useState<AssessmentInsights | null>(null);
+  const [isLoadingInsights, setIsLoadingInsights] = useState(true);
 
-  // Fetch AI insights on mount
+  // Fetch insights from saved assessment
   useEffect(() => {
     async function fetchInsights() {
-      if (!type || !severity) return;
-
-      setIsLoadingInsights(true);
-      setInsightsError(null);
+      if (!assessmentId) {
+        setIsLoadingInsights(false);
+        return;
+      }
 
       try {
-        const response = await fetch('/api/v1/assessment/insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            assessmentType: type,
-            score,
-            severity,
-            riskLevel: severity.toLowerCase().includes('severe') ? 'high' : 'low',
-            detectedConditions: [type],
-          }),
-        });
+        const supabase = createClient();
+        const { data: assessment, error } = await supabase
+          .from('assessments')
+          .select('score_breakdown')
+          .eq('id', assessmentId)
+          .single();
 
-        const data = await response.json();
-
-        if (data.success) {
-          setAiInsights(data.insights);
-        } else {
-          setInsightsError('Unable to generate personalized insights');
+        if (error) {
+          console.error('Error fetching assessment:', error);
+        } else if (assessment?.score_breakdown?.aiInsights) {
+          setInsights(assessment.score_breakdown.aiInsights);
         }
       } catch (error) {
         console.error('Error fetching insights:', error);
-        setInsightsError('Unable to generate personalized insights');
       } finally {
         setIsLoadingInsights(false);
       }
     }
 
     fetchInsights();
-  }, [type, score, severity]);
+  }, [assessmentId]);
 
   if (!instrument) {
     return null;
@@ -150,25 +92,43 @@ function ResultsContent() {
     return 'mild';
   };
 
-  // Get recommendations based on severity
-  const getRecommendations = () => {
-    if (severity.toLowerCase().includes('severe')) {
-      return RECOMMENDATIONS['Severe'];
+  const scorePercentage = (score / instrument.scoring.maxScore) * 100;
+
+  // Get icon component based on finding type
+  const getFindingIcon = (type: string) => {
+    switch (type) {
+      case 'positive':
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'concern':
+        return <AlertTriangle className="w-5 h-5 text-amber-500" />;
+      default:
+        return <Info className="w-5 h-5 text-blue-500" />;
     }
-    if (severity.toLowerCase().includes('moderately')) {
-      return RECOMMENDATIONS['Moderately Severe'];
-    }
-    if (severity.toLowerCase().includes('moderate')) {
-      return RECOMMENDATIONS['Moderate'];
-    }
-    if (severity.toLowerCase().includes('mild')) {
-      return RECOMMENDATIONS['Mild'];
-    }
-    return RECOMMENDATIONS['Minimal'];
   };
 
-  const recommendations = getRecommendations();
-  const scorePercentage = (score / instrument.scoring.maxScore) * 100;
+  // Get priority color
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
+      case 'medium':
+        return 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800';
+      default:
+        return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800';
+    }
+  };
+
+  // Get urgency icon
+  const getUrgencyIcon = (urgency: string) => {
+    switch (urgency) {
+      case 'immediate':
+        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+      case 'soon':
+        return <TrendingUp className="w-4 h-4 text-amber-500" />;
+      default:
+        return <Calendar className="w-4 h-4 text-green-500" />;
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -182,9 +142,8 @@ function ResultsContent() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8"
           >
-            <span className="text-5xl mb-4 block">{typeInfo.icon}</span>
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-1">
-              Your {typeInfo.name} Assessment Results
+              Your {typeInfo?.name || type} Assessment Results
             </h1>
             <p className="text-neutral-500">
               {instrument.name}
@@ -197,7 +156,7 @@ function ResultsContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <GlassCard variant="elevated" className="mb-8">
+            <GlassCard variant="elevated" className="mb-6">
               <div className="text-center">
                 <p className="text-neutral-600 dark:text-neutral-400 mb-2">
                   Your score indicates
@@ -205,7 +164,7 @@ function ResultsContent() {
                 <SeverityBadge severity={getSeverityLevel()} className="mb-4" />
 
                 {/* Score visualization */}
-                <div className="max-w-xs mx-auto mb-6">
+                <div className="max-w-xs mx-auto mb-4">
                   <div className="flex justify-between text-sm text-neutral-500 mb-1">
                     <span>0</span>
                     <span>{instrument.scoring.maxScore}</span>
@@ -228,132 +187,249 @@ function ResultsContent() {
                     {score} / {instrument.scoring.maxScore}
                   </p>
                 </div>
-
-                {/* Severity explanation */}
-                <div className="text-left bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-4">
-                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">
-                    What does this mean?
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    {instrument.scoring.ranges.map((range) => (
-                      <div
-                        key={range.severity}
-                        className={`flex items-center justify-between p-2 rounded-lg ${
-                          severity === range.severity
-                            ? 'bg-primary-100 dark:bg-primary-900/30 border border-primary-300 dark:border-primary-700'
-                            : ''
-                        }`}
-                      >
-                        <span className="text-neutral-600 dark:text-neutral-400">
-                          {range.min}-{range.max}
-                        </span>
-                        <span
-                          className={`font-medium ${
-                            severity === range.severity
-                              ? 'text-primary-700 dark:text-primary-300'
-                              : 'text-neutral-500'
-                          }`}
-                        >
-                          {range.severity}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </GlassCard>
           </motion.div>
 
-          {/* AI-Powered Insights */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-8"
-          >
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-500" />
-              AI-Powered Insights
-            </h2>
-            <GlassCard className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-700/30">
-              {isLoadingInsights ? (
+          {/* AI Insights Section */}
+          {isLoadingInsights ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mb-6"
+            >
+              <GlassCard className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-700/30">
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="w-6 h-6 animate-spin text-amber-500 mr-3" />
                   <span className="text-neutral-600 dark:text-neutral-400">
-                    Generating personalized insights...
+                    Loading insights...
                   </span>
                 </div>
-              ) : insightsError ? (
-                <div className="text-center py-6">
-                  <p className="text-neutral-500">{insightsError}</p>
-                  <p className="text-sm text-neutral-400 mt-2">
-                    See the recommendations below for general guidance.
-                  </p>
-                </div>
-              ) : aiInsights ? (
-                <div className="prose prose-sm dark:prose-invert max-w-none">
-                  <div className="whitespace-pre-wrap text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {aiInsights}
-                  </div>
-                </div>
-              ) : null}
-            </GlassCard>
-          </motion.div>
-
-          {/* Recommendations */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-8"
-          >
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-primary-500" />
-              Recommendations
-            </h2>
-            {recommendations.map((rec, index) => (
-              <GlassCard key={index} className="mb-4">
-                <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
-                  {rec.title}
-                </h3>
-                <p className="text-sm text-neutral-500 mb-4">{rec.titleMs}</p>
-                <ul className="space-y-3">
-                  {rec.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-primary-500 mt-2 flex-shrink-0" />
-                      <div>
-                        <p className="text-neutral-700 dark:text-neutral-300">
-                          {item.text}
-                        </p>
-                        <p className="text-sm text-neutral-500">{item.textMs}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
               </GlassCard>
-            ))}
-          </motion.div>
+            </motion.div>
+          ) : insights ? (
+            <>
+              {/* Summary Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="mb-6"
+              >
+                <GlassCard className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 border-primary-200 dark:border-primary-700/30">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-primary-500 rounded-lg flex-shrink-0">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
+                        Summary
+                      </h3>
+                      <p className="text-neutral-700 dark:text-neutral-300">
+                        {insights.summary}
+                      </p>
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                        {insights.summaryMs}
+                      </p>
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
 
-          {/* Actions */}
+              {/* Key Findings */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mb-6"
+              >
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                  <Brain className="w-5 h-5 text-primary-500" />
+                  Key Findings
+                </h2>
+                <div className="space-y-3">
+                  {insights.keyFindings.map((finding, index) => (
+                    <GlassCard key={index} className="py-3">
+                      <div className="flex items-start gap-3">
+                        {getFindingIcon(finding.type)}
+                        <div className="flex-1">
+                          <p className="text-neutral-800 dark:text-neutral-200">
+                            {finding.text}
+                          </p>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                            {finding.textMs}
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Recommendations */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="mb-6"
+              >
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                  <Target className="w-5 h-5 text-primary-500" />
+                  Recommendations
+                </h2>
+                <div className="space-y-3">
+                  {insights.recommendations.map((rec, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 rounded-xl border ${getPriorityColor(rec.priority)}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-1">
+                          <p className="font-medium">{rec.text}</p>
+                          <p className="text-sm opacity-80 mt-0.5">{rec.textMs}</p>
+                        </div>
+                        <span className="text-xs font-medium uppercase px-2 py-1 rounded-full bg-white/50 dark:bg-black/20">
+                          {rec.priority}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Coping Strategies */}
+              {insights.copingStrategies.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mb-6"
+                >
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5 text-amber-500" />
+                    Coping Strategies
+                  </h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {insights.copingStrategies.map((strategy, index) => (
+                      <GlassCard key={index}>
+                        <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
+                          {strategy.title}
+                        </h3>
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
+                          {strategy.titleMs}
+                        </p>
+                        <p className="text-neutral-700 dark:text-neutral-300 text-sm">
+                          {strategy.description}
+                        </p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                          {strategy.descriptionMs}
+                        </p>
+                      </GlassCard>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Risk Factors */}
+              {insights.riskFactors.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                  className="mb-6"
+                >
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-red-500" />
+                    Risk Factors to Monitor
+                  </h2>
+                  <GlassCard className="border-red-200 dark:border-red-800/30 bg-red-50/50 dark:bg-red-900/10">
+                    <ul className="space-y-3">
+                      {insights.riskFactors.map((risk, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <AlertTriangle className={`w-5 h-5 flex-shrink-0 ${
+                            risk.level === 'high' ? 'text-red-500' :
+                            risk.level === 'moderate' ? 'text-amber-500' : 'text-yellow-500'
+                          }`} />
+                          <div>
+                            <p className="text-neutral-800 dark:text-neutral-200">{risk.text}</p>
+                            <p className="text-sm text-neutral-500 dark:text-neutral-400">{risk.textMs}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </GlassCard>
+                </motion.div>
+              )}
+
+              {/* Next Steps */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mb-6"
+              >
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-primary-500" />
+                  Next Steps
+                </h2>
+                <div className="space-y-3">
+                  {insights.nextSteps.map((step, index) => (
+                    <GlassCard key={index} className="py-3">
+                      <div className="flex items-start gap-3">
+                        {getUrgencyIcon(step.urgency)}
+                        <div className="flex-1">
+                          <p className="text-neutral-800 dark:text-neutral-200 font-medium">
+                            {step.action}
+                          </p>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                            {step.actionMs}
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  ))}
+                </div>
+              </motion.div>
+            </>
+          ) : (
+            // Fallback - no insights available
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-6"
+            >
+              <GlassCard className="text-center py-6">
+                <Info className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
+                <p className="text-neutral-600 dark:text-neutral-400">
+                  AI insights are not available for this assessment.
+                </p>
+                <p className="text-sm text-neutral-500 mt-1">
+                  Please see the general recommendations below.
+                </p>
+              </GlassCard>
+            </motion.div>
+          )}
+
+          {/* Quick Actions */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-8"
+            transition={{ delay: 0.45 }}
+            className="mb-6"
           >
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-primary-500" />
-              Next Steps
-            </h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              <GlassCard className="hover:border-primary-400 transition-colors cursor-pointer">
+              <GlassCard
+                className="hover:border-primary-400 transition-colors cursor-pointer"
+                onClick={() => router.push('/chat')}
+              >
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl">
                     <MessageCircle className="w-6 h-6 text-primary-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-white">
-                      Talk to AI Assistant
+                      AI Chat Support
                     </h3>
                     <p className="text-sm text-neutral-500">
                       Get personalized guidance
@@ -362,39 +438,25 @@ function ResultsContent() {
                 </div>
               </GlassCard>
 
-              <GlassCard className="hover:border-primary-400 transition-colors cursor-pointer">
+              <GlassCard
+                className="hover:border-primary-400 transition-colors cursor-pointer"
+                onClick={() => router.push('/interventions')}
+              >
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl">
-                    <Calendar className="w-6 h-6 text-primary-600" />
+                    <Brain className="w-6 h-6 text-primary-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-white">
-                      Book a Session
+                      Self-Help Courses
                     </h3>
                     <p className="text-sm text-neutral-500">
-                      Connect with a professional
+                      Evidence-based interventions
                     </p>
                   </div>
                 </div>
               </GlassCard>
             </div>
-          </motion.div>
-
-          {/* Share/Download Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex gap-4 mb-8"
-          >
-            <GlassButton variant="secondary" className="flex-1">
-              <Download className="w-4 h-4 mr-2" />
-              Download PDF
-            </GlassButton>
-            <GlassButton variant="secondary" className="flex-1">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share Results
-            </GlassButton>
           </motion.div>
 
           {/* CTA */}
@@ -414,9 +476,9 @@ function ResultsContent() {
                 variant="primary"
                 size="lg"
                 rightIcon={<ArrowRight className="w-5 h-5" />}
-                onClick={() => router.push('/results/preliminary')}
+                onClick={() => router.push('/my-assessments')}
               >
-                Back to Dashboard
+                View All Assessments
               </GlassButton>
             </GlassCard>
           </motion.div>

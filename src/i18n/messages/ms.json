@@ -1,0 +1,210 @@
+{
+  "common": {
+    "loading": "Memuatkan...",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "edit": "Sunting",
+    "delete": "Padam",
+    "confirm": "Sahkan",
+    "back": "Kembali",
+    "next": "Seterusnya",
+    "submit": "Hantar",
+    "close": "Tutup",
+    "search": "Cari",
+    "notSet": "Tidak ditetapkan",
+    "viewAll": "Lihat Semua",
+    "learnMore": "Ketahui Lebih Lanjut"
+  },
+  "auth": {
+    "login": "Log Masuk",
+    "logout": "Log Keluar",
+    "register": "Daftar",
+    "email": "E-mel",
+    "password": "Kata Laluan",
+    "confirmPassword": "Sahkan Kata Laluan",
+    "forgotPassword": "Lupa Kata Laluan?",
+    "noAccount": "Belum ada akaun?",
+    "hasAccount": "Sudah ada akaun?",
+    "signInWithGoogle": "Teruskan dengan Google",
+    "orContinueWith": "atau teruskan dengan"
+  },
+  "nav": {
+    "home": "Utama",
+    "about": "Tentang Kami",
+    "assessments": "Penilaian Saya",
+    "resources": "Sumber",
+    "account": "Akaun",
+    "billing": "Bil",
+    "emergency": "Bantuan Kecemasan"
+  },
+  "home": {
+    "hero": {
+      "title": "Memahami Kesejahteraan Mental Anda",
+      "subtitle": "Ambil saringan kesihatan mental yang disahkan dan dapatkan pandangan peribadi untuk menyokong perjalanan kesihatan mental anda.",
+      "startButton": "Mulakan Saringan Percuma",
+      "learnMore": "Ketahui Lebih Lanjut"
+    },
+    "features": {
+      "title": "Mengapa Pilih MyMental?",
+      "validated": {
+        "title": "Instrumen Yang Disahkan",
+        "description": "Penilaian kami menggunakan alat saringan yang disahkan secara klinikal seperti PHQ-9 dan GAD-7."
+      },
+      "private": {
+        "title": "Peribadi & Selamat",
+        "description": "Data anda disulitkan dan dilindungi. Kami tidak akan berkongsi maklumat anda."
+      },
+      "insights": {
+        "title": "Pandangan Peribadi",
+        "description": "Dapatkan cadangan berkuasa AI berdasarkan keputusan saringan anda."
+      }
+    }
+  },
+  "screening": {
+    "title": "Saringan Kesihatan Mental",
+    "subtitle": "Jawab dengan jujur untuk mendapatkan keputusan yang paling tepat",
+    "initialScreening": "Saringan Awal",
+    "socialFunction": "Penilaian Fungsi Sosial",
+    "progress": "Kemajuan",
+    "questionOf": "Soalan {current} daripada {total}",
+    "yes": "Ya",
+    "no": "Tidak",
+    "stronglyDisagree": "Sangat Tidak Setuju",
+    "disagree": "Tidak Setuju",
+    "neutral": "Neutral",
+    "agree": "Setuju",
+    "stronglyAgree": "Sangat Setuju",
+    "skipToResults": "Langkau ke Keputusan"
+  },
+  "results": {
+    "title": "Keputusan Anda",
+    "preliminary": "Keputusan Awal",
+    "riskLevel": "Tahap Risiko",
+    "score": "Skor",
+    "severity": "Keterukan",
+    "low": "Rendah",
+    "moderate": "Sederhana",
+    "high": "Tinggi",
+    "imminent": "Segera",
+    "detectedConditions": "Kawasan Yang Mungkin Memerlukan Perhatian",
+    "recommendations": "Cadangan",
+    "takeDetailedTest": "Ambil Penilaian Terperinci",
+    "viewAssessments": "Lihat Penilaian Saya"
+  },
+  "assessments": {
+    "title": "Penilaian Saya",
+    "subtitle": "Jejaki perjalanan kesihatan mental anda",
+    "screeningsTab": "Saringan",
+    "assessmentsTab": "Penilaian",
+    "noScreenings": "Tiada saringan lagi",
+    "noAssessments": "Tiada penilaian lagi",
+    "startFirst": "Ambil saringan pertama anda untuk mula menjejaki kesihatan mental anda.",
+    "totalScreenings": "Jumlah Saringan",
+    "totalAssessments": "Jumlah Penilaian",
+    "areasTracked": "Bidang Dijejaki",
+    "lastActivity": "Aktiviti Terakhir",
+    "takeNew": "Ambil Penilaian Baru",
+    "retake": "Ambil Semula",
+    "viewResults": "Lihat Keputusan",
+    "types": {
+      "depression": "Kemurungan",
+      "anxiety": "Kebimbangan",
+      "ocd": "OCD",
+      "ptsd": "PTSD",
+      "insomnia": "Insomnia",
+      "suicidal": "Pemikiran Bunuh Diri",
+      "psychosis": "Psikosis",
+      "sexual_addiction": "Ketagihan Seksual",
+      "marital_distress": "Tekanan Perkahwinan"
+    }
+  },
+  "account": {
+    "title": "Tetapan Akaun",
+    "subtitle": "Urus profil dan pilihan anda",
+    "profile": "Profil",
+    "preferences": "Pilihan",
+    "security": "Keselamatan",
+    "dangerZone": "Zon Bahaya",
+    "fullName": "Nama Penuh",
+    "gender": "Jantina",
+    "age": "Umur",
+    "maritalStatus": "Status Perkahwinan",
+    "occupation": "Pekerjaan",
+    "education": "Tahap Pendidikan",
+    "language": "Bahasa",
+    "languageDescription": "Pilih bahasa pilihan anda",
+    "changePassword": "Tukar Kata Laluan",
+    "changePasswordDescription": "Kemas kini kata laluan anda secara berkala",
+    "billing": "Bil & Langganan",
+    "billingDescription": "Urus pelan langganan anda",
+    "deleteAccount": "Padam Akaun",
+    "deleteAccountWarning": "Sebaik sahaja anda memadam akaun anda, tiada jalan untuk kembali. Sila pastikan.",
+    "profileUpdated": "Profil berjaya dikemas kini",
+    "languageSaved": "Pilihan bahasa disimpan",
+    "passwordUpdated": "Kata laluan berjaya dikemas kini",
+    "passwordsDoNotMatch": "Kata laluan tidak sepadan",
+    "passwordTooShort": "Kata laluan mestilah sekurang-kurangnya 8 aksara",
+    "genderOptions": {
+      "select": "Pilih jantina",
+      "male": "Lelaki",
+      "female": "Perempuan",
+      "other": "Lain-lain / Tidak mahu nyatakan"
+    },
+    "maritalOptions": {
+      "select": "Pilih status",
+      "single": "Bujang",
+      "married": "Berkahwin",
+      "divorced": "Bercerai",
+      "widowed": "Janda/Duda"
+    },
+    "educationOptions": {
+      "select": "Pilih tahap pendidikan",
+      "secondary": "Sekolah Menengah (SPM)",
+      "diploma": "Diploma",
+      "bachelor": "Ijazah Sarjana Muda",
+      "master": "Ijazah Sarjana",
+      "phd": "PhD / Doktor Falsafah",
+      "other": "Lain-lain"
+    }
+  },
+  "billing": {
+    "title": "Bil & Langganan",
+    "subtitle": "Urus pelan dan kaedah pembayaran anda",
+    "currentPlan": "Pelan Semasa",
+    "freePlan": "Pelan Percuma",
+    "premiumPlan": "Pelan Premium",
+    "upgradeToPremium": "Naik Taraf ke Premium",
+    "paymentHistory": "Sejarah Pembayaran",
+    "noPayments": "Tiada sejarah pembayaran lagi"
+  },
+  "emergency": {
+    "title": "Bantuan Kecemasan",
+    "subtitle": "Jika anda dalam krisis, sila dapatkan bantuan dengan segera",
+    "callNow": "Hubungi Sekarang",
+    "hotlines": {
+      "talianKasih": "Talian Kasih",
+      "befrienders": "Befrienders",
+      "emergency": "Kecemasan"
+    },
+    "safetyPlan": "Pelan Keselamatan",
+    "resources": "Sumber Krisis"
+  },
+  "chat": {
+    "title": "Pembantu Kesihatan Mental AI",
+    "subtitle": "Saya di sini untuk memberikan sokongan dan maklumat",
+    "placeholder": "Taip mesej anda...",
+    "send": "Hantar",
+    "disclaimer": "AI ini hanya memberikan maklumat umum dan bukan pengganti penjagaan kesihatan mental profesional."
+  },
+  "footer": {
+    "tagline": "Menyokong perjalanan kesihatan mental anda",
+    "product": "Produk",
+    "company": "Syarikat",
+    "support": "Sokongan",
+    "legal": "Undang-undang",
+    "privacy": "Dasar Privasi",
+    "terms": "Terma Perkhidmatan",
+    "contact": "Hubungi Kami",
+    "copyright": "Hak cipta terpelihara."
+  }
+}

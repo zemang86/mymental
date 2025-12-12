@@ -2,9 +2,12 @@
 
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Phone, Heart, ExternalLink } from 'lucide-react';
+import { AlertTriangle, Phone, Heart, ExternalLink, RotateCcw } from 'lucide-react';
 import { GlassButton } from '@/components/ui';
 import { MALAYSIA_HOTLINES } from '@/lib/constants/hotlines';
+import { useAssessmentStore } from '@/stores/assessment-store';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 interface EmergencyModalProps {
   isOpen: boolean;
@@ -17,6 +20,14 @@ export function EmergencyModal({
   onClose,
   canClose = false,
 }: EmergencyModalProps) {
+  const resetStore = useAssessmentStore((state) => state.reset);
+
+  // Dev reset function
+  const handleDevReset = () => {
+    resetStore();
+    localStorage.removeItem('mymental-assessment');
+    window.location.href = '/';
+  };
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -143,6 +154,19 @@ export function EmergencyModal({
                   <p className="text-center text-sm text-neutral-500">
                     Please call one of the hotlines above for immediate support
                   </p>
+                )}
+
+                {/* Dev Reset Button - only visible in development */}
+                {isDev && (
+                  <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <button
+                      onClick={handleDevReset}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 text-xs text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 rounded-lg transition-colors"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      DEV: Reset & Exit (clears session)
+                    </button>
+                  </div>
                 )}
               </div>
             </motion.div>

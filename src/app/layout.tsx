@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import { GradientBackground } from '@/components/layout';
 import './globals.css';
 
@@ -94,24 +96,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen`}
       >
-        <GradientBackground />
-        {children}
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            className: 'glass rounded-xl',
-          }}
-        />
+        <NextIntlClientProvider messages={messages}>
+          <GradientBackground />
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              className: 'glass rounded-xl',
+            }}
+          />
+        </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
       </body>
