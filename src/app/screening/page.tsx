@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { ChevronRight, ChevronLeft, AlertTriangle, FastForward } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, ProgressBar } from '@/components/ui';
@@ -16,6 +17,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 export default function ScreeningPage() {
   const router = useRouter();
+  const t = useTranslations('screening');
   const {
     initialScreeningAnswers,
     setInitialScreeningAnswer,
@@ -153,7 +155,7 @@ export default function ScreeningPage() {
           {/* Progress */}
           <div className="mb-8">
             <div className="flex items-center justify-between text-sm text-neutral-600 dark:text-neutral-400 mb-2">
-              <span>Initial Mental Health Screening</span>
+              <span>{t('initialScreening')}</span>
               <span>{Math.round(progress)}%</span>
             </div>
             <ProgressBar value={progress} showPercentage={false} />
@@ -162,7 +164,7 @@ export default function ScreeningPage() {
           {/* Question counter */}
           <div className="text-center mb-6">
             <span className="text-sm text-neutral-500">
-              Question {currentQuestionIndex + 1} of {questions.length}
+              {t('questionOf', { current: currentQuestionIndex + 1, total: questions.length })}
             </span>
           </div>
 
@@ -210,10 +212,10 @@ export default function ScreeningPage() {
                   <AlertTriangle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm text-orange-800 dark:text-orange-200 font-medium">
-                      We noticed your response indicates you may benefit from professional support.
+                      {t('warningTitle')}
                     </p>
                     <p className="text-xs text-orange-600 dark:text-orange-300 mt-1">
-                      Remember, help is always available. You can continue with the screening or reach out to a professional anytime.
+                      {t('warningSubtitle')}
                     </p>
                   </div>
                 </div>
@@ -229,7 +231,7 @@ export default function ScreeningPage() {
                 onClick={handleBack}
                 leftIcon={<ChevronLeft className="w-5 h-5" />}
               >
-                Back
+                {t('back')}
               </GlassButton>
             )}
             <GlassButton
@@ -240,7 +242,7 @@ export default function ScreeningPage() {
               rightIcon={<ChevronRight className="w-5 h-5" />}
               className="flex-1"
             >
-              {isLastQuestion ? 'Continue to Social Function' : 'Next'}
+              {isLastQuestion ? t('continueToSocial') : t('next')}
             </GlassButton>
           </div>
 

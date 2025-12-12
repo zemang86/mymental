@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import {
   ArrowRight,
   Play,
@@ -17,60 +18,15 @@ import { StatsInfographic } from '@/components/landing/stats-infographic';
 
 // Unsplash image URLs for conditions (free to use)
 const CONDITIONS = [
-  {
-    id: 'anxiety',
-    title: 'Anxiety',
-    image: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=800&h=600&fit=crop',
-    description: 'Excessive worry, nervousness, or fear that interferes with daily activities.',
-  },
-  {
-    id: 'marital_distress',
-    title: 'Marital Distress',
-    image: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&h=600&fit=crop',
-    description: 'Relationship conflicts and emotional distance affecting your well-being.',
-  },
-  {
-    id: 'ocd',
-    title: 'OCD (Obsessive-Compulsive Disorder)',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
-    description: 'Unwanted repetitive thoughts and behaviors that are difficult to control.',
-  },
-  {
-    id: 'psychosis',
-    title: 'Prodromal Psychosis',
-    image: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=800&h=600&fit=crop',
-    description: 'Early warning signs of psychotic disorders that may need attention.',
-  },
-  {
-    id: 'insomnia',
-    title: 'Insomnia',
-    image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=600&fit=crop',
-    description: 'Difficulty falling asleep, staying asleep, or getting restful sleep.',
-  },
-  {
-    id: 'sexual_addiction',
-    title: 'Sexual Addiction',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop',
-    description: 'Compulsive sexual thoughts or behaviors affecting your life.',
-  },
-  {
-    id: 'depression',
-    title: 'Depression',
-    image: 'https://images.unsplash.com/photo-1474540412665-1cdae210ae6b?w=800&h=600&fit=crop',
-    description: 'Persistent sadness, loss of interest, and feelings of hopelessness.',
-  },
-  {
-    id: 'ptsd',
-    title: 'PTSD (Post-Traumatic Stress Disorder)',
-    image: 'https://images.unsplash.com/photo-1509909756405-be0199881695?w=800&h=600&fit=crop',
-    description: 'Lasting effects from experiencing or witnessing traumatic events.',
-  },
-  {
-    id: 'suicidal',
-    title: 'Suicidal',
-    image: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&h=600&fit=crop',
-    description: 'Thoughts of self-harm or ending your life that need immediate attention.',
-  },
+  { id: 'anxiety', key: 'anxiety', image: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=800&h=600&fit=crop' },
+  { id: 'marital_distress', key: 'maritalDistress', image: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&h=600&fit=crop' },
+  { id: 'ocd', key: 'ocd', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' },
+  { id: 'psychosis', key: 'psychosis', image: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=800&h=600&fit=crop' },
+  { id: 'insomnia', key: 'insomnia', image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=600&fit=crop' },
+  { id: 'sexual_addiction', key: 'sexualAddiction', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop' },
+  { id: 'depression', key: 'depression', image: 'https://images.unsplash.com/photo-1474540412665-1cdae210ae6b?w=800&h=600&fit=crop' },
+  { id: 'ptsd', key: 'ptsd', image: 'https://images.unsplash.com/photo-1509909756405-be0199881695?w=800&h=600&fit=crop' },
+  { id: 'suicidal', key: 'suicidal', image: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&h=600&fit=crop' },
 ];
 
 // Hero and other images from Unsplash
@@ -96,55 +52,9 @@ const TESTIMONIALS = [
   },
 ];
 
-// FAQ data
-const FAQ_DATA = [
-  {
-    question: 'How does the mental health screening test work?',
-    answer: 'Our screening uses validated questionnaires to assess your mental well-being. You answer a series of questions about your thoughts, feelings, and behaviors. Based on your responses, we provide insights into potential areas of concern and recommend appropriate next steps.',
-  },
-  {
-    question: 'Is this a clinical diagnosis?',
-    answer: 'No, this screening is not a clinical diagnosis. It is a preliminary assessment tool designed to help you understand your mental health better. For a proper diagnosis, please consult a licensed mental health professional.',
-  },
-  {
-    question: 'Are my results confidential and private?',
-    answer: 'Yes, your privacy is our top priority. All data is encrypted and stored securely. We do not share your personal information with third parties without your explicit consent.',
-  },
-  {
-    question: 'How much does it cost to take this mental health screening?',
-    answer: 'The initial mental health screening is completely free. Some detailed assessments and additional features may require a subscription or one-time payment.',
-  },
-  {
-    question: 'What is a mental health screening?',
-    answer: 'A mental health screening is a quick assessment that helps identify signs of mental health conditions. It typically involves answering questions about your mood, thoughts, and behaviors over a recent period.',
-  },
-  {
-    question: 'Who can take this mental health screening?',
-    answer: 'Anyone aged 13 and above can take this screening. However, if you are under 18, we recommend involving a parent or guardian in reviewing your results.',
-  },
-  {
-    question: 'What do I need to complete this mental health screening?',
-    answer: 'You just need about 10-15 minutes of quiet time and honest reflection. There are no right or wrong answers - just answer based on how you have been feeling recently.',
-  },
-  {
-    question: 'How long does it take to complete this initial mental health screening?',
-    answer: 'The initial screening takes approximately 5-10 minutes. Detailed assessments for specific conditions may take an additional 5-10 minutes each.',
-  },
-  {
-    question: 'I have thoughts of killing myself. Do I need to complete this mental health screening?',
-    answer: 'If you are having thoughts of harming yourself, please seek immediate help. Call Talian Kasih at 15999 or Befrienders at 03-7956 8145. You can also go to the nearest hospital emergency department. Your life matters.',
-  },
-  {
-    question: 'What happens after I complete this initial mental health screening?',
-    answer: 'After completing the screening, you will receive preliminary insights about your mental well-being. Based on your results, we may recommend specific detailed assessments and provide resources for support.',
-  },
-  {
-    question: 'Are the decisions made highly valid and reliable?',
-    answer: 'Our screening tools are based on clinically validated instruments used worldwide, including PHQ-9 for depression and GAD-7 for anxiety. However, they are screening tools, not diagnostic instruments.',
-  },
-];
-
 export default function HomePage() {
+  const t = useTranslations('home');
+  const faqItems = t.raw('faq.items') as Array<{ question: string; answer: string }>;
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
@@ -168,18 +78,18 @@ export default function HomePage() {
                 transition={{ duration: 0.5 }}
               >
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-tight">
-                  Take a Moment for Your{' '}
+                  {t('hero.title')}{' '}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400">
-                    Mental Health
+                    {t('hero.titleHighlight')}
                   </span>
                 </h1>
 
                 <p className="mt-6 text-lg text-neutral-600 dark:text-neutral-300 max-w-xl">
-                  With MyMental, a quick screening can provide insights into your well-being level and guide you to take positive action.
+                  {t('hero.subtitle')}
                 </p>
 
                 <p className="mt-4 text-neutral-500 dark:text-neutral-400">
-                  Let&apos;s take the first step in self-care with a mental health screening!
+                  {t('hero.cta')}
                 </p>
 
                 <div className="mt-8">
@@ -189,7 +99,7 @@ export default function HomePage() {
                       size="lg"
                       rightIcon={<ArrowRight className="w-5 h-5" />}
                     >
-                      Get Started
+                      {t('hero.startButton')}
                     </GlassButton>
                   </Link>
                 </div>
@@ -221,7 +131,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
               <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
-                In Collaboration With
+                {t('collaboration')}
               </span>
               <div className="flex items-center gap-8 md:gap-12">
                 {/* Partner logos - replace with actual logos */}
@@ -279,7 +189,7 @@ export default function HomePage() {
                 viewport={{ once: true }}
               >
                 <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white">
-                  What We Often Ignore Maybe an Early Sign
+                  {t('earlySigns.title')}
                 </h2>
               </motion.div>
 
@@ -289,9 +199,9 @@ export default function HomePage() {
                 viewport={{ once: true }}
               >
                 <p className="text-neutral-600 dark:text-neutral-300 mb-6">
-                  Tired? Stressed? Worried? These could be signs of something more serious. Self-diagnosing your mental health can be risky and misleading.{' '}
+                  {t('earlySigns.description')}{' '}
                   <strong className="text-neutral-900 dark:text-white">
-                    Take 2 minutes to check your mental health the right way.
+                    {t('earlySigns.cta')}
                   </strong>
                 </p>
 
@@ -300,7 +210,7 @@ export default function HomePage() {
                     variant="primary"
                     rightIcon={<ArrowRight className="w-5 h-5" />}
                   >
-                    Let&apos;s Get Started
+                    {t('earlySigns.button')}
                   </GlassButton>
                 </Link>
               </motion.div>
@@ -324,7 +234,7 @@ export default function HomePage() {
                     <div className="aspect-[4/3] relative">
                       <Image
                         src={condition.image}
-                        alt={condition.title}
+                        alt={t(`conditions.${condition.key}.title`)}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -332,13 +242,13 @@ export default function HomePage() {
                     </div>
                     <div className="p-4">
                       <h3 className="font-semibold text-white mb-1">
-                        {condition.title}
+                        {t(`conditions.${condition.key}.title`)}
                       </h3>
                       <Link
                         href={`/test/${condition.id}`}
                         className="text-primary-300 hover:text-primary-200 text-sm font-medium inline-flex items-center gap-1"
                       >
-                        Read More
+                        {t('conditions.readMore')}
                         <ArrowRight className="w-3 h-3" />
                       </Link>
                     </div>
@@ -401,12 +311,12 @@ export default function HomePage() {
               className="text-center mb-12"
             >
               <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
-                Frequently Asked Questions
+                {t('faq.title')}
               </h2>
             </motion.div>
 
             <div className="space-y-3">
-              {FAQ_DATA.map((faq, index) => (
+              {faqItems.map((faq, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 10 }}
@@ -463,7 +373,7 @@ export default function HomePage() {
                 viewport={{ once: true }}
               >
                 <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-                  MENTAL HEALTH MATTERS
+                  {t('cta.title')}
                 </h2>
               </motion.div>
 

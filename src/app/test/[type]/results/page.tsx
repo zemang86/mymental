@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   ArrowRight,
   Download,
@@ -36,6 +37,11 @@ function ResultsContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations('results');
+
+  // Helper to get localized content (shows English for 'en', Malay for 'ms')
+  const isMalay = locale === 'ms';
 
   const type = params.type as AssessmentType;
   const assessmentId = searchParams.get('id');
@@ -223,13 +229,10 @@ function ResultsContent() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
-                        Summary
+                        {isMalay ? 'Ringkasan' : 'Summary'}
                       </h3>
                       <p className="text-neutral-700 dark:text-neutral-300">
-                        {insights.summary}
-                      </p>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                        {insights.summaryMs}
+                        {isMalay ? insights.summaryMs : insights.summary}
                       </p>
                     </div>
                   </div>
@@ -245,7 +248,7 @@ function ResultsContent() {
               >
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
                   <Brain className="w-5 h-5 text-primary-500" />
-                  Key Findings
+                  {isMalay ? 'Penemuan Utama' : 'Key Findings'}
                 </h2>
                 <div className="space-y-3">
                   {insights.keyFindings.map((finding, index) => (
@@ -254,10 +257,7 @@ function ResultsContent() {
                         {getFindingIcon(finding.type)}
                         <div className="flex-1">
                           <p className="text-neutral-800 dark:text-neutral-200">
-                            {finding.text}
-                          </p>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                            {finding.textMs}
+                            {isMalay ? finding.textMs : finding.text}
                           </p>
                         </div>
                       </div>
@@ -275,7 +275,7 @@ function ResultsContent() {
               >
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
                   <Target className="w-5 h-5 text-primary-500" />
-                  Recommendations
+                  {isMalay ? 'Cadangan' : 'Recommendations'}
                 </h2>
                 <div className="space-y-3">
                   {insights.recommendations.map((rec, index) => (
@@ -285,11 +285,12 @@ function ResultsContent() {
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-1">
-                          <p className="font-medium">{rec.text}</p>
-                          <p className="text-sm opacity-80 mt-0.5">{rec.textMs}</p>
+                          <p className="font-medium">{isMalay ? rec.textMs : rec.text}</p>
                         </div>
                         <span className="text-xs font-medium uppercase px-2 py-1 rounded-full bg-white/50 dark:bg-black/20">
-                          {rec.priority}
+                          {rec.priority === 'high' ? (isMalay ? 'tinggi' : 'high') :
+                           rec.priority === 'medium' ? (isMalay ? 'sederhana' : 'medium') :
+                           (isMalay ? 'rendah' : 'low')}
                         </span>
                       </div>
                     </div>
@@ -307,22 +308,16 @@ function ResultsContent() {
                 >
                   <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-amber-500" />
-                    Coping Strategies
+                    {isMalay ? 'Strategi Menangani' : 'Coping Strategies'}
                   </h2>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {insights.copingStrategies.map((strategy, index) => (
                       <GlassCard key={index}>
-                        <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
-                          {strategy.title}
+                        <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">
+                          {isMalay ? strategy.titleMs : strategy.title}
                         </h3>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                          {strategy.titleMs}
-                        </p>
                         <p className="text-neutral-700 dark:text-neutral-300 text-sm">
-                          {strategy.description}
-                        </p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                          {strategy.descriptionMs}
+                          {isMalay ? strategy.descriptionMs : strategy.description}
                         </p>
                       </GlassCard>
                     ))}
@@ -340,7 +335,7 @@ function ResultsContent() {
                 >
                   <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
                     <Shield className="w-5 h-5 text-red-500" />
-                    Risk Factors to Monitor
+                    {isMalay ? 'Faktor Risiko untuk Dipantau' : 'Risk Factors to Monitor'}
                   </h2>
                   <GlassCard className="border-red-200 dark:border-red-800/30 bg-red-50/50 dark:bg-red-900/10">
                     <ul className="space-y-3">
@@ -351,8 +346,9 @@ function ResultsContent() {
                             risk.level === 'moderate' ? 'text-amber-500' : 'text-yellow-500'
                           }`} />
                           <div>
-                            <p className="text-neutral-800 dark:text-neutral-200">{risk.text}</p>
-                            <p className="text-sm text-neutral-500 dark:text-neutral-400">{risk.textMs}</p>
+                            <p className="text-neutral-800 dark:text-neutral-200">
+                              {isMalay ? risk.textMs : risk.text}
+                            </p>
                           </div>
                         </li>
                       ))}
@@ -370,7 +366,7 @@ function ResultsContent() {
               >
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
                   <Heart className="w-5 h-5 text-primary-500" />
-                  Next Steps
+                  {isMalay ? 'Langkah Seterusnya' : 'Next Steps'}
                 </h2>
                 <div className="space-y-3">
                   {insights.nextSteps.map((step, index) => (
@@ -379,10 +375,7 @@ function ResultsContent() {
                         {getUrgencyIcon(step.urgency)}
                         <div className="flex-1">
                           <p className="text-neutral-800 dark:text-neutral-200 font-medium">
-                            {step.action}
-                          </p>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                            {step.actionMs}
+                            {isMalay ? step.actionMs : step.action}
                           </p>
                         </div>
                       </div>
@@ -429,10 +422,10 @@ function ResultsContent() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-white">
-                      AI Chat Support
+                      {isMalay ? 'Sokongan Chat AI' : 'AI Chat Support'}
                     </h3>
                     <p className="text-sm text-neutral-500">
-                      Get personalized guidance
+                      {isMalay ? 'Dapatkan panduan peribadi' : 'Get personalized guidance'}
                     </p>
                   </div>
                 </div>
@@ -448,10 +441,10 @@ function ResultsContent() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-white">
-                      Self-Help Courses
+                      {isMalay ? 'Kursus Bantu Diri' : 'Self-Help Courses'}
                     </h3>
                     <p className="text-sm text-neutral-500">
-                      Evidence-based interventions
+                      {isMalay ? 'Intervensi berasaskan bukti' : 'Evidence-based interventions'}
                     </p>
                   </div>
                 </div>
@@ -467,10 +460,12 @@ function ResultsContent() {
           >
             <GlassCard variant="elevated" className="text-center">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
-                Continue Your Assessment Journey
+                {isMalay ? 'Teruskan Perjalanan Penilaian Anda' : 'Continue Your Assessment Journey'}
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-                Take more assessments to get a comprehensive view of your mental well-being.
+                {isMalay
+                  ? 'Ambil lebih banyak penilaian untuk mendapatkan gambaran menyeluruh tentang kesejahteraan mental anda.'
+                  : 'Take more assessments to get a comprehensive view of your mental well-being.'}
               </p>
               <GlassButton
                 variant="primary"
@@ -478,7 +473,7 @@ function ResultsContent() {
                 rightIcon={<ArrowRight className="w-5 h-5" />}
                 onClick={() => router.push('/my-assessments')}
               >
-                View All Assessments
+                {isMalay ? 'Lihat Semua Penilaian' : 'View All Assessments'}
               </GlassButton>
             </GlassCard>
           </motion.div>
@@ -490,7 +485,9 @@ function ResultsContent() {
             transition={{ delay: 0.6 }}
             className="mt-8 p-4 bg-neutral-100/50 dark:bg-neutral-800/50 rounded-xl"
           >
-            <p className="text-xs text-neutral-500">{SCREENING_DISCLAIMER.en}</p>
+            <p className="text-xs text-neutral-500">
+              {isMalay ? SCREENING_DISCLAIMER.ms : SCREENING_DISCLAIMER.en}
+            </p>
           </motion.div>
         </div>
       </main>

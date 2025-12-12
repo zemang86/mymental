@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils/cn';
 import { EMERGENCY_DISCLAIMER } from '@/lib/constants/hotlines';
 
@@ -9,29 +10,30 @@ interface FooterProps {
   className?: string;
 }
 
-const footerLinks = {
-  register: [
-    { name: 'Online Counselling', href: '/counselling/online' },
-    { name: 'Offline Counselling', href: '/counselling/offline' },
-  ],
-  contact: [
-    { name: 'Contact Us', href: '/contact' },
-    { name: 'Customer Service', href: '/support' },
-    { name: 'Partnership', href: '/partnership' },
-  ],
-  needToKnow: [
-    { name: 'FAQ', href: '/faq' },
-    { name: 'Counselling Guide', href: '/guide' },
-  ],
-  legal: [
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Cookies', href: '/cookies' },
-  ],
-};
-
 export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
+  const t = useTranslations('footer');
   const currentYear = new Date().getFullYear();
+
+  const footerLinks = {
+    register: [
+      { name: t('links.onlineCounselling'), href: '/counselling/online' },
+      { name: t('links.offlineCounselling'), href: '/counselling/offline' },
+    ],
+    contact: [
+      { name: t('links.contactUs'), href: '/contact' },
+      { name: t('links.customerService'), href: '/support' },
+      { name: t('links.partnership'), href: '/partnership' },
+    ],
+    needToKnow: [
+      { name: t('links.faq'), href: '/faq' },
+      { name: t('links.counsellingGuide'), href: '/guide' },
+    ],
+    legal: [
+      { name: t('links.termsOfService'), href: '/terms' },
+      { name: t('links.privacyPolicy'), href: '/privacy' },
+      { name: t('links.cookies'), href: '/cookies' },
+    ],
+  };
 
   return (
     <footer className={cn('mt-auto', className)}>
@@ -56,7 +58,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
             {/* Register */}
             <div>
               <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">
-                Register
+                {t('sections.register')}
               </h3>
               <ul className="space-y-2">
                 {footerLinks.register.map((link) => (
@@ -75,7 +77,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
             {/* Contact Us */}
             <div>
               <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">
-                Contact Us
+                {t('sections.contact')}
               </h3>
               <ul className="space-y-2">
                 {footerLinks.contact.map((link) => (
@@ -94,7 +96,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
             {/* Need to Know */}
             <div>
               <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">
-                Need to Know
+                {t('sections.needToKnow')}
               </h3>
               <ul className="space-y-2">
                 {footerLinks.needToKnow.map((link) => (
@@ -113,7 +115,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
             {/* Legal */}
             <div>
               <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">
-                Legal
+                {t('sections.legal')}
               </h3>
               <ul className="space-y-2">
                 {footerLinks.legal.map((link) => (
@@ -150,13 +152,13 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
 
             <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
               <Link href="/terms" className="hover:text-primary-600 transition-colors">
-                Terms of Service
+                {t('links.termsOfService')}
               </Link>
               <Link href="/privacy" className="hover:text-primary-600 transition-colors">
-                Privacy Policy
+                {t('links.privacyPolicy')}
               </Link>
               <Link href="/cookies" className="hover:text-primary-600 transition-colors">
-                Cookies
+                {t('links.cookies')}
               </Link>
             </div>
           </div>

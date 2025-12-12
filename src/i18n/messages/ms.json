@@ -39,31 +39,115 @@
   },
   "home": {
     "hero": {
-      "title": "Memahami Kesejahteraan Mental Anda",
-      "subtitle": "Ambil saringan kesihatan mental yang disahkan dan dapatkan pandangan peribadi untuk menyokong perjalanan kesihatan mental anda.",
-      "startButton": "Mulakan Saringan Percuma",
-      "learnMore": "Ketahui Lebih Lanjut"
+      "title": "Luangkan Masa untuk",
+      "titleHighlight": "Kesihatan Mental",
+      "subtitle": "Dengan MyMental, saringan ringkas boleh memberikan pandangan tentang tahap kesejahteraan anda dan membimbing anda untuk mengambil tindakan positif.",
+      "cta": "Jom ambil langkah pertama dalam penjagaan diri dengan saringan kesihatan mental!",
+      "startButton": "Mula Sekarang"
     },
-    "features": {
-      "title": "Mengapa Pilih MyMental?",
-      "validated": {
-        "title": "Instrumen Yang Disahkan",
-        "description": "Penilaian kami menggunakan alat saringan yang disahkan secara klinikal seperti PHQ-9 dan GAD-7."
+    "collaboration": "Dengan Kerjasama",
+    "earlySigns": {
+      "title": "Apa Yang Kita Selalu Abaikan Mungkin Tanda Awal",
+      "description": "Penat? Tertekan? Risau? Ini mungkin tanda-tanda sesuatu yang lebih serius. Mendiagnosis sendiri kesihatan mental anda boleh berisiko dan mengelirukan.",
+      "cta": "Ambil 2 minit untuk memeriksa kesihatan mental anda dengan cara yang betul.",
+      "button": "Jom Mula"
+    },
+    "conditions": {
+      "anxiety": {
+        "title": "Kebimbangan",
+        "description": "Kebimbangan berlebihan, kegelisahan, atau ketakutan yang mengganggu aktiviti harian."
       },
-      "private": {
-        "title": "Peribadi & Selamat",
-        "description": "Data anda disulitkan dan dilindungi. Kami tidak akan berkongsi maklumat anda."
+      "maritalDistress": {
+        "title": "Tekanan Perkahwinan",
+        "description": "Konflik hubungan dan jarak emosi yang menjejaskan kesejahteraan anda."
       },
-      "insights": {
-        "title": "Pandangan Peribadi",
-        "description": "Dapatkan cadangan berkuasa AI berdasarkan keputusan saringan anda."
-      }
+      "ocd": {
+        "title": "OCD (Gangguan Obsesif-Kompulsif)",
+        "description": "Pemikiran dan tingkah laku berulang yang tidak diingini dan sukar dikawal."
+      },
+      "psychosis": {
+        "title": "Psikosis Prodromal",
+        "description": "Tanda-tanda awal gangguan psikotik yang mungkin memerlukan perhatian."
+      },
+      "insomnia": {
+        "title": "Insomnia",
+        "description": "Kesukaran untuk tidur, kekal tidur, atau mendapatkan tidur yang nyenyak."
+      },
+      "sexualAddiction": {
+        "title": "Ketagihan Seksual",
+        "description": "Pemikiran atau tingkah laku seksual kompulsif yang menjejaskan kehidupan anda."
+      },
+      "depression": {
+        "title": "Kemurungan",
+        "description": "Kesedihan berterusan, kehilangan minat, dan perasaan putus asa."
+      },
+      "ptsd": {
+        "title": "PTSD (Gangguan Tekanan Pasca Trauma)",
+        "description": "Kesan berpanjangan daripada mengalami atau menyaksikan peristiwa traumatik."
+      },
+      "suicidal": {
+        "title": "Membunuh Diri",
+        "description": "Pemikiran untuk mencederakan diri sendiri atau mengakhiri hidup yang memerlukan perhatian segera."
+      },
+      "readMore": "Baca Lagi"
+    },
+    "faq": {
+      "title": "Soalan Lazim",
+      "items": [
+        {
+          "question": "Bagaimana ujian saringan kesihatan mental berfungsi?",
+          "answer": "Saringan kami menggunakan soal selidik yang disahkan untuk menilai kesejahteraan mental anda. Anda menjawab siri soalan tentang pemikiran, perasaan, dan tingkah laku anda. Berdasarkan jawapan anda, kami memberikan pandangan tentang kawasan yang mungkin memerlukan perhatian dan mencadangkan langkah seterusnya yang sesuai."
+        },
+        {
+          "question": "Adakah ini diagnosis klinikal?",
+          "answer": "Tidak, saringan ini bukan diagnosis klinikal. Ia adalah alat penilaian awal yang direka untuk membantu anda memahami kesihatan mental anda dengan lebih baik. Untuk diagnosis yang tepat, sila rujuk profesional kesihatan mental berlesen."
+        },
+        {
+          "question": "Adakah keputusan saya sulit dan peribadi?",
+          "answer": "Ya, privasi anda adalah keutamaan kami. Semua data disulitkan dan disimpan dengan selamat. Kami tidak berkongsi maklumat peribadi anda dengan pihak ketiga tanpa kebenaran jelas anda."
+        },
+        {
+          "question": "Berapakah kos untuk mengambil saringan kesihatan mental ini?",
+          "answer": "Saringan kesihatan mental awal adalah percuma sepenuhnya. Sesetengah penilaian terperinci dan ciri tambahan mungkin memerlukan langganan atau bayaran sekali."
+        },
+        {
+          "question": "Apakah saringan kesihatan mental?",
+          "answer": "Saringan kesihatan mental adalah penilaian ringkas yang membantu mengenal pasti tanda-tanda keadaan kesihatan mental. Ia biasanya melibatkan menjawab soalan tentang mood, pemikiran, dan tingkah laku anda dalam tempoh masa tertentu."
+        },
+        {
+          "question": "Siapa yang boleh mengambil saringan kesihatan mental ini?",
+          "answer": "Sesiapa berumur 13 tahun ke atas boleh mengambil saringan ini. Walau bagaimanapun, jika anda berumur di bawah 18 tahun, kami mencadangkan melibatkan ibu bapa atau penjaga dalam menyemak keputusan anda."
+        },
+        {
+          "question": "Apa yang saya perlukan untuk melengkapkan saringan kesihatan mental ini?",
+          "answer": "Anda hanya memerlukan kira-kira 10-15 minit masa yang tenang dan refleksi jujur. Tiada jawapan yang betul atau salah - jawab sahaja berdasarkan perasaan anda kebelakangan ini."
+        },
+        {
+          "question": "Berapa lama masa yang diperlukan untuk melengkapkan saringan kesihatan mental awal ini?",
+          "answer": "Saringan awal mengambil masa kira-kira 5-10 minit. Penilaian terperinci untuk keadaan tertentu mungkin mengambil tambahan 5-10 minit setiap satu."
+        },
+        {
+          "question": "Saya ada pemikiran untuk membunuh diri. Perlukah saya melengkapkan saringan kesihatan mental ini?",
+          "answer": "Jika anda mempunyai pemikiran untuk mencederakan diri sendiri, sila dapatkan bantuan segera. Hubungi Talian Kasih di 15999 atau Befrienders di 03-7956 8145. Anda juga boleh pergi ke jabatan kecemasan hospital terdekat. Nyawa anda penting."
+        },
+        {
+          "question": "Apa yang berlaku selepas saya melengkapkan saringan kesihatan mental awal ini?",
+          "answer": "Selepas melengkapkan saringan, anda akan menerima pandangan awal tentang kesejahteraan mental anda. Berdasarkan keputusan anda, kami mungkin mencadangkan penilaian terperinci tertentu dan menyediakan sumber untuk sokongan."
+        },
+        {
+          "question": "Adakah keputusan yang dibuat sangat sah dan boleh dipercayai?",
+          "answer": "Alat saringan kami berdasarkan instrumen yang disahkan secara klinikal yang digunakan di seluruh dunia, termasuk PHQ-9 untuk kemurungan dan GAD-7 untuk kebimbangan. Walau bagaimanapun, ia adalah alat saringan, bukan instrumen diagnostik."
+        }
+      ]
+    },
+    "cta": {
+      "title": "KESIHATAN MENTAL PENTING"
     }
   },
   "screening": {
     "title": "Saringan Kesihatan Mental",
     "subtitle": "Jawab dengan jujur untuk mendapatkan keputusan yang paling tepat",
-    "initialScreening": "Saringan Awal",
+    "initialScreening": "Saringan Kesihatan Mental Awal",
     "socialFunction": "Penilaian Fungsi Sosial",
     "progress": "Kemajuan",
     "questionOf": "Soalan {current} daripada {total}",
@@ -74,7 +158,12 @@
     "neutral": "Neutral",
     "agree": "Setuju",
     "stronglyAgree": "Sangat Setuju",
-    "skipToResults": "Langkau ke Keputusan"
+    "skipToResults": "Langkau ke Keputusan",
+    "back": "Kembali",
+    "next": "Seterusnya",
+    "continueToSocial": "Teruskan ke Fungsi Sosial",
+    "warningTitle": "Kami perasan jawapan anda menunjukkan anda mungkin mendapat manfaat daripada sokongan profesional.",
+    "warningSubtitle": "Ingat, bantuan sentiasa tersedia. Anda boleh meneruskan saringan atau menghubungi profesional pada bila-bila masa."
   },
   "results": {
     "title": "Keputusan Anda",
@@ -106,6 +195,21 @@
     "takeNew": "Ambil Penilaian Baru",
     "retake": "Ambil Semula",
     "viewResults": "Lihat Keputusan",
+    "tryAgain": "Cuba Lagi",
+    "startScreening": "Mula Saringan",
+    "initialScreening": "Saringan Awal",
+    "detected": "Dikesan",
+    "noConditionsDetected": "Tiada keadaan dikesan",
+    "score": "Skor",
+    "freePlan": "Pelan Percuma",
+    "demoMode": "Mod Demo",
+    "upgradeMessage": "Naik taraf untuk membuka semua penilaian & pandangan AI",
+    "testSubscribe": "Cuba Langgan",
+    "takeAnother": "Ambil Penilaian Lain",
+    "regularCheckins": "Semakan berkala membantu anda menjejaki kemajuan dan kesejahteraan anda.",
+    "fullScreeningAgain": "Atau ambil saringan penuh sekali lagi",
+    "chooseAssessment": "Pilih penilaian untuk memulakan perjalanan kesihatan mental anda",
+    "takeInitialScreening": "Ambil saringan kesihatan mental awal",
     "types": {
       "depression": "Kemurungan",
       "anxiety": "Kebimbangan",
@@ -198,13 +302,34 @@
   },
   "footer": {
     "tagline": "Menyokong perjalanan kesihatan mental anda",
-    "product": "Produk",
-    "company": "Syarikat",
-    "support": "Sokongan",
-    "legal": "Undang-undang",
-    "privacy": "Dasar Privasi",
-    "terms": "Terma Perkhidmatan",
-    "contact": "Hubungi Kami",
-    "copyright": "Hak cipta terpelihara."
+    "copyright": "Hak cipta terpelihara.",
+    "sections": {
+      "register": "Daftar",
+      "contact": "Hubungi Kami",
+      "needToKnow": "Perlu Tahu",
+      "legal": "Undang-undang"
+    },
+    "links": {
+      "onlineCounselling": "Kaunseling Dalam Talian",
+      "offlineCounselling": "Kaunseling Luar Talian",
+      "contactUs": "Hubungi Kami",
+      "customerService": "Khidmat Pelanggan",
+      "partnership": "Perkongsian",
+      "faq": "Soalan Lazim",
+      "counsellingGuide": "Panduan Kaunseling",
+      "termsOfService": "Terma Perkhidmatan",
+      "privacyPolicy": "Dasar Privasi",
+      "cookies": "Kuki"
+    },
+    "emergency": "Jika anda dalam krisis atau mengalami kecemasan kesihatan mental, sila hubungi salah satu talian bantuan di atas atau pergi ke jabatan kecemasan hospital terdekat."
+  },
+  "emergencyModal": {
+    "title": "Kami Prihatin Tentang Anda",
+    "subtitle": "Sila dapatkan sokongan",
+    "message": "Berdasarkan jawapan anda, kami ingin memastikan anda mempunyai akses kepada sokongan segera. Anda tidak bersendirian, dan bantuan tersedia 24/7.",
+    "callForHelp": "Hubungi untuk bantuan segera:",
+    "viewAllResources": "Lihat Semua Sumber Kecemasan",
+    "continueButton": "Saya faham, teruskan",
+    "pleaseCall": "Sila hubungi salah satu talian bantuan di atas untuk sokongan segera"
   }
 }

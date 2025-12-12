@@ -31,12 +31,10 @@ interface SaveScreeningRequest {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
-    const adminClient = createAdminClient(); // Use admin client to bypass RLS
+    const adminClient = createAdminClient();
 
     // Get current user (optional - can save anonymously)
     const { data: { user } } = await supabase.auth.getUser();
-
-    console.log('Screening save - User:', user?.id || 'anonymous');
 
     const body: SaveScreeningRequest = await request.json();
     const {
@@ -48,8 +46,6 @@ export async function POST(request: NextRequest) {
       socialFunctionAnswers,
       socialFunctionScore,
       functionalLevel,
-      demographics,
-      sessionId,
     } = body;
 
     // Validate required fields
@@ -74,7 +70,6 @@ export async function POST(request: NextRequest) {
     // For anonymous users, create a demographic session first
     let demographicSessionId: string | null = null;
     if (!profileExists) {
-      console.log('Screening save - Creating demographic session for anonymous user...');
       const { data: session, error: sessionError } = await adminClient
         .from('demographic_sessions')
         .insert({
@@ -93,16 +88,14 @@ export async function POST(request: NextRequest) {
         );
       }
       demographicSessionId = session.id;
-      console.log('Screening save - Demographic session created:', demographicSessionId);
     }
 
     // 1. Save initial screening (use admin client to bypass RLS for anonymous users)
-    console.log('Screening save - Inserting initial screening... (profileExists:', profileExists, ', sessionId:', demographicSessionId, ')');
     const { data: initialScreening, error: initialError } = await adminClient
       .from('initial_screenings')
       .insert({
         user_id: profileExists ? user!.id : null,
-        session_id: profileExists ? null : demographicSessionId, // Use demographic session for anonymous users
+        session_id: profileExists ? null : demographicSessionId,
         raw_answers: initialScreeningAnswers,
         detected_conditions: detectedConditions,
         has_suicidal_ideation: hasSuicidalIdeation,
@@ -120,17 +113,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Screening save - Initial screening saved:', initialScreening.id);
-
-    // 2. Save social function screening (if provided) - use admin client
+    // 2. Save social function screening (if provided)
     let socialScreeningId = null;
     if (socialFunctionAnswers && Object.keys(socialFunctionAnswers).length > 0 && socialFunctionScore !== undefined) {
-      console.log('Screening save - Inserting social function screening...');
       const { data: socialScreening, error: socialError } = await adminClient
         .from('social_function_screenings')
         .insert({
           user_id: profileExists ? user!.id : null,
-          session_id: profileExists ? null : demographicSessionId, // Use demographic session for anonymous users
+          session_id: profileExists ? null : demographicSessionId,
           initial_screening_id: initialScreening.id,
           raw_answers: socialFunctionAnswers,
           total_score: socialFunctionScore,
@@ -144,17 +134,15 @@ export async function POST(request: NextRequest) {
         // Don't fail the whole request, just log the error
       } else {
         socialScreeningId = socialScreening.id;
-        console.log('Screening save - Social screening saved:', socialScreeningId);
       }
     }
 
-    // 3. Log triage event if high risk - use admin client
+    // 3. Log triage event if high risk
     if (riskLevel === 'imminent' || riskLevel === 'high') {
-      console.log('Screening save - Logging triage event for risk level:', riskLevel);
       await adminClient.from('triage_events').insert({
         initial_screening_id: initialScreening.id,
         user_id: profileExists ? user!.id : null,
-        session_id: profileExists ? null : demographicSessionId, // Use demographic session for anonymous users
+        session_id: profileExists ? null : demographicSessionId,
         risk_level: riskLevel,
         trigger_reason: hasSuicidalIdeation
           ? 'Suicidal ideation detected'
@@ -164,7 +152,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    console.log('Screening save - Complete!');
     return NextResponse.json({
       success: true,
       initialScreeningId: initialScreening.id,

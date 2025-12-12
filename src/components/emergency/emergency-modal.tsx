@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { AlertTriangle, Phone, Heart, ExternalLink, RotateCcw } from 'lucide-react';
 import { GlassButton } from '@/components/ui';
 import { MALAYSIA_HOTLINES } from '@/lib/constants/hotlines';
@@ -20,6 +21,7 @@ export function EmergencyModal({
   onClose,
   canClose = false,
 }: EmergencyModalProps) {
+  const t = useTranslations('emergencyModal');
   const resetStore = useAssessmentStore((state) => state.reset);
 
   // Dev reset function
@@ -81,9 +83,9 @@ export function EmergencyModal({
                 <div className="flex items-center gap-3 text-white">
                   <AlertTriangle className="w-8 h-8" />
                   <div>
-                    <h2 className="text-xl font-bold">We Care About You</h2>
+                    <h2 className="text-xl font-bold">{t('title')}</h2>
                     <p className="text-red-100 text-sm">
-                      Please reach out for support
+                      {t('subtitle')}
                     </p>
                   </div>
                 </div>
@@ -94,15 +96,14 @@ export function EmergencyModal({
                 <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
                   <Heart className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-red-800 dark:text-red-200">
-                    Based on your responses, we want to make sure you have access to
-                    immediate support. You are not alone, and help is available 24/7.
+                    {t('message')}
                   </p>
                 </div>
 
                 {/* Hotlines */}
                 <div className="space-y-3">
                   <h3 className="font-semibold text-neutral-900 dark:text-white">
-                    Call for immediate help:
+                    {t('callForHelp')}
                   </h3>
 
                   {MALAYSIA_HOTLINES.slice(0, 3).map((hotline) => (
@@ -135,7 +136,7 @@ export function EmergencyModal({
                   <a href="/emergency">
                     <GlassButton variant="danger" className="w-full">
                       <Phone className="w-4 h-4" />
-                      View All Emergency Resources
+                      {t('viewAllResources')}
                     </GlassButton>
                   </a>
 
@@ -145,14 +146,14 @@ export function EmergencyModal({
                       className="w-full"
                       onClick={onClose}
                     >
-                      I understand, continue
+                      {t('continueButton')}
                     </GlassButton>
                   )}
                 </div>
 
                 {!canClose && (
                   <p className="text-center text-sm text-neutral-500">
-                    Please call one of the hotlines above for immediate support
+                    {t('pleaseCall')}
                   </p>
                 )}
 

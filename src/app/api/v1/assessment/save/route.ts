@@ -26,10 +26,7 @@ export async function POST(request: NextRequest) {
     // Get current user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    console.log('Assessment save - User:', user?.id, 'Auth error:', authError?.message);
-
     if (authError || !user) {
-      console.log('Assessment save - Unauthorized, no user found');
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -58,7 +55,6 @@ export async function POST(request: NextRequest) {
     // For users without profile, create a demographic session
     let demographicSessionId: string | null = null;
     if (!profileExists) {
-      console.log('Assessment save - Creating demographic session for user without profile...');
       const { data: session, error: sessionError } = await adminClient
         .from('demographic_sessions')
         .insert({
@@ -89,16 +85,13 @@ export async function POST(request: NextRequest) {
     // Generate AI insights (don't block save if this fails)
     let aiInsights = null;
     try {
-      console.log('Assessment save - Generating AI insights...');
       aiInsights = await generateStructuredInsights(type, score, maxScore, severity, riskLevel);
-      console.log('Assessment save - AI insights generated successfully');
     } catch (insightError) {
       console.error('Failed to generate AI insights:', insightError);
       // Continue with save even if insights generation fails
     }
 
     // Save to assessments table (use admin client to bypass RLS)
-    console.log('Assessment save - Inserting for user:', user.id, 'type:', type, 'score:', score);
     const { data: assessment, error: insertError } = await adminClient
       .from('assessments')
       .insert({
@@ -123,7 +116,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Assessment save - Success! ID:', assessment.id);
     return NextResponse.json({
       success: true,
       assessmentId: assessment.id,

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import {
   FileText,
   Clock,
@@ -62,6 +63,7 @@ interface InitialScreening {
 
 export default function MyAssessmentsPage() {
   const router = useRouter();
+  const t = useTranslations('assessments');
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [screenings, setScreenings] = useState<InitialScreening[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -161,10 +163,10 @@ export default function MyAssessmentsPage() {
             className="mb-8"
           >
             <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
-              My Assessments
+              {t('title')}
             </h1>
             <p className="text-neutral-600 dark:text-neutral-400">
-              Track your mental health journey
+              {t('subtitle')}
             </p>
           </motion.div>
 
@@ -182,7 +184,7 @@ export default function MyAssessmentsPage() {
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {screenings.length}
               </p>
-              <p className="text-sm text-neutral-500">Screenings</p>
+              <p className="text-sm text-neutral-500">{t('screeningsTab')}</p>
             </GlassCard>
 
             <GlassCard className="text-center">
@@ -192,7 +194,7 @@ export default function MyAssessmentsPage() {
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {assessments.length}
               </p>
-              <p className="text-sm text-neutral-500">Assessments</p>
+              <p className="text-sm text-neutral-500">{t('assessmentsTab')}</p>
             </GlassCard>
 
             <GlassCard className="text-center">
@@ -202,7 +204,7 @@ export default function MyAssessmentsPage() {
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {uniqueTypes.size}
               </p>
-              <p className="text-sm text-neutral-500">Areas Tracked</p>
+              <p className="text-sm text-neutral-500">{t('areasTracked')}</p>
             </GlassCard>
 
             <GlassCard className="text-center">
@@ -216,7 +218,7 @@ export default function MyAssessmentsPage() {
                     ).split(',')[0]
                   : 'N/A'}
               </p>
-              <p className="text-sm text-neutral-500">Last Activity</p>
+              <p className="text-sm text-neutral-500">{t('lastActivity')}</p>
             </GlassCard>
           </motion.div>
 
@@ -236,14 +238,14 @@ export default function MyAssessmentsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-neutral-900 dark:text-white">
-                        Free Plan
+                        {t('freePlan')}
                       </h3>
                       <span className="text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full">
-                        Demo Mode
+                        {t('demoMode')}
                       </span>
                     </div>
                     <p className="text-sm text-neutral-500">
-                      Upgrade to unlock all assessments & AI insights
+                      {t('upgradeMessage')}
                     </p>
                   </div>
                 </div>
@@ -253,7 +255,7 @@ export default function MyAssessmentsPage() {
                   className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
                   rightIcon={<ChevronRight className="w-4 h-4" />}
                 >
-                  Test Subscribe
+                  {t('testSubscribe')}
                 </GlassButton>
               </div>
             </GlassCard>
@@ -280,7 +282,7 @@ export default function MyAssessmentsPage() {
                 <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
                 <GlassButton variant="secondary" onClick={fetchAssessments}>
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Try Again
+                  {t('tryAgain')}
                 </GlassButton>
               </GlassCard>
             </motion.div>
@@ -304,7 +306,7 @@ export default function MyAssessmentsPage() {
                   }`}
                 >
                   <ClipboardList className="w-4 h-4" />
-                  Screenings ({screenings.length})
+                  {t('screeningsTab')} ({screenings.length})
                 </button>
                 <button
                   onClick={() => setActiveTab('assessments')}
@@ -315,7 +317,7 @@ export default function MyAssessmentsPage() {
                   }`}
                 >
                   <FileText className="w-4 h-4" />
-                  Assessments ({assessments.length})
+                  {t('assessmentsTab')} ({assessments.length})
                 </button>
               </div>
 
@@ -351,7 +353,7 @@ export default function MyAssessmentsPage() {
                               <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
                                   <h3 className="font-semibold text-neutral-900 dark:text-white">
-                                    Initial Screening
+                                    {t('initialScreening')}
                                   </h3>
                                   <span className={`text-xs px-2 py-0.5 rounded-full ${
                                     screening.overall_risk_level === 'high' || screening.overall_risk_level === 'imminent'
@@ -365,8 +367,8 @@ export default function MyAssessmentsPage() {
                                 </div>
                                 <p className="text-sm text-neutral-500">
                                   {screening.detected_conditions.length > 0
-                                    ? `Detected: ${screening.detected_conditions.map(c => ASSESSMENT_TYPE_INFO[c]?.name || c).join(', ')}`
-                                    : 'No conditions detected'}
+                                    ? `${t('detected')}: ${screening.detected_conditions.map(c => ASSESSMENT_TYPE_INFO[c]?.name || c).join(', ')}`
+                                    : t('noConditionsDetected')}
                                 </p>
                                 <p className="text-xs text-neutral-400 mt-1">
                                   {formatDate(screening.created_at)}
@@ -381,17 +383,17 @@ export default function MyAssessmentsPage() {
                     <GlassCard className="text-center py-8">
                       <ClipboardList className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
                       <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">
-                        No screenings yet
+                        {t('noScreenings')}
                       </h3>
                       <p className="text-neutral-500 mb-4">
-                        Take an initial mental health screening
+                        {t('takeInitialScreening')}
                       </p>
                       <GlassButton
                         variant="primary"
                         onClick={() => router.push('/start')}
                         rightIcon={<ChevronRight className="w-4 h-4" />}
                       >
-                        Start Screening
+                        {t('startScreening')}
                       </GlassButton>
                     </GlassCard>
                   )}
@@ -442,7 +444,7 @@ export default function MyAssessmentsPage() {
                                 />
                               </div>
                               <p className="text-sm text-neutral-500">
-                                Score: {assessment.total_score}{maxScore ? `/${maxScore}` : ''}
+                                {t('score')}: {assessment.total_score}{maxScore ? `/${maxScore}` : ''}
                               </p>
                               <p className="text-xs text-neutral-400 mt-1">
                                 {formatDate(assessment.created_at)}
@@ -459,10 +461,10 @@ export default function MyAssessmentsPage() {
                 <GlassCard className="py-8">
                   <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
                   <h3 className="font-semibold text-neutral-900 dark:text-white mb-2 text-center">
-                    No assessments yet
+                    {t('noAssessments')}
                   </h3>
                   <p className="text-neutral-500 mb-6 text-center">
-                    Choose an assessment to start your mental health journey
+                    {t('chooseAssessment')}
                   </p>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {AVAILABLE_ASSESSMENTS.map((type) => {
@@ -504,10 +506,10 @@ export default function MyAssessmentsPage() {
             >
               <GlassCard variant="elevated">
                 <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2 text-center">
-                  Take Another Assessment
+                  {t('takeAnother')}
                 </h3>
                 <p className="text-neutral-600 dark:text-neutral-400 mb-6 text-center">
-                  Regular check-ins help you track your progress and well-being.
+                  {t('regularCheckins')}
                 </p>
                 <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {AVAILABLE_ASSESSMENTS.map((type) => {
@@ -537,7 +539,7 @@ export default function MyAssessmentsPage() {
                     onClick={() => router.push('/start')}
                     className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
                   >
-                    Or take the full screening again →
+                    {t('fullScreeningAgain')} →
                   </button>
                 </div>
               </GlassCard>

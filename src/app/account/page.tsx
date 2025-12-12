@@ -621,8 +621,8 @@ export default function AccountPage() {
             </GlassButton>
           </motion.div>
 
-          {/* Danger Zone */}
-          <motion.div
+          {/* Danger Zone - Hidden for now, will be implemented in future */}
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -643,7 +643,7 @@ export default function AccountPage() {
                 {t('deleteAccount')}
               </GlassButton>
             </GlassCard>
-          </motion.div>
+          </motion.div> */}
         </div>
       </main>
 

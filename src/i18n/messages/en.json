@@ -39,31 +39,115 @@
   },
   "home": {
     "hero": {
-      "title": "Understanding Your Mental Well-being",
-      "subtitle": "Take validated mental health screenings and get personalized insights to support your mental health journey.",
-      "startButton": "Start Free Screening",
-      "learnMore": "Learn More"
+      "title": "Take a Moment for Your",
+      "titleHighlight": "Mental Health",
+      "subtitle": "With MyMental, a quick screening can provide insights into your well-being level and guide you to take positive action.",
+      "cta": "Let's take the first step in self-care with a mental health screening!",
+      "startButton": "Get Started"
     },
-    "features": {
-      "title": "Why Choose MyMental?",
-      "validated": {
-        "title": "Validated Instruments",
-        "description": "Our assessments use clinically validated screening tools like PHQ-9 and GAD-7."
+    "collaboration": "In Collaboration With",
+    "earlySigns": {
+      "title": "What We Often Ignore Maybe an Early Sign",
+      "description": "Tired? Stressed? Worried? These could be signs of something more serious. Self-diagnosing your mental health can be risky and misleading.",
+      "cta": "Take 2 minutes to check your mental health the right way.",
+      "button": "Let's Get Started"
+    },
+    "conditions": {
+      "anxiety": {
+        "title": "Anxiety",
+        "description": "Excessive worry, nervousness, or fear that interferes with daily activities."
       },
-      "private": {
-        "title": "Private & Secure",
-        "description": "Your data is encrypted and protected. We never share your information."
+      "maritalDistress": {
+        "title": "Marital Distress",
+        "description": "Relationship conflicts and emotional distance affecting your well-being."
       },
-      "insights": {
-        "title": "Personalized Insights",
-        "description": "Get AI-powered recommendations based on your screening results."
-      }
+      "ocd": {
+        "title": "OCD (Obsessive-Compulsive Disorder)",
+        "description": "Unwanted repetitive thoughts and behaviors that are difficult to control."
+      },
+      "psychosis": {
+        "title": "Prodromal Psychosis",
+        "description": "Early warning signs of psychotic disorders that may need attention."
+      },
+      "insomnia": {
+        "title": "Insomnia",
+        "description": "Difficulty falling asleep, staying asleep, or getting restful sleep."
+      },
+      "sexualAddiction": {
+        "title": "Sexual Addiction",
+        "description": "Compulsive sexual thoughts or behaviors affecting your life."
+      },
+      "depression": {
+        "title": "Depression",
+        "description": "Persistent sadness, loss of interest, and feelings of hopelessness."
+      },
+      "ptsd": {
+        "title": "PTSD (Post-Traumatic Stress Disorder)",
+        "description": "Lasting effects from experiencing or witnessing traumatic events."
+      },
+      "suicidal": {
+        "title": "Suicidal",
+        "description": "Thoughts of self-harm or ending your life that need immediate attention."
+      },
+      "readMore": "Read More"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "How does the mental health screening test work?",
+          "answer": "Our screening uses validated questionnaires to assess your mental well-being. You answer a series of questions about your thoughts, feelings, and behaviors. Based on your responses, we provide insights into potential areas of concern and recommend appropriate next steps."
+        },
+        {
+          "question": "Is this a clinical diagnosis?",
+          "answer": "No, this screening is not a clinical diagnosis. It is a preliminary assessment tool designed to help you understand your mental health better. For a proper diagnosis, please consult a licensed mental health professional."
+        },
+        {
+          "question": "Are my results confidential and private?",
+          "answer": "Yes, your privacy is our top priority. All data is encrypted and stored securely. We do not share your personal information with third parties without your explicit consent."
+        },
+        {
+          "question": "How much does it cost to take this mental health screening?",
+          "answer": "The initial mental health screening is completely free. Some detailed assessments and additional features may require a subscription or one-time payment."
+        },
+        {
+          "question": "What is a mental health screening?",
+          "answer": "A mental health screening is a quick assessment that helps identify signs of mental health conditions. It typically involves answering questions about your mood, thoughts, and behaviors over a recent period."
+        },
+        {
+          "question": "Who can take this mental health screening?",
+          "answer": "Anyone aged 13 and above can take this screening. However, if you are under 18, we recommend involving a parent or guardian in reviewing your results."
+        },
+        {
+          "question": "What do I need to complete this mental health screening?",
+          "answer": "You just need about 10-15 minutes of quiet time and honest reflection. There are no right or wrong answers - just answer based on how you have been feeling recently."
+        },
+        {
+          "question": "How long does it take to complete this initial mental health screening?",
+          "answer": "The initial screening takes approximately 5-10 minutes. Detailed assessments for specific conditions may take an additional 5-10 minutes each."
+        },
+        {
+          "question": "I have thoughts of killing myself. Do I need to complete this mental health screening?",
+          "answer": "If you are having thoughts of harming yourself, please seek immediate help. Call Talian Kasih at 15999 or Befrienders at 03-7956 8145. You can also go to the nearest hospital emergency department. Your life matters."
+        },
+        {
+          "question": "What happens after I complete this initial mental health screening?",
+          "answer": "After completing the screening, you will receive preliminary insights about your mental well-being. Based on your results, we may recommend specific detailed assessments and provide resources for support."
+        },
+        {
+          "question": "Are the decisions made highly valid and reliable?",
+          "answer": "Our screening tools are based on clinically validated instruments used worldwide, including PHQ-9 for depression and GAD-7 for anxiety. However, they are screening tools, not diagnostic instruments."
+        }
+      ]
+    },
+    "cta": {
+      "title": "MENTAL HEALTH MATTERS"
     }
   },
   "screening": {
     "title": "Mental Health Screening",
     "subtitle": "Answer honestly to get the most accurate results",
-    "initialScreening": "Initial Screening",
+    "initialScreening": "Initial Mental Health Screening",
     "socialFunction": "Social Function Assessment",
     "progress": "Progress",
     "questionOf": "Question {current} of {total}",
@@ -74,7 +158,12 @@
     "neutral": "Neutral",
     "agree": "Agree",
     "stronglyAgree": "Strongly Agree",
-    "skipToResults": "Skip to Results"
+    "skipToResults": "Skip to Results",
+    "back": "Back",
+    "next": "Next",
+    "continueToSocial": "Continue to Social Function",
+    "warningTitle": "We noticed your response indicates you may benefit from professional support.",
+    "warningSubtitle": "Remember, help is always available. You can continue with the screening or reach out to a professional anytime."
   },
   "results": {
     "title": "Your Results",
@@ -106,6 +195,21 @@
     "takeNew": "Take New Assessment",
     "retake": "Retake",
     "viewResults": "View Results",
+    "tryAgain": "Try Again",
+    "startScreening": "Start Screening",
+    "initialScreening": "Initial Screening",
+    "detected": "Detected",
+    "noConditionsDetected": "No conditions detected",
+    "score": "Score",
+    "freePlan": "Free Plan",
+    "demoMode": "Demo Mode",
+    "upgradeMessage": "Upgrade to unlock all assessments & AI insights",
+    "testSubscribe": "Test Subscribe",
+    "takeAnother": "Take Another Assessment",
+    "regularCheckins": "Regular check-ins help you track your progress and well-being.",
+    "fullScreeningAgain": "Or take the full screening again",
+    "chooseAssessment": "Choose an assessment to start your mental health journey",
+    "takeInitialScreening": "Take an initial mental health screening",
     "types": {
       "depression": "Depression",
       "anxiety": "Anxiety",
@@ -198,13 +302,34 @@
   },
   "footer": {
     "tagline": "Supporting your mental health journey",
-    "product": "Product",
-    "company": "Company",
-    "support": "Support",
-    "legal": "Legal",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "contact": "Contact Us",
-    "copyright": "All rights reserved."
+    "copyright": "All rights reserved.",
+    "sections": {
+      "register": "Register",
+      "contact": "Contact Us",
+      "needToKnow": "Need to Know",
+      "legal": "Legal"
+    },
+    "links": {
+      "onlineCounselling": "Online Counselling",
+      "offlineCounselling": "Offline Counselling",
+      "contactUs": "Contact Us",
+      "customerService": "Customer Service",
+      "partnership": "Partnership",
+      "faq": "FAQ",
+      "counsellingGuide": "Counselling Guide",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "cookies": "Cookies"
+    },
+    "emergency": "If you're in crisis or experiencing a mental health emergency, please call one of the helplines above or go to your nearest hospital emergency department."
+  },
+  "emergencyModal": {
+    "title": "We Care About You",
+    "subtitle": "Please reach out for support",
+    "message": "Based on your responses, we want to make sure you have access to immediate support. You are not alone, and help is available 24/7.",
+    "callForHelp": "Call for immediate help:",
+    "viewAllResources": "View All Emergency Resources",
+    "continueButton": "I understand, continue",
+    "pleaseCall": "Please call one of the hotlines above for immediate support"
   }
 }
