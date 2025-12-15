@@ -86,7 +86,7 @@ export default function InterventionsPage() {
       if (res.ok) {
         const data = await res.json();
         const progressMap: Record<string, { completed: number; total: number }> = {};
-        data.progress?.forEach((p: any) => {
+        data.progress?.forEach((p: { interventionId: string; completedChapters?: number }) => {
           progressMap[p.interventionId] = {
             completed: p.completedChapters || 0,
             total: interventions.find(i => i.id === p.interventionId)?.totalChapters || 0,

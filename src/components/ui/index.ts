@@ -11,6 +11,9 @@ export type { GlassInputProps } from './glass-input';
 export { GlassModal } from './glass-modal';
 export type { GlassModalProps } from './glass-modal';
 
+export { ConfirmModal, AlertModal } from './confirm-modal';
+export type { ConfirmModalProps, AlertModalProps, ConfirmModalVariant } from './confirm-modal';
+
 export { ProgressBar, ProgressSteps } from './progress-bar';
 export type { ProgressBarProps, ProgressStepsProps } from './progress-bar';
 

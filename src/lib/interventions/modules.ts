@@ -63,6 +63,40 @@ export interface UserChapterProgress {
   notes?: string;
 }
 
+// Database record types (internal use)
+interface DbIntervention {
+  id: string;
+  slug: string;
+  name: string;
+  name_ms?: string;
+  description?: string;
+  description_ms?: string;
+  category: string;
+  thumbnail_url?: string;
+  video_intro_url?: string;
+  is_premium: boolean;
+  is_published: boolean;
+  total_chapters?: number;
+  estimated_duration_minutes?: number;
+}
+
+interface DbChapter {
+  id: string;
+  intervention_id: string;
+  kb_article_id?: string;
+  chapter_order: number;
+  title: string;
+  title_ms?: string;
+  description?: string;
+  description_ms?: string;
+  is_free_preview: boolean;
+  kb_articles?: {
+    content?: string;
+    exercise_steps?: string[];
+    estimated_duration_minutes?: number;
+  };
+}
+
 /**
  * Get all published intervention modules
  */
@@ -188,7 +222,7 @@ export async function getInterventionBySlug(
   }
 
   const transformedChapters: InterventionChapter[] = (chapters || []).map(
-    (ch: any) => ({
+    (ch: DbChapter) => ({
       id: ch.id,
       interventionId: ch.intervention_id,
       kbArticleId: ch.kb_article_id,
@@ -372,7 +406,7 @@ export async function getUserInterventionProgress(
 /**
  * Transform database intervention to module type
  */
-function transformIntervention(data: any): InterventionModule {
+function transformIntervention(data: DbIntervention): InterventionModule {
   return {
     id: data.id,
     slug: data.slug,

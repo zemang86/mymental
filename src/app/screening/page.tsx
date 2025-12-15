@@ -47,8 +47,11 @@ export default function ScreeningPage() {
   // Check for emergency state on mount
   useEffect(() => {
     if (isEmergency) {
-      setShowEmergencyModal(true);
-      setCanCloseEmergency(false);
+      // Defer state updates to avoid cascading renders
+      queueMicrotask(() => {
+        setShowEmergencyModal(true);
+        setCanCloseEmergency(false);
+      });
     }
   }, [isEmergency]);
 
@@ -104,7 +107,7 @@ export default function ScreeningPage() {
 
     // Detect conditions
     const conditions = detectConditions(initialScreeningAnswers);
-    setDetectedConditions(conditions as any);
+    setDetectedConditions(conditions);
 
     // Check for emergency one more time
     if (triageResult.shouldShowEmergency) {

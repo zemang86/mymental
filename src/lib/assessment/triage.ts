@@ -11,7 +11,7 @@
  * - low: Normal flow
  */
 
-import type { RiskLevel } from '@/types/assessment';
+import type { RiskLevel, AssessmentType } from '@/types/assessment';
 import { INITIAL_SCREENING_QUESTIONS } from './questions';
 
 export type TriageAction =
@@ -214,8 +214,8 @@ export function evaluateSingleAnswer(
  */
 export function detectConditions(
   answers: Record<string, boolean>
-): string[] {
-  const conditions = new Set<string>();
+): AssessmentType[] {
+  const conditions = new Set<AssessmentType>();
 
   for (const question of INITIAL_SCREENING_QUESTIONS) {
     if (answers[question.id] === true && question.triggerCondition) {

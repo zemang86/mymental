@@ -28,7 +28,7 @@ export function AlertsOverview({ alertCount }: AlertsOverviewProps) {
             <Bell className="w-6 h-6 text-neutral-500" />
           </div>
           <p className="text-sm text-neutral-400">No pending alerts</p>
-          <p className="text-xs text-neutral-500 mt-1">You're all caught up!</p>
+          <p className="text-xs text-neutral-500 mt-1">You&apos;re all caught up!</p>
         </div>
       ) : (
         <div className="space-y-3">

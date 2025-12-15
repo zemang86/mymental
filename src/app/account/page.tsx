@@ -22,7 +22,7 @@ import {
   Users,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
-import { GlassCard, GlassButton, GlassInput } from '@/components/ui';
+import { GlassCard, GlassButton, GlassInput, ConfirmModal, AlertModal } from '@/components/ui';
 import { createClient } from '@/lib/supabase/client';
 import { setLocale } from '@/i18n/client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
@@ -76,6 +76,8 @@ export default function AccountPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -227,13 +229,9 @@ export default function AccountPage() {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete your account? This action cannot be undone.'
-    );
-    if (!confirmed) return;
-
     // In production, this would call a server action to delete the user
-    alert('Account deletion request submitted. You will be contacted via email.');
+    setShowDeleteConfirm(false);
+    setShowDeleteAlert(true);
   };
 
   const updateFormField = (field: string, value: string) => {
@@ -621,15 +619,15 @@ export default function AccountPage() {
             </GlassButton>
           </motion.div>
 
-          {/* Danger Zone - Hidden for now, will be implemented in future */}
-          {/* <motion.div
+          {/* Danger Zone */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             className="mt-8"
           >
-            <GlassCard className="border-red-200 dark:border-red-800">
-              <h2 className="text-lg font-semibold text-red-600 mb-4">
+            <GlassCard className="border-red-200 dark:border-red-800/30">
+              <h2 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-4">
                 {t('dangerZone')}
               </h2>
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
@@ -637,13 +635,13 @@ export default function AccountPage() {
               </p>
               <GlassButton
                 variant="secondary"
-                className="text-red-600 border-red-200 hover:bg-red-50"
-                onClick={handleDeleteAccount}
+                className="text-red-600 border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+                onClick={() => setShowDeleteConfirm(true)}
               >
                 {t('deleteAccount')}
               </GlassButton>
             </GlassCard>
-          </motion.div> */}
+          </motion.div>
         </div>
       </main>
 
@@ -717,6 +715,28 @@ export default function AccountPage() {
           </motion.div>
         </div>
       )}
+
+      {/* Delete Account Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeleteAccount}
+        title={t('deleteAccount')}
+        message={t('deleteAccountWarning')}
+        confirmText={t('deleteAccount')}
+        cancelText={tCommon('cancel')}
+        variant="danger"
+      />
+
+      {/* Delete Account Success Alert */}
+      <AlertModal
+        isOpen={showDeleteAlert}
+        onClose={() => setShowDeleteAlert(false)}
+        title="Request Submitted"
+        message="Account deletion request submitted. You will be contacted via email."
+        buttonText="OK"
+        variant="info"
+      />
     </div>
   );
 }

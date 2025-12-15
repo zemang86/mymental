@@ -14,9 +14,18 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
-import { GlassCard, GlassButton } from '@/components/ui';
+import { GlassCard, GlassButton, ConfirmModal } from '@/components/ui';
 import { useSubscription } from '@/hooks/use-subscription';
 import { PRICING_PLANS, formatPrice } from '@/lib/payments';
+
+interface Payment {
+  id: string;
+  created_at: string;
+  plan_id?: string;
+  assessment_type?: string;
+  amount: number;
+  status: 'completed' | 'pending' | 'failed';
+}
 
 export default function BillingPage() {
   const router = useRouter();
@@ -24,14 +33,14 @@ export default function BillingPage() {
     subscription,
     plan,
     hasAccess,
-    isPremium,
     isSimulated,
     isLoading,
   } = useSubscription();
 
-  const [payments, setPayments] = useState<any[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [isLoadingPayments, setIsLoadingPayments] = useState(true);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   useEffect(() => {
     fetchPayments();
@@ -52,11 +61,7 @@ export default function BillingPage() {
   };
 
   const handleCancelSubscription = async () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your billing period.'
-    );
-    if (!confirmed) return;
-
+    setShowCancelConfirm(false);
     setIsCancelling(true);
     try {
       const response = await fetch('/api/v1/subscription', {
@@ -237,7 +242,7 @@ export default function BillingPage() {
               {hasAccess && !isSimulated && (
                 <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
                   <button
-                    onClick={handleCancelSubscription}
+                    onClick={() => setShowCancelConfirm(true)}
                     disabled={isCancelling}
                     className="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
                   >
@@ -371,6 +376,19 @@ export default function BillingPage() {
       </main>
 
       <Footer />
+
+      {/* Cancel Subscription Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showCancelConfirm}
+        onClose={() => setShowCancelConfirm(false)}
+        onConfirm={handleCancelSubscription}
+        title="Cancel Subscription"
+        message="Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your billing period."
+        confirmText="Cancel Subscription"
+        cancelText="Keep Subscription"
+        variant="warning"
+        isLoading={isCancelling}
+      />
     </div>
   );
 }

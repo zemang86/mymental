@@ -82,14 +82,14 @@ export default function DetailedAssessmentPage() {
   // Check for emergency state
   useEffect(() => {
     if (isEmergency) {
-      setShowEmergencyModal(true);
+      queueMicrotask(() => setShowEmergencyModal(true));
     }
   }, [isEmergency]);
 
   // Check if user needs to pay for premium assessments
   useEffect(() => {
     if (!isLoadingUser && instrument?.isPremium && !user) {
-      setShowPaymentGate(true);
+      queueMicrotask(() => setShowPaymentGate(true));
     }
   }, [instrument, user, isLoadingUser]);
 
