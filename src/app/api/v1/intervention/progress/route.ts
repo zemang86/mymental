@@ -5,12 +5,19 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { saveChapterProgress, getUserInterventionProgress } from '@/lib/interventions/modules';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-loaded client to avoid build-time errors
+let _supabaseAdmin: SupabaseClient | null = null;
+function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabaseAdmin;
+}
 
 // GET: Retrieve user's progress for interventions
 export async function GET(request: NextRequest) {
@@ -28,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     // If specific intervention requested, get detailed progress
     if (interventionId) {
-      const { data: progress, error } = await supabaseAdmin
+      const { data: progress, error } = await getSupabaseAdmin()
         .from('user_intervention_progress')
         .select('*')
         .eq('user_id', userId)
@@ -41,7 +48,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Get chapter-level progress
-      const { data: chapterProgress } = await supabaseAdmin
+      const { data: chapterProgress } = await getSupabaseAdmin()
         .from('user_exercise_progress')
         .select('*')
         .eq('user_id', userId)
@@ -150,7 +157,7 @@ export async function PATCH(request: NextRequest) {
 
     if (action === 'start') {
       // Start tracking this intervention
-      const { error } = await supabaseAdmin
+      const { error } = await getSupabaseAdmin()
         .from('user_intervention_progress')
         .upsert(
           {
@@ -188,7 +195,7 @@ export async function PATCH(request: NextRequest) {
         );
       }
 
-      const { error } = await supabaseAdmin
+      const { error } = await getSupabaseAdmin()
         .from('user_intervention_progress')
         .update({
           total_time_spent_seconds: timeSpent,

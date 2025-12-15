@@ -3,7 +3,7 @@
  * Maps assessment results to relevant intervention content from KB
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import {
   generateEmbedding,
   searchSimilarDocumentsByCategories,
@@ -15,10 +15,17 @@ import type {
   InterventionRecommendations,
 } from '@/types/intervention-recommendations';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-loaded client to avoid build-time errors
+let _supabase: SupabaseClient | null = null;
+function getSupabase(): SupabaseClient {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 /**
  * Assessment type to intervention module mapping
@@ -147,7 +154,7 @@ export async function getRelatedModules(
   const categories = getKBCategoriesForAssessment(assessmentType);
 
   // Get unique articles grouped by category to create "modules"
-  const { data: articles, error } = await supabase
+  const { data: articles, error } = await getSupabase()
     .from('kb_articles')
     .select('id, title, category, content')
     .in('category', categories)

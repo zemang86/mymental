@@ -5,12 +5,19 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateChatResponse, detectCrisis } from '@/lib/ai/rag';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-loaded client to avoid build-time errors
+let _supabaseAdmin: SupabaseClient | null = null;
+function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabaseAdmin;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Check for user's risk level if userId provided
     let userRiskLevel: string | undefined;
     if (userId) {
-      const { data: profile } = await supabaseAdmin
+      const { data: profile } = await getSupabaseAdmin()
         .from('profiles')
         .select('risk_level')
         .eq('id', userId)
@@ -62,7 +69,7 @@ You are not alone. Help is available.`,
     const crisisCheck = detectCrisis(message);
     if (crisisCheck.level === 'imminent') {
       // Log crisis event
-      await supabaseAdmin.from('triage_events').insert({
+      await getSupabaseAdmin().from('triage_events').insert({
         user_id: userId,
         session_id: sessionId,
         trigger_type: 'chat_message',
@@ -90,7 +97,7 @@ You are not alone. These feelings can be overwhelming, but help is available rig
 
     // Store user message
     if (userId) {
-      await supabaseAdmin.from('chat_messages').insert({
+      await getSupabaseAdmin().from('chat_messages').insert({
         user_id: userId,
         session_id: sessionId,
         role: 'user',
@@ -107,7 +114,7 @@ You are not alone. These feelings can be overwhelming, but help is available rig
 
     // Store assistant response
     if (userId) {
-      await supabaseAdmin.from('chat_messages').insert({
+      await getSupabaseAdmin().from('chat_messages').insert({
         user_id: userId,
         session_id: sessionId,
         role: 'assistant',
@@ -121,7 +128,7 @@ You are not alone. These feelings can be overwhelming, but help is available rig
 
     // If crisis detected during response generation, log it
     if (result.isCrisis) {
-      await supabaseAdmin.from('triage_events').insert({
+      await getSupabaseAdmin().from('triage_events').insert({
         user_id: userId,
         session_id: sessionId,
         trigger_type: 'chat_message',
@@ -175,7 +182,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let query = supabaseAdmin
+    let query = getSupabaseAdmin()
       .from('chat_messages')
       .select('id, role, content, created_at')
       .eq('session_id', sessionId)
