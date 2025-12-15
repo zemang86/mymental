@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       insights: results,
       sources: sources.map((s) => ({
         title: s.title,
-        category: s.condition,
+        category: s.category,
         similarity: s.similarity,
       })),
     });

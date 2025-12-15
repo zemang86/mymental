@@ -4,7 +4,13 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
-import { generateEmbedding, searchSimilarDocuments, type KBArticle } from './embeddings';
+import {
+  generateEmbedding,
+  searchSimilarDocuments,
+  searchSimilarDocumentsByCategories,
+  getKBCategoriesForAssessment,
+  type KBArticle
+} from './embeddings';
 import { SYSTEM_PROMPTS, buildChatPrompt, buildResultPrompt, CRISIS_RESPONSE } from './prompts';
 import type { AssessmentInsights } from '@/types/insights';
 
@@ -89,6 +95,35 @@ export async function retrieveContext(query: string, limit: number = 4): Promise
   } catch (error) {
     console.error('Error retrieving context:', error);
     return [];
+  }
+}
+
+/**
+ * Retrieve relevant context filtered by assessment type categories
+ * Uses condition-specific KB articles for more relevant results
+ */
+export async function retrieveContextByCategory(
+  query: string,
+  assessmentType: string,
+  limit: number = 6
+): Promise<KBArticle[]> {
+  try {
+    const { embedding } = await generateEmbedding(query);
+    const categories = getKBCategoriesForAssessment(assessmentType);
+
+    // Get articles from each relevant category
+    const articles = await searchSimilarDocumentsByCategories(
+      embedding,
+      categories,
+      Math.ceil(limit / categories.length), // Distribute limit across categories
+      0.4 // Lower threshold for category-filtered search
+    );
+
+    return articles.slice(0, limit);
+  } catch (error) {
+    console.error('Error retrieving context by category:', error);
+    // Fallback to general search
+    return retrieveContext(query, limit);
   }
 }
 
@@ -180,6 +215,7 @@ export async function generateChatResponse(
 
 /**
  * Generate assessment results with RAG enhancement
+ * Uses category-filtered KB search for condition-specific results
  */
 export async function generateAssessmentResults(
   assessmentType: string,
@@ -191,8 +227,8 @@ export async function generateAssessmentResults(
   // Build search query based on assessment
   const searchQuery = `${assessmentType} ${severity} coping strategies treatment ${detectedConditions.join(' ')}`;
 
-  // Retrieve relevant context
-  const articles = await retrieveContext(searchQuery, 6);
+  // Retrieve relevant context using category-filtered search
+  const articles = await retrieveContextByCategory(searchQuery, assessmentType, 6);
   const context = formatContext(articles);
 
   // Build the prompt
@@ -258,6 +294,7 @@ export async function quickAnswer(question: string): Promise<string> {
 /**
  * Generate structured assessment insights
  * Returns a JSON object with parsed, actionable insights
+ * Uses category-filtered KB search for condition-specific recommendations
  */
 export async function generateStructuredInsights(
   assessmentType: string,
@@ -266,11 +303,11 @@ export async function generateStructuredInsights(
   severity: string,
   riskLevel: string
 ): Promise<AssessmentInsights> {
-  // Build search query based on assessment
-  const searchQuery = `${assessmentType} ${severity} coping strategies treatment recommendations`;
+  // Build search query based on assessment - include specific terms for better matching
+  const searchQuery = `${assessmentType} ${severity} intervention teknik strategi rawatan coping strategies treatment`;
 
-  // Retrieve relevant context
-  const articles = await retrieveContext(searchQuery, 4);
+  // Retrieve relevant context using category-filtered search
+  const articles = await retrieveContextByCategory(searchQuery, assessmentType, 6);
   const context = formatContext(articles);
 
   const systemPrompt = `You are a mental health assessment analyzer. Generate structured insights in JSON format.

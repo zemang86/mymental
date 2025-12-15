@@ -24,14 +24,18 @@ import {
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, SeverityBadge } from '@/components/ui';
+import { ExerciseGrid } from '@/components/intervention/exercise-card';
+import { PremiumGate, InsightsPreview, InsightsSummaryPreview, InterventionsTeaser } from '@/components/premium';
 import {
   getInstrument,
   ASSESSMENT_TYPE_INFO,
 } from '@/lib/assessment/instruments';
 import { SCREENING_DISCLAIMER } from '@/lib/constants/hotlines';
 import { createClient } from '@/lib/supabase/client';
+import { useSubscription } from '@/hooks/use-subscription';
 import type { AssessmentType } from '@/types/assessment';
 import type { AssessmentInsights } from '@/types/insights';
+import type { InterventionRecommendations } from '@/types/intervention-recommendations';
 
 function ResultsContent() {
   const params = useParams();
@@ -54,6 +58,13 @@ function ResultsContent() {
   // Insights state
   const [insights, setInsights] = useState<AssessmentInsights | null>(null);
   const [isLoadingInsights, setIsLoadingInsights] = useState(true);
+
+  // Recommendations state
+  const [recommendations, setRecommendations] = useState<InterventionRecommendations | null>(null);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
+
+  // Subscription status
+  const { hasAccess, isPremium } = useSubscription();
 
   // Fetch insights from saved assessment
   useEffect(() => {
@@ -85,6 +96,35 @@ function ResultsContent() {
 
     fetchInsights();
   }, [assessmentId]);
+
+  // Fetch intervention recommendations
+  useEffect(() => {
+    async function fetchRecommendations() {
+      if (!type || !severity) {
+        setIsLoadingRecommendations(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/v1/assessment/recommendations?type=${type}&severity=${severity}`
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setRecommendations(result.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching recommendations:', error);
+      } finally {
+        setIsLoadingRecommendations(false);
+      }
+    }
+
+    fetchRecommendations();
+  }, [type, severity]);
 
   if (!instrument) {
     return null;
@@ -213,6 +253,20 @@ function ResultsContent() {
                 </div>
               </GlassCard>
             </motion.div>
+          ) : !hasAccess && !insights ? (
+            // Premium gate for AI insights when user doesn't have access
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="mb-6"
+            >
+              <InsightsPreview
+                assessmentType={type}
+                severity={severity}
+                locale={isMalay ? 'ms' : 'en'}
+              />
+            </motion.div>
           ) : insights ? (
             <>
               {/* Summary Card */}
@@ -322,6 +376,42 @@ function ResultsContent() {
                       </GlassCard>
                     ))}
                   </div>
+                </motion.div>
+              )}
+
+              {/* Recommended Exercises Section */}
+              {recommendations && recommendations.exercises.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.32 }}
+                  className="mb-6"
+                >
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Target className="w-5 h-5 text-primary-500" />
+                    {isMalay ? 'Latihan yang Disyorkan' : 'Recommended Exercises'}
+                  </h2>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                    {isMalay
+                      ? 'Berdasarkan keputusan penilaian anda, kami mencadangkan latihan berikut:'
+                      : 'Based on your assessment results, we recommend these exercises:'}
+                  </p>
+                  {hasAccess ? (
+                    <ExerciseGrid
+                      exercises={recommendations.exercises}
+                      hasAccess={hasAccess}
+                      locale={isMalay ? 'ms' : 'en'}
+                      onExerciseStart={(exercise) => {
+                        router.push(`/interventions/${exercise.category}`);
+                      }}
+                    />
+                  ) : (
+                    <InterventionsTeaser
+                      exercises={recommendations.exercises}
+                      category={type}
+                      locale={isMalay ? 'ms' : 'en'}
+                    />
+                  )}
                 </motion.div>
               )}
 

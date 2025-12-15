@@ -76,9 +76,90 @@ export interface KBArticle {
   id: string;
   title: string;
   content: string;
-  condition: string;
+  category: string;
   language: string;
   similarity: number;
+}
+
+/**
+ * Assessment type to KB category mapping
+ * Maps assessment types to their relevant KB article categories
+ */
+export const ASSESSMENT_TO_KB_CATEGORY: Record<string, string[]> = {
+  depression: ['depression', 'general'],
+  anxiety: ['anxiety'],
+  ocd: ['ocd'],
+  ptsd: ['ptsd'],
+  insomnia: ['insomnia'],
+  suicidal: ['suicidal'],
+  psychosis: ['psychosis'],
+  sexual_addiction: ['sexual-addiction'],
+  marital_distress: ['marital-distress'],
+};
+
+/**
+ * Search for similar documents filtered by category
+ * Uses the match_kb_articles_by_category RPC for condition-specific searches
+ */
+export async function searchSimilarDocumentsByCategory(
+  queryEmbedding: number[],
+  category: string,
+  limit: number = 4,
+  matchThreshold: number = 0.5
+): Promise<KBArticle[]> {
+  const { data, error } = await supabaseAdmin.rpc('match_kb_articles_by_category', {
+    query_embedding: queryEmbedding,
+    filter_category: category,
+    match_threshold: matchThreshold,
+    match_count: limit,
+  });
+
+  if (error) {
+    console.error('Error searching documents by category:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Search for similar documents across multiple categories
+ * Useful for assessment types that map to multiple KB categories
+ */
+export async function searchSimilarDocumentsByCategories(
+  queryEmbedding: number[],
+  categories: string[],
+  limitPerCategory: number = 2,
+  matchThreshold: number = 0.5
+): Promise<KBArticle[]> {
+  const results: KBArticle[] = [];
+
+  for (const category of categories) {
+    const articles = await searchSimilarDocumentsByCategory(
+      queryEmbedding,
+      category,
+      limitPerCategory,
+      matchThreshold
+    );
+    results.push(...articles);
+  }
+
+  // Sort by similarity and remove duplicates
+  const uniqueResults = results.reduce((acc, article) => {
+    if (!acc.find(a => a.id === article.id)) {
+      acc.push(article);
+    }
+    return acc;
+  }, [] as KBArticle[]);
+
+  return uniqueResults.sort((a, b) => b.similarity - a.similarity);
+}
+
+/**
+ * Get KB categories for an assessment type
+ */
+export function getKBCategoriesForAssessment(assessmentType: string): string[] {
+  return ASSESSMENT_TO_KB_CATEGORY[assessmentType] || ['general'];
 }
 
 /**

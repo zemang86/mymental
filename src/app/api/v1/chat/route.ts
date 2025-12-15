@@ -138,7 +138,7 @@ You are not alone. These feelings can be overwhelming, but help is available rig
       sources: result.sources.map(s => ({
         id: s.id,
         title: s.title,
-        condition: s.condition,
+        category: s.category,
       })),
       crisisLevel: result.crisisLevel,
       blocked: result.crisisLevel === 'imminent',

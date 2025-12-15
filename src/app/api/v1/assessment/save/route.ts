@@ -1,14 +1,16 @@
 /**
  * Save Assessment Results API
  * Saves detailed assessment results to the database
- * Also generates AI insights and stores them
+ * Also generates AI insights for premium users
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateStructuredInsights } from '@/lib/ai/rag';
+import { hasFeatureAccess, FeatureKey } from '@/lib/premium/access-rules';
 import type { AssessmentType } from '@/types/assessment';
+import type { SubscriptionTier } from '@/lib/premium/access-rules';
 
 interface SaveAssessmentRequest {
   type: AssessmentType;
@@ -82,13 +84,32 @@ export async function POST(request: NextRequest) {
         ? 'moderate'
         : 'low';
 
-    // Generate AI insights (don't block save if this fails)
+    // Check user's subscription tier for AI insights access
+    let userTier: SubscriptionTier = 'free';
+    if (profileExists) {
+      const { data: subscription } = await adminClient
+        .from('subscriptions')
+        .select('tier, status')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .single();
+
+      if (subscription?.tier) {
+        userTier = subscription.tier as SubscriptionTier;
+      }
+    }
+
+    // Only generate AI insights for users with premium access
     let aiInsights = null;
-    try {
-      aiInsights = await generateStructuredInsights(type, score, maxScore, severity, riskLevel);
-    } catch (insightError) {
-      console.error('Failed to generate AI insights:', insightError);
-      // Continue with save even if insights generation fails
+    const canAccessInsights = hasFeatureAccess('AI_INSIGHTS', userTier);
+
+    if (canAccessInsights) {
+      try {
+        aiInsights = await generateStructuredInsights(type, score, maxScore, severity, riskLevel);
+      } catch (insightError) {
+        console.error('Failed to generate AI insights:', insightError);
+        // Continue with save even if insights generation fails
+      }
     }
 
     // Save to assessments table (use admin client to bypass RLS)
@@ -120,6 +141,8 @@ export async function POST(request: NextRequest) {
       success: true,
       assessmentId: assessment.id,
       insights: aiInsights,
+      hasInsightsAccess: canAccessInsights,
+      userTier,
     });
   } catch (error) {
     console.error('Assessment save error:', error);
