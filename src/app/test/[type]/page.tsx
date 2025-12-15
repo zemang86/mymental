@@ -9,7 +9,24 @@ import {
   AlertTriangle,
   Lock,
   Info,
+  CloudRain,
+  HeartPulse,
+  RefreshCw,
+  ShieldAlert,
+  Moon,
+  Brain,
+  type LucideIcon,
 } from 'lucide-react';
+
+// Map icon names to Lucide components
+const ICON_MAP: Record<string, LucideIcon> = {
+  'cloud-rain': CloudRain,
+  'heart-pulse': HeartPulse,
+  'refresh-cw': RefreshCw,
+  'shield-alert': ShieldAlert,
+  'moon': Moon,
+  'brain': Brain,
+};
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton, ProgressBar } from '@/components/ui';
 import { EmergencyModal } from '@/components/emergency/emergency-modal';
@@ -203,7 +220,10 @@ export default function DetailedAssessmentPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-6"
           >
-            <span className="text-4xl mb-2 block">{typeInfo.icon}</span>
+            {(() => {
+              const IconComponent = ICON_MAP[typeInfo.icon] || Brain;
+              return <IconComponent className="w-12 h-12 mx-auto mb-2 text-primary-500" />;
+            })()}
             <h1 className="text-xl font-bold text-neutral-900 dark:text-white">
               {instrument.name}
             </h1>

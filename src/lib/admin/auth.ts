@@ -25,18 +25,24 @@ export async function checkAdminAccess(): Promise<AdminUser | null> {
 
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
+  console.log('[Admin Auth] User check:', { userId: user?.id, authError: authError?.message });
+
   if (authError || !user) {
+    console.log('[Admin Auth] No user found');
     return null;
   }
 
   const adminClient = createAdminClient();
   const { data: profile, error: profileError } = await adminClient
     .from('profiles')
-    .select('id, role, full_name, avatar_url')
+    .select('id, role, full_name')
     .eq('id', user.id)
     .single();
 
+  console.log('[Admin Auth] Profile check:', { profile, profileError: profileError?.message });
+
   if (profileError || !profile) {
+    console.log('[Admin Auth] Profile not found');
     return null;
   }
 
@@ -44,15 +50,17 @@ export async function checkAdminAccess(): Promise<AdminUser | null> {
 
   // Check if user has admin or higher role
   if (!['moderator', 'admin', 'super_admin'].includes(role)) {
+    console.log('[Admin Auth] User role not admin:', role);
     return null;
   }
+
+  console.log('[Admin Auth] Access granted for:', user.email, 'role:', role);
 
   return {
     id: user.id,
     email: user.email!,
     role,
     fullName: profile.full_name,
-    avatarUrl: profile.avatar_url,
   };
 }
 

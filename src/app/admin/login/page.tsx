@@ -63,7 +63,8 @@ export default function AdminLoginPage() {
         }),
       });
 
-      router.push('/admin');
+      // Use hard redirect to ensure server-side session is picked up
+      window.location.href = '/admin';
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
 

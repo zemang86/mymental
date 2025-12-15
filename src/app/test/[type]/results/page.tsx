@@ -474,8 +474,22 @@ function ResultsContent() {
                 </div>
               </motion.div>
             </>
+          ) : !hasAccess ? (
+            // Show upgrade prompt for non-premium users
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-6"
+            >
+              <InsightsPreview
+                assessmentType={type}
+                severity={severity}
+                locale={isMalay ? 'ms' : 'en'}
+              />
+            </motion.div>
           ) : (
-            // Fallback - no insights available
+            // Fallback - insights failed to generate for premium user
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -485,10 +499,14 @@ function ResultsContent() {
               <GlassCard className="text-center py-6">
                 <Info className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
                 <p className="text-neutral-600 dark:text-neutral-400">
-                  AI insights are not available for this assessment.
+                  {isMalay
+                    ? 'Pandangan AI tidak dapat dijana buat masa ini.'
+                    : 'AI insights could not be generated at this time.'}
                 </p>
                 <p className="text-sm text-neutral-500 mt-1">
-                  Please see the general recommendations below.
+                  {isMalay
+                    ? 'Sila cuba lagi kemudian atau hubungi sokongan.'
+                    : 'Please try again later or contact support.'}
                 </p>
               </GlassCard>
             </motion.div>
