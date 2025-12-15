@@ -3,13 +3,20 @@
  * Handles fetching and managing intervention modules with KB content
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Server-side Supabase client
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-loaded Supabase client to avoid build-time errors
+let _supabaseClient: SupabaseClient | null = null;
+
+function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseClient) {
+    _supabaseClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabaseClient;
+}
 
 export interface InterventionModule {
   id: string;
@@ -103,7 +110,7 @@ interface DbChapter {
 export async function getInterventionModules(
   category?: string
 ): Promise<InterventionModule[]> {
-  let query = supabaseAdmin
+  let query = getSupabaseAdmin()
     .from('interventions')
     .select('*')
     .eq('is_published', true)
@@ -148,7 +155,7 @@ export async function getInterventionBySlug(
   slug: string,
   userId?: string
 ): Promise<InterventionModule | null> {
-  const { data: intervention, error } = await supabaseAdmin
+  const { data: intervention, error } = await getSupabaseAdmin()
     .from('interventions')
     .select('*')
     .eq('slug', slug)
@@ -161,7 +168,7 @@ export async function getInterventionBySlug(
   }
 
   // Fetch chapters
-  const { data: chapters } = await supabaseAdmin
+  const { data: chapters } = await getSupabaseAdmin()
     .from('intervention_chapters')
     .select(`
       *,
@@ -181,7 +188,7 @@ export async function getInterventionBySlug(
   let chapterProgress: Record<string, UserChapterProgress> = {};
 
   if (userId) {
-    const { data: progress } = await supabaseAdmin
+    const { data: progress } = await getSupabaseAdmin()
       .from('user_intervention_progress')
       .select('*')
       .eq('user_id', userId)
@@ -201,7 +208,7 @@ export async function getInterventionBySlug(
     }
 
     // Fetch chapter-level progress
-    const { data: exerciseProgress } = await supabaseAdmin
+    const { data: exerciseProgress } = await getSupabaseAdmin()
       .from('user_exercise_progress')
       .select('*')
       .eq('user_id', userId)
@@ -253,7 +260,7 @@ export async function getInterventionBySlug(
 export async function getKBInterventions(
   category: string
 ): Promise<InterventionModule | null> {
-  const { data: articles, error } = await supabaseAdmin
+  const { data: articles, error } = await getSupabaseAdmin()
     .from('kb_articles')
     .select('*')
     .eq('category', category)
@@ -310,7 +317,7 @@ export async function saveChapterProgress(
   notes?: string
 ): Promise<{ success: boolean; error?: string }> {
   // Upsert chapter progress
-  const { error: chapterError } = await supabaseAdmin
+  const { error: chapterError } = await getSupabaseAdmin()
     .from('user_exercise_progress')
     .upsert(
       {
@@ -335,14 +342,14 @@ export async function saveChapterProgress(
   }
 
   // Update intervention progress summary
-  const { data: completedCount } = await supabaseAdmin
+  const { data: completedCount } = await getSupabaseAdmin()
     .from('user_exercise_progress')
     .select('id', { count: 'exact' })
     .eq('user_id', userId)
     .eq('intervention_id', interventionId)
     .eq('completed', true);
 
-  const { data: intervention } = await supabaseAdmin
+  const { data: intervention } = await getSupabaseAdmin()
     .from('interventions')
     .select('total_chapters')
     .eq('id', interventionId)
@@ -352,7 +359,7 @@ export async function saveChapterProgress(
   const totalChapters = intervention?.total_chapters || 0;
   const isCompleted = completedChapters >= totalChapters && totalChapters > 0;
 
-  const { error: progressError } = await supabaseAdmin
+  const { error: progressError } = await getSupabaseAdmin()
     .from('user_intervention_progress')
     .upsert(
       {
@@ -381,7 +388,7 @@ export async function saveChapterProgress(
 export async function getUserInterventionProgress(
   userId: string
 ): Promise<UserInterventionProgress[]> {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('user_intervention_progress')
     .select('*')
     .eq('user_id', userId)

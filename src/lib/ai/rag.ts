@@ -14,9 +14,17 @@ import {
 import { SYSTEM_PROMPTS, buildChatPrompt, buildResultPrompt, CRISIS_RESPONSE } from './prompts';
 import type { AssessmentInsights } from '@/types/insights';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// Lazy-loaded client to avoid build-time errors
+let anthropicClient: Anthropic | null = null;
+
+function getAnthropic(): Anthropic {
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
+  }
+  return anthropicClient;
+}
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -184,7 +192,7 @@ export async function generateChatResponse(
   const userPrompt = buildChatPrompt(userMessage, context, conversationHistory);
 
   try {
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
       system: SYSTEM_PROMPTS.chatAssistant,
@@ -242,7 +250,7 @@ export async function generateAssessmentResults(
   );
 
   try {
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 2048,
       system: SYSTEM_PROMPTS.resultGeneration,
@@ -272,7 +280,7 @@ export async function quickAnswer(question: string): Promise<string> {
   const context = formatContext(articles);
 
   try {
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 512,
       system: `You are a helpful mental health information assistant. Answer the question based on the provided context. Be concise and accurate. If you don't know, say so.`,
@@ -356,7 +364,7 @@ ${severity.toLowerCase().includes('mild') || severity.toLowerCase().includes('mi
 Return ONLY valid JSON, no markdown or explanation.`;
 
   try {
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 2048,
       system: systemPrompt,

@@ -4,16 +4,30 @@
  */
 
 import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy-loaded clients to avoid build-time errors
+let openaiClient: OpenAI | null = null;
+let supabaseAdminClient: SupabaseClient | null = null;
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getOpenAI(): OpenAI {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return openaiClient;
+}
+
+function getSupabaseAdmin(): SupabaseClient {
+  if (!supabaseAdminClient) {
+    supabaseAdminClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return supabaseAdminClient;
+}
 
 export interface EmbeddingResult {
   embedding: number[];
@@ -24,7 +38,7 @@ export interface EmbeddingResult {
  * Generate embeddings for a given text using OpenAI's text-embedding-3-small model
  */
 export async function generateEmbedding(text: string): Promise<EmbeddingResult> {
-  const response = await openai.embeddings.create({
+  const response = await getOpenAI().embeddings.create({
     model: 'text-embedding-3-small',
     input: text,
   });
@@ -39,7 +53,7 @@ export async function generateEmbedding(text: string): Promise<EmbeddingResult> 
  * Generate embeddings for multiple texts in batch
  */
 export async function generateEmbeddings(texts: string[]): Promise<EmbeddingResult[]> {
-  const response = await openai.embeddings.create({
+  const response = await getOpenAI().embeddings.create({
     model: 'text-embedding-3-small',
     input: texts,
   });
@@ -58,7 +72,7 @@ export async function searchSimilarDocuments(
   limit: number = 4,
   matchThreshold: number = 0.7
 ): Promise<KBArticle[]> {
-  const { data, error } = await supabaseAdmin.rpc('match_kb_articles', {
+  const { data, error } = await getSupabaseAdmin().rpc('match_kb_articles', {
     query_embedding: queryEmbedding,
     match_threshold: matchThreshold,
     match_count: limit,
@@ -107,7 +121,7 @@ export async function searchSimilarDocumentsByCategory(
   limit: number = 4,
   matchThreshold: number = 0.5
 ): Promise<KBArticle[]> {
-  const { data, error } = await supabaseAdmin.rpc('match_kb_articles_by_category', {
+  const { data, error } = await getSupabaseAdmin().rpc('match_kb_articles_by_category', {
     query_embedding: queryEmbedding,
     filter_category: category,
     match_threshold: matchThreshold,
@@ -172,7 +186,7 @@ export async function storeArticle(
   language: 'en' | 'ms',
   embedding: number[]
 ): Promise<{ success: boolean; id?: string; error?: string }> {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('kb_articles')
     .insert({
       title,
@@ -198,7 +212,7 @@ export async function updateArticleEmbedding(
   articleId: string,
   embedding: number[]
 ): Promise<{ success: boolean; error?: string }> {
-  const { error } = await supabaseAdmin
+  const { error } = await getSupabaseAdmin()
     .from('kb_articles')
     .update({ embedding, updated_at: new Date().toISOString() })
     .eq('id', articleId);
