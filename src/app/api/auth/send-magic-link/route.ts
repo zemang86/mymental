@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     // Send OTP via Resend
     const { error } = await resend.emails.send({
-      from: 'MyMental <onboarding@resend.dev>',
+      from: 'MyMental <noreply@kitamen.my>',
       to: [email],
       subject: `Your MyMental verification code: ${code}`,
       html: emailHtml,

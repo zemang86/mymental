@@ -36,9 +36,9 @@ export async function sendAssessmentResults({
       })
     );
 
-    // Use Resend onboarding domain for testing, or custom domain for production
-    const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'onboarding@resend.dev';
-    const fromName = fromEmail.includes('onboarding') ? 'MyMental (Test)' : 'MyMental';
+    // Use verified kitamen.my domain
+    const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'noreply@kitamen.my';
+    const fromName = 'MyMental';
 
     const { data, error } = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,
@@ -72,8 +72,8 @@ export async function sendEmail({
   html: string;
 }) {
   try {
-    const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'onboarding@resend.dev';
-    const fromName = fromEmail.includes('onboarding') ? 'MyMental (Test)' : 'MyMental';
+    const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'noreply@kitamen.my';
+    const fromName = 'MyMental';
 
     const { data, error } = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,

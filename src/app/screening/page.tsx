@@ -50,7 +50,7 @@ export default function ScreeningPage() {
       // Defer state updates to avoid cascading renders
       queueMicrotask(() => {
         setShowEmergencyModal(true);
-        setCanCloseEmergency(false);
+        setCanCloseEmergency(true);
       });
     }
   }, [isEmergency]);
@@ -67,7 +67,7 @@ export default function ScreeningPage() {
         setSuicidalIdeation(true);
         triggerEmergency();
         setShowEmergencyModal(true);
-        setCanCloseEmergency(false);
+        setCanCloseEmergency(true);
         return; // Don't proceed
       }
 
@@ -112,7 +112,7 @@ export default function ScreeningPage() {
     // Check for emergency one more time
     if (triageResult.shouldShowEmergency) {
       setShowEmergencyModal(true);
-      setCanCloseEmergency(triageResult.riskLevel !== 'imminent');
+      setCanCloseEmergency(true);
       if (triageResult.riskLevel === 'imminent') {
         setIsSubmitting(false);
         return;
