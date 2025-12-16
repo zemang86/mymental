@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { GlassCard, GlassButton } from '@/components/ui';
 import { QuizContainer } from './quiz';
+import { ContentRenderer } from './content-renderer';
 import type { InterventionChapter } from '@/lib/interventions/modules';
 
 interface ExerciseDetailProps {
@@ -122,15 +123,15 @@ export function ExerciseDetail({
             {title}
           </h2>
           {chapter.estimatedDuration && (
-            <p className="text-sm text-neutral-500 flex items-center gap-1 mt-1">
+            <p className="text-sm text-sage-600 dark:text-sage-400 flex items-center gap-1.5 mt-1">
               <Clock className="w-4 h-4" />
               {chapter.estimatedDuration} {locale === 'ms' ? 'minit' : 'min'}
             </p>
           )}
         </div>
         {chapter.isCompleted && (
-          <span className="flex items-center gap-1 text-green-600 dark:text-green-400 text-sm font-medium">
-            <CheckCircle className="w-5 h-5" />
+          <span className="flex items-center gap-1 text-sage-600 dark:text-sage-400 text-sm font-medium bg-sage-50 dark:bg-sage-900/30 px-3 py-1.5 rounded-full">
+            <CheckCircle className="w-4 h-4" />
             {locale === 'ms' ? 'Selesai' : 'Completed'}
           </span>
         )}
@@ -138,27 +139,22 @@ export function ExerciseDetail({
 
       {/* Content */}
       <GlassCard>
-        <div className="prose dark:prose-invert max-w-none">
-          {description && (
-            <p className="text-neutral-700 dark:text-neutral-300 mb-4">
-              {description}
-            </p>
-          )}
+        {description && (
+          <p className="text-neutral-600 dark:text-neutral-400 mb-6 text-lg leading-relaxed">
+            {description}
+          </p>
+        )}
 
-          {chapter.content && (
-            <div className="text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap">
-              {chapter.content.slice(0, 2000)}
-              {chapter.content.length > 2000 && '...'}
-            </div>
-          )}
-        </div>
+        {chapter.content && (
+          <ContentRenderer content={chapter.content} />
+        )}
       </GlassCard>
 
       {/* Exercise Steps */}
       {steps.length > 0 && (
         <GlassCard>
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-primary-500" />
+            <BookOpen className="w-5 h-5 text-sage-500" />
             {locale === 'ms' ? 'Langkah-langkah' : 'Steps'}
           </h3>
 
@@ -169,12 +165,12 @@ export function ExerciseDetail({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`flex items-start gap-3 p-3 rounded-lg transition-colors ${
+                className={`flex items-start gap-3 p-3 rounded-2xl transition-colors ${
                   index === currentStep
-                    ? 'bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-700'
+                    ? 'bg-sage-50 dark:bg-sage-900/20 border border-sage-200 dark:border-sage-700'
                     : index < currentStep
-                    ? 'bg-green-50 dark:bg-green-900/20'
-                    : 'bg-neutral-50 dark:bg-neutral-800/50'
+                    ? 'bg-sage-100/50 dark:bg-sage-900/10'
+                    : 'bg-warm-50 dark:bg-neutral-800/50'
                 }`}
               >
                 <button
@@ -182,10 +178,10 @@ export function ExerciseDetail({
                   className="flex-shrink-0 mt-0.5"
                 >
                   {index < currentStep ? (
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <CheckCircle className="w-5 h-5 text-sage-500" />
                   ) : index === currentStep ? (
-                    <div className="w-5 h-5 rounded-full border-2 border-primary-500 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-primary-500" />
+                    <div className="w-5 h-5 rounded-full border-2 border-sage-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-sage-500" />
                     </div>
                   ) : (
                     <Circle className="w-5 h-5 text-neutral-400" />
@@ -205,9 +201,9 @@ export function ExerciseDetail({
           </div>
 
           {/* Step Navigation */}
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-sage-200 dark:border-sage-800">
             <GlassButton
-              variant="ghost"
+              variant="wellness-outline"
               size="sm"
               onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
               disabled={currentStep === 0}
@@ -215,11 +211,11 @@ export function ExerciseDetail({
               <ChevronLeft className="w-4 h-4 mr-1" />
               {locale === 'ms' ? 'Sebelum' : 'Previous'}
             </GlassButton>
-            <span className="text-sm text-neutral-500">
+            <span className="text-sm text-sage-600 dark:text-sage-400 font-medium">
               {currentStep + 1} / {steps.length}
             </span>
             <GlassButton
-              variant="ghost"
+              variant="wellness-outline"
               size="sm"
               onClick={() => setCurrentStep(prev => Math.min(steps.length - 1, prev + 1))}
               disabled={currentStep === steps.length - 1}
@@ -234,15 +230,15 @@ export function ExerciseDetail({
       {/* Timer (for timed exercises) */}
       {chapter.estimatedDuration && (
         <GlassCard className="text-center">
-          <h3 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2">
+          <h3 className="text-sm font-medium text-sage-600 dark:text-sage-400 mb-2">
             {locale === 'ms' ? 'Pemasa Latihan' : 'Exercise Timer'}
           </h3>
-          <div className="text-3xl font-mono font-bold text-neutral-900 dark:text-white mb-4">
+          <div className="text-3xl font-mono font-bold text-sage-700 dark:text-sage-300 mb-4">
             {formatTime(elapsedTime)}
           </div>
           <div className="flex items-center justify-center gap-3">
             <GlassButton
-              variant={isTimerRunning ? 'secondary' : 'primary'}
+              variant={isTimerRunning ? 'wellness-outline' : 'wellness'}
               size="sm"
               onClick={() => setIsTimerRunning(!isTimerRunning)}
             >
@@ -259,7 +255,7 @@ export function ExerciseDetail({
               )}
             </GlassButton>
             <GlassButton
-              variant="ghost"
+              variant="wellness-outline"
               size="sm"
               onClick={() => {
                 setElapsedTime(0);
@@ -286,7 +282,7 @@ export function ExerciseDetail({
       {/* Notes */}
       {!showQuiz && (
         <GlassCard>
-        <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <h3 className="text-sm font-medium text-sage-700 dark:text-sage-300 mb-2">
           {locale === 'ms' ? 'Nota Peribadi (Pilihan)' : 'Personal Notes (Optional)'}
         </h3>
         <textarea
@@ -297,7 +293,7 @@ export function ExerciseDetail({
               ? 'Tulis refleksi atau nota anda di sini...'
               : 'Write your reflections or notes here...'
           }
-          className="w-full p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full p-3 rounded-2xl bg-warm-50 dark:bg-neutral-800 border border-sage-200 dark:border-sage-800 text-neutral-900 dark:text-white placeholder-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-sage-400"
           rows={3}
         />
       </GlassCard>
@@ -308,7 +304,7 @@ export function ExerciseDetail({
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           {hasPrevious && (
-            <GlassButton variant="ghost" onClick={onPrevious}>
+            <GlassButton variant="wellness-outline" onClick={onPrevious}>
               <ChevronLeft className="w-4 h-4 mr-1" />
               {locale === 'ms' ? 'Sebelumnya' : 'Previous'}
             </GlassButton>
@@ -319,7 +315,7 @@ export function ExerciseDetail({
           {/* Show Take Quiz button if chapter has quiz */}
           {quizId && (
             <GlassButton
-              variant={chapter.isCompleted ? 'secondary' : 'primary'}
+              variant={chapter.isCompleted ? 'wellness-outline' : 'wellness'}
               onClick={() => setShowQuiz(true)}
             >
               <BookOpen className="w-4 h-4 mr-1" />
@@ -330,13 +326,13 @@ export function ExerciseDetail({
             </GlassButton>
           )}
           {!chapter.isCompleted && !quizId && (
-            <GlassButton variant="primary" onClick={handleMarkComplete}>
+            <GlassButton variant="wellness" onClick={handleMarkComplete}>
               <CheckCircle className="w-4 h-4 mr-1" />
               {locale === 'ms' ? 'Tandakan Selesai' : 'Mark Complete'}
             </GlassButton>
           )}
           {hasNext && (
-            <GlassButton variant={chapter.isCompleted ? 'primary' : 'secondary'} onClick={onNext}>
+            <GlassButton variant={chapter.isCompleted ? 'wellness' : 'wellness-outline'} onClick={onNext}>
               {locale === 'ms' ? 'Seterusnya' : 'Next Chapter'}
               <ChevronRight className="w-4 h-4 ml-1" />
             </GlassButton>

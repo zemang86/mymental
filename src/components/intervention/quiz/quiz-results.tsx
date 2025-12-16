@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Check, RefreshCw, Sparkles, Clock, Heart } from 'lucide-react';
+import { Check, RefreshCw, Clock, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
-import { BreathingCircle } from '@/components/ui/lottie-animation';
+import { SuccessAnimation, ConfettiAnimation } from '@/components/ui/lottie-animation';
 
 interface QuizResultsProps {
   result: {
@@ -92,20 +92,27 @@ export function QuizResults({ result, quiz, answers }: QuizResultsProps) {
       {/* Overall Result */}
       <div className="wellness-card p-8">
         <div className="text-center">
-          {/* Success/Encourage Icon */}
+          {/* Success/Encourage Animation */}
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', duration: 0.6 }}
-            className="mb-6"
+            className="mb-6 relative"
           >
             {passed ? (
-              <div className="w-20 h-20 mx-auto rounded-full bg-sage-100 dark:bg-sage-900/30 flex items-center justify-center wellness-glow-sage">
-                <Sparkles className="w-10 h-10 text-sage-600 dark:text-sage-400" />
-              </div>
+              <>
+                {/* Confetti background */}
+                <div className="absolute inset-0 -top-8 flex items-center justify-center pointer-events-none">
+                  <ConfettiAnimation size="xl" />
+                </div>
+                {/* Success checkmark */}
+                <div className="relative z-10 mx-auto wellness-glow-sage rounded-full">
+                  <SuccessAnimation size="lg" />
+                </div>
+              </>
             ) : (
-              <div className="w-20 h-20 mx-auto rounded-full bg-warm-100 dark:bg-warm-900/30 flex items-center justify-center">
-                <Heart className="w-10 h-10 text-warm-500 dark:text-warm-400" />
+              <div className="w-24 h-24 mx-auto rounded-full bg-warm-100 dark:bg-warm-900/30 flex items-center justify-center">
+                <Heart className="w-12 h-12 text-warm-500 dark:text-warm-400 animate-pulse" />
               </div>
             )}
           </motion.div>
