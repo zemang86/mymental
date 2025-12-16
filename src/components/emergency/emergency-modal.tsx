@@ -14,12 +14,14 @@ interface EmergencyModalProps {
   isOpen: boolean;
   onClose?: () => void;
   canClose?: boolean; // For imminent risk, cannot close
+  referralCreated?: boolean; // Show referral confirmation
 }
 
 export function EmergencyModal({
   isOpen,
   onClose,
   canClose = false,
+  referralCreated = false,
 }: EmergencyModalProps) {
   const t = useTranslations('emergencyModal');
   const resetStore = useAssessmentStore((state) => state.reset);
@@ -99,6 +101,25 @@ export function EmergencyModal({
                     {t('message')}
                   </p>
                 </div>
+
+                {/* Referral Confirmation */}
+                {referralCreated && (
+                  <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                    <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-full flex-shrink-0">
+                      <Heart className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-green-900 dark:text-green-100 mb-1">
+                        {t('referralCreatedTitle', { defaultValue: 'Professional Support Requested' })}
+                      </h4>
+                      <p className="text-sm text-green-800 dark:text-green-200">
+                        {t('referralCreatedMessage', {
+                          defaultValue: 'Our team has been notified and will contact you within 24-48 hours to connect you with a mental health professional. You will also receive an email with additional resources.'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Hotlines */}
                 <div className="space-y-3">

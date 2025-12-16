@@ -228,7 +228,7 @@ export default function FullResultsPage() {
                 <div className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
                   Risk Level
                 </div>
-                <RiskBadge risk={overallRisk} />
+                <RiskBadge level={overallRisk} />
               </div>
               <div className="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
                 <div className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
@@ -341,14 +341,14 @@ export default function FullResultsPage() {
           </div>
 
           {/* Disclaimer */}
-          <GlassCard variant="outlined" className="mb-6">
+          <GlassCard variant="subtle" className="mb-6">
             <div className="flex gap-3">
               <Shield className="w-5 h-5 text-neutral-500 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-neutral-600 dark:text-neutral-400">
                 <p className="font-medium text-neutral-900 dark:text-white mb-2">
                   Important Disclaimer
                 </p>
-                <p className="whitespace-pre-line">{SCREENING_DISCLAIMER}</p>
+                <p className="whitespace-pre-line">{SCREENING_DISCLAIMER.en}</p>
               </div>
             </div>
           </GlassCard>
@@ -357,10 +357,10 @@ export default function FullResultsPage() {
           <div className="text-center">
             <GlassButton
               variant="primary"
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/interventions')}
               rightIcon={<ArrowRight className="w-5 h-5" />}
             >
-              Go to Dashboard
+              Explore Interventions
             </GlassButton>
           </div>
         </div>

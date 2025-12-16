@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { calculateFunctionalLevel, getOverallRiskLevel } from '@/lib/assessment/triage';
+import { calculateFunctionalLevel, getOverallRiskLevel, createReferralForHighRiskUser, type TriageResult } from '@/lib/assessment/triage';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     // Get initial screening to combine risk levels
     const { data: initialScreening } = await supabase
       .from('initial_screenings')
-      .select('risk_level')
+      .select('risk_level, detected_conditions, has_suicidal_ideation, has_psychosis_indicators')
       .eq('session_id', sessionId)
       .single();
 
@@ -67,6 +67,40 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to save social screening' },
         { status: 500 }
       );
+    }
+
+    // Create automatic referral if overall risk is high/imminent AND user not yet referred
+    if (session.user_id && (overallRisk === 'high' || overallRisk === 'imminent') && initialScreening) {
+      // Check if referral already exists
+      const { data: existingReferral } = await supabase
+        .from('user_referrals')
+        .select('id')
+        .eq('user_id', session.user_id)
+        .eq('risk_level', overallRisk)
+        .single();
+
+      if (!existingReferral) {
+        const triageResult: TriageResult = {
+          riskLevel: overallRisk,
+          triggeredRules: [],
+          actions: [],
+          shouldBlockChat: false,
+          shouldShowEmergency: overallRisk === 'imminent',
+          shouldRedirectEmergency: overallRisk === 'imminent',
+          highestRiskReason: `Severe functional impairment (${functionalLevel}) combined with ${initialScreening.risk_level} risk`,
+          hasSuicidalIdeation: initialScreening.has_suicidal_ideation || false,
+          hasPsychosisIndicators: initialScreening.has_psychosis_indicators || false,
+          triggerQuestions: [],
+        };
+
+        createReferralForHighRiskUser(
+          session.user_id,
+          triageResult,
+          initialScreening.detected_conditions || []
+        ).catch((error) => {
+          console.error('Failed to create automatic referral:', error);
+        });
+      }
     }
 
     return NextResponse.json({

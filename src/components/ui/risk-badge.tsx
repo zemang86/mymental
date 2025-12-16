@@ -50,7 +50,9 @@ export function RiskBadge({
   size = 'md',
   className,
 }: RiskBadgeProps) {
-  const config = riskConfig[level];
+  // Normalize level to lowercase and handle undefined
+  const normalizedLevel = (level?.toLowerCase() || 'moderate') as keyof typeof riskConfig;
+  const config = riskConfig[normalizedLevel] || riskConfig.moderate;
   const Icon = config.icon;
 
   return (
@@ -113,7 +115,7 @@ const severityConfig = {
 };
 
 export function SeverityBadge({ severity, size = 'md', className }: SeverityBadgeProps) {
-  const config = severityConfig[severity];
+  const config = severityConfig[severity] || severityConfig.moderate;
 
   return (
     <span

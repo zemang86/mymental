@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { evaluateTriage, detectConditions } from '@/lib/assessment/triage';
+import { evaluateTriage, detectConditions, createReferralForHighRiskUser } from '@/lib/assessment/triage';
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,6 +69,17 @@ export async function POST(request: NextRequest) {
         trigger_question: triageResult.triggerQuestions?.[0] || null,
         trigger_answer: true,
         action_taken: triageResult.actions,
+      });
+    }
+
+    // Create automatic referral for high-risk users
+    if (session.user_id && (triageResult.riskLevel === 'high' || triageResult.riskLevel === 'imminent')) {
+      createReferralForHighRiskUser(
+        session.user_id,
+        triageResult,
+        detectedConditions
+      ).catch((error) => {
+        console.error('Failed to create automatic referral:', error);
       });
     }
 

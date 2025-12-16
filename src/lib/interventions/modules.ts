@@ -46,6 +46,7 @@ export interface InterventionChapter {
   description?: string;
   descriptionMs?: string;
   isFreePreview: boolean;
+  hasQuiz?: boolean;
   content?: string;
   exerciseSteps?: string[];
   estimatedDuration?: number;
@@ -97,11 +98,15 @@ interface DbChapter {
   description?: string;
   description_ms?: string;
   is_free_preview: boolean;
-  kb_articles?: {
+  has_quiz?: boolean;
+  video_url?: string;
+  kb_articles?: Array<{
+    id?: string;
+    title?: string;
     content?: string;
     exercise_steps?: string[];
     estimated_duration_minutes?: number;
-  };
+  }>;
 }
 
 /**
@@ -171,7 +176,18 @@ export async function getInterventionBySlug(
   const { data: chapters } = await getSupabaseAdmin()
     .from('intervention_chapters')
     .select(`
-      *,
+      id,
+      intervention_id,
+      kb_article_id,
+      chapter_order,
+      title,
+      title_ms,
+      description,
+      description_ms,
+      is_free_preview,
+      has_quiz,
+      video_url,
+      created_at,
       kb_articles (
         id,
         title,
@@ -239,9 +255,10 @@ export async function getInterventionBySlug(
       description: ch.description,
       descriptionMs: ch.description_ms || ch.description,
       isFreePreview: ch.is_free_preview,
-      content: ch.kb_articles?.content,
-      exerciseSteps: ch.kb_articles?.exercise_steps || [],
-      estimatedDuration: ch.kb_articles?.estimated_duration_minutes,
+      hasQuiz: ch.has_quiz || false,
+      content: ch.kb_articles?.[0]?.content,
+      exerciseSteps: ch.kb_articles?.[0]?.exercise_steps || [],
+      estimatedDuration: ch.kb_articles?.[0]?.estimated_duration_minutes,
       isCompleted: chapterProgress[ch.id]?.completed || false,
     })
   );

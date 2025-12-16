@@ -22,7 +22,7 @@ import type { InterventionChapter } from '@/lib/interventions';
 import { formatDuration } from '@/lib/interventions';
 
 // Dynamically import ReactPlayer to avoid SSR issues
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false }) as any;
 
 interface VideoPlayerProps {
   chapters: InterventionChapter[];
@@ -218,7 +218,7 @@ export function VideoPlayer({
                   portrait: false,
                 },
               },
-            }}
+            } as any}
           />
         ) : (
           /* Placeholder when no video URL */

@@ -14,6 +14,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { GlassCard, GlassButton } from '@/components/ui';
+import { QuizContainer } from './quiz';
 import type { InterventionChapter } from '@/lib/interventions/modules';
 
 interface ExerciseDetailProps {
@@ -39,6 +40,36 @@ export function ExerciseDetail({
   const [currentStep, setCurrentStep] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizPassed, setQuizPassed] = useState(false);
+  const [quizId, setQuizId] = useState<string | null>(null);
+
+  // Fetch quiz ID if chapter has quiz
+  useEffect(() => {
+    async function fetchQuizId() {
+      console.log('🔍 Chapter data:', chapter);
+      console.log('🔍 hasQuiz:', chapter.hasQuiz);
+      console.log('🔍 chapter.id:', chapter.id);
+
+      if (chapter.hasQuiz && chapter.id) {
+        console.log('✅ Chapter has quiz! Fetching quiz ID...');
+        try {
+          const response = await fetch(`/api/v1/intervention/chapter/${chapter.id}/quiz`);
+          const data = await response.json();
+          console.log('📝 Quiz data:', data);
+          if (data.success && data.quizId) {
+            setQuizId(data.quizId);
+            console.log('✅ Quiz ID set:', data.quizId);
+          }
+        } catch (error) {
+          console.error('❌ Error fetching quiz:', error);
+        }
+      } else {
+        console.log('❌ No quiz for this chapter');
+      }
+    }
+    fetchQuizId();
+  }, [chapter.id, chapter.hasQuiz]);
 
   const title = locale === 'ms' ? chapter.titleMs : chapter.title;
   const description = locale === 'ms' ? chapter.descriptionMs : chapter.description;
@@ -63,7 +94,24 @@ export function ExerciseDetail({
   }, [isTimerRunning]);
 
   const handleMarkComplete = () => {
+    // If chapter has quiz and hasn't been passed yet, show quiz first
+    if (quizId && !quizPassed && !showQuiz) {
+      setShowQuiz(true);
+      return;
+    }
+
+    // Complete the chapter
     onComplete(notes || undefined);
+  };
+
+  const handleQuizComplete = (passed: boolean, score: number) => {
+    setQuizPassed(passed);
+    if (passed) {
+      // Auto-complete chapter after passing quiz
+      setTimeout(() => {
+        onComplete(notes || undefined);
+      }, 2000);
+    }
   };
 
   return (
@@ -226,8 +274,19 @@ export function ExerciseDetail({
         </GlassCard>
       )}
 
+      {/* Quiz */}
+      {showQuiz && quizId && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <QuizContainer quizId={quizId} onComplete={handleQuizComplete} />
+        </motion.div>
+      )}
+
       {/* Notes */}
-      <GlassCard>
+      {!showQuiz && (
+        <GlassCard>
         <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           {locale === 'ms' ? 'Nota Peribadi (Pilihan)' : 'Personal Notes (Optional)'}
         </h3>
@@ -243,8 +302,10 @@ export function ExerciseDetail({
           rows={3}
         />
       </GlassCard>
+      )}
 
       {/* Action Buttons */}
+      {!showQuiz && (
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           {hasPrevious && (
@@ -270,6 +331,7 @@ export function ExerciseDetail({
           )}
         </div>
       </div>
+      )}
     </div>
   );
 }

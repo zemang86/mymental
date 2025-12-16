@@ -31,3 +31,33 @@ export async function createClient() {
     }
   );
 }
+
+/**
+ * Creates a Supabase admin client with service role key
+ * Use this for admin operations like creating users, bypassing RLS, etc.
+ * WARNING: This client bypasses Row Level Security - use carefully!
+ */
+export async function createAdminClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Ignore cookie errors in Server Components
+          }
+        },
+      },
+    }
+  );
+}
