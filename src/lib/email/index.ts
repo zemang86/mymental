@@ -36,8 +36,12 @@ export async function sendAssessmentResults({
       })
     );
 
+    // Use Resend onboarding domain for testing, or custom domain for production
+    const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'onboarding@resend.dev';
+    const fromName = fromEmail.includes('onboarding') ? 'MyMental (Test)' : 'MyMental';
+
     const { data, error } = await resend.emails.send({
-      from: process.env.NEXT_PUBLIC_FROM_EMAIL || 'MyMental <noreply@mymental.com>',
+      from: `${fromName} <${fromEmail}>`,
       to: [to],
       subject: 'Your MyMental Assessment Results',
       html: emailHtml,
