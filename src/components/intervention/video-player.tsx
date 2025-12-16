@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import {
   Play,
   Pause,
@@ -19,6 +20,9 @@ import { cn } from '@/lib/utils/cn';
 import { GlassCard } from '@/components/ui';
 import type { InterventionChapter } from '@/lib/interventions';
 import { formatDuration } from '@/lib/interventions';
+
+// Dynamically import ReactPlayer to avoid SSR issues
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 interface VideoPlayerProps {
   chapters: InterventionChapter[];
@@ -39,7 +43,7 @@ export function VideoPlayer({
   onChapterComplete,
   initialTime = 0,
 }: VideoPlayerProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const playerRef = useRef<any>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(initialTime);
@@ -50,9 +54,13 @@ export function VideoPlayer({
   const [showControls, setShowControls] = useState(true);
   const [showChapterList, setShowChapterList] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [isReady, setIsReady] = useState(false);
 
   const currentChapter = chapters[currentChapterIndex];
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Check if chapter has video URL
+  const hasVideo = !!(currentChapter as any)?.video_url;
 
   // Hide controls after inactivity
   useEffect(() => {
@@ -78,8 +86,8 @@ export function VideoPlayer({
   // Update progress every second
   useEffect(() => {
     const interval = setInterval(() => {
-      if (videoRef.current && isPlaying) {
-        const time = videoRef.current.currentTime;
+      if (playerRef.current && isPlaying) {
+        const time = playerRef.current.getCurrentTime?.() || currentTime;
         setCurrentTime(time);
         onProgress(time);
 
@@ -91,43 +99,30 @@ export function VideoPlayer({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPlaying, duration, currentChapter, completedChapters, onProgress, onChapterComplete]);
+  }, [isPlaying, duration, currentChapter, completedChapters, onProgress, onChapterComplete, currentTime]);
 
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
+    setIsPlaying(!isPlaying);
   };
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (progressRef.current && videoRef.current) {
+    if (progressRef.current && playerRef.current) {
       const rect = progressRef.current.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       const newTime = pos * duration;
-      videoRef.current.currentTime = newTime;
+      playerRef.current.seekTo?.(newTime, 'seconds');
       setCurrentTime(newTime);
     }
   };
 
   const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
+    setIsMuted(!isMuted);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
-    if (videoRef.current) {
-      videoRef.current.volume = newVolume;
-      setVolume(newVolume);
-      setIsMuted(newVolume === 0);
-    }
+    setVolume(newVolume);
+    setIsMuted(newVolume === 0);
   };
 
   const toggleFullscreen = () => {
@@ -159,10 +154,29 @@ export function VideoPlayer({
     const currentIndex = rates.indexOf(playbackRate);
     const nextIndex = (currentIndex + 1) % rates.length;
     const newRate = rates[nextIndex];
-    if (videoRef.current) {
-      videoRef.current.playbackRate = newRate;
-    }
     setPlaybackRate(newRate);
+  };
+
+  const handleProgress = (state: any) => {
+    if (!isPlaying) return;
+    setCurrentTime(state.playedSeconds);
+    onProgress(state.playedSeconds);
+  };
+
+  const handleDuration = (duration: number) => {
+    setDuration(duration);
+  };
+
+  const handleReady = () => {
+    setIsReady(true);
+    if (initialTime > 0 && playerRef.current) {
+      playerRef.current.seekTo(initialTime, 'seconds');
+    }
+  };
+
+  const handleEnded = () => {
+    onChapterComplete(currentChapter.id);
+    goToNextChapter();
   };
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -176,34 +190,46 @@ export function VideoPlayer({
         onMouseMove={() => setShowControls(true)}
         onMouseLeave={() => isPlaying && setShowControls(false)}
       >
-        {/* Placeholder for actual video - using gradient as placeholder */}
-        <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center">
-          <div className="text-center text-white/60">
-            <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-sm">Video Player</p>
-            <p className="text-xs opacity-60 mt-1">{currentChapter?.title}</p>
-          </div>
-        </div>
-
-        {/* Video element (hidden in demo, would show actual video) */}
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-contain hidden"
-          onLoadedMetadata={() => {
-            if (videoRef.current) {
-              setDuration(videoRef.current.duration || currentChapter?.duration || 300);
-            }
-          }}
-          onEnded={goToNextChapter}
-        />
-
-        {/* Set duration from chapter data for demo */}
-        {duration === 0 && currentChapter && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `setTimeout(() => {}, 0)`,
+        {/* ReactPlayer for YouTube, Vimeo, etc. */}
+        {hasVideo ? (
+          <ReactPlayer
+            ref={playerRef}
+            url={(currentChapter as any).video_url}
+            playing={isPlaying}
+            volume={volume}
+            muted={isMuted}
+            playbackRate={playbackRate}
+            width="100%"
+            height="100%"
+            onProgress={handleProgress}
+            onDuration={handleDuration}
+            onReady={handleReady}
+            onEnded={handleEnded}
+            config={{
+              youtube: {
+                playerVars: {
+                  modestbranding: 1,
+                  rel: 0,
+                },
+              },
+              vimeo: {
+                playerOptions: {
+                  byline: false,
+                  portrait: false,
+                },
+              },
             }}
           />
+        ) : (
+          /* Placeholder when no video URL */
+          <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center">
+            <div className="text-center text-white/60">
+              <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-sm">No Video Available</p>
+              <p className="text-xs opacity-60 mt-1">{currentChapter?.title}</p>
+              <p className="text-xs opacity-40 mt-2">Add a video URL in the admin panel</p>
+            </div>
+          </div>
         )}
 
         {/* Controls Overlay */}
