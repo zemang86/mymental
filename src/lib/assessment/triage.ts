@@ -227,6 +227,50 @@ export function detectConditions(
 }
 
 /**
+ * Create referral for high-risk users
+ * This function creates a referral record and sends alerts to admin
+ */
+export async function createReferralForHighRiskUser(
+  userId: string,
+  triageResult: TriageResult,
+  detectedConditions: AssessmentType[]
+): Promise<{ referralId: string | null; alertId: string | null }> {
+  // Only create referrals for high or imminent risk
+  if (triageResult.riskLevel !== 'high' && triageResult.riskLevel !== 'imminent') {
+    return { referralId: null, alertId: null };
+  }
+
+  try {
+    // Create referral via API
+    const referralResponse = await fetch('/api/v1/referral/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        riskLevel: triageResult.riskLevel,
+        detectedConditions,
+        referralReason: triageResult.highestRiskReason,
+        contactPreference: ['phone', 'in_person'],
+      }),
+    });
+
+    if (!referralResponse.ok) {
+      console.error('Failed to create referral');
+      return { referralId: null, alertId: null };
+    }
+
+    const referralData = await referralResponse.json();
+    return {
+      referralId: referralData.referralId,
+      alertId: referralData.alertId,
+    };
+  } catch (error) {
+    console.error('Error creating referral:', error);
+    return { referralId: null, alertId: null };
+  }
+}
+
+/**
  * Calculate functional level from social function score
  * Score range: 0-32 (8 questions x 0-4)
  */

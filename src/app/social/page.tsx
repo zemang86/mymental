@@ -51,13 +51,30 @@ export default function SocialFunctionPage() {
   const handleComplete = async () => {
     setIsSubmitting(true);
 
-    // Calculate final score
-    calculateSocialFunctionScore();
+    try {
+      // Calculate final score
+      calculateSocialFunctionScore();
 
-    setStep('registration');
+      setStep('registration');
 
-    // Navigate to results (which will show registration gate)
-    router.push('/results/preliminary');
+      // Check if user has paid for results access
+      const response = await fetch('/api/v1/assessment/payment-status');
+      const { hasPaid } = await response.json();
+
+      if (hasPaid) {
+        // User has paid - show full results
+        router.push('/results/full');
+      } else {
+        // User hasn't paid - redirect to checkout with default 6-month plan
+        router.push('/checkout?flow=results&plan=basic_6months');
+      }
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+      // On error, show preliminary results as fallback
+      router.push('/results/preliminary');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const canProceed = currentAnswer !== undefined;

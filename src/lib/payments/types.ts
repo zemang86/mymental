@@ -15,7 +15,7 @@ export interface PricingPlan {
   tier: SubscriptionTier;
   price: number; // in MYR cents (e.g., 2900 = RM29.00)
   currency: 'MYR';
-  interval: 'one_time' | 'monthly' | 'yearly';
+  interval: 'one_time' | 'monthly' | '6_months' | 'yearly';
   features: string[];
   featuresMs: string[];
   popular?: boolean;
@@ -124,18 +124,44 @@ export const PRICING_PLANS: PricingPlan[] = [
     name: 'Premium Yearly',
     nameMs: 'Premium Tahunan',
     tier: 'premium',
-    price: 39900, // RM399.00 (save ~32%)
+    price: 4500, // RM45.00
     currency: 'MYR',
     interval: 'yearly',
     features: [
       'All premium features',
-      'Save 32% vs monthly',
+      'Best value - Save 23%',
       '12 months access',
     ],
     featuresMs: [
       'Semua ciri premium',
-      'Jimat 32% berbanding bulanan',
+      'Nilai terbaik - Jimat 23%',
       'Akses 12 bulan',
+    ],
+  },
+  {
+    id: 'basic_6months',
+    name: 'Basic - 6 Months',
+    nameMs: 'Asas - 6 Bulan',
+    tier: 'basic',
+    price: 2900, // RM29.00
+    currency: 'MYR',
+    interval: '6_months',
+    popular: true,
+    features: [
+      'All free features',
+      '3 detailed assessments per month',
+      'Personalized insights',
+      'Unlimited AI chat',
+      'Progress tracking',
+      '6 months access',
+    ],
+    featuresMs: [
+      'Semua ciri percuma',
+      '3 penilaian terperinci sebulan',
+      'Pandangan peribadi',
+      'Sembang AI tanpa had',
+      'Penjejakan kemajuan',
+      'Akses 6 bulan',
     ],
   },
 ];
