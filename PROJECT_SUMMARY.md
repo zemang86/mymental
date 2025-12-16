@@ -15,6 +15,17 @@ MyMental is a comprehensive mental health assessment and support platform built 
 
 ## Implementation Status (December 16, 2025)
 
+### 💰 CURRENT PRICING STRUCTURE
+
+**Active Plans (3 tiers only):**
+- **Free** - RM0 (Initial screening, basic features)
+- **Premium - 6 Months** - RM29 (All premium features for 6 months)
+- **Premium - Yearly** - RM45 (All premium features for 12 months, best value)
+
+**Note:** All monthly plans (Basic Monthly RM19, Premium Monthly RM49) have been **REMOVED**. Platform now only offers 6-month and yearly premium subscriptions.
+
+---
+
 ### ✅ FULLY IMPLEMENTED SYSTEMS
 
 #### Assessment System (100% Complete)
@@ -70,7 +81,7 @@ MyMental is a comprehensive mental health assessment and support platform built 
 - ✓ Simulation mode fully functional for testing
 - ✓ Checkout UI with Stripe/FPX options
 - ✓ Subscription viewing and basic cancellation
-- ✓ New pricing tiers (RM29/6mo, RM45/year) configured
+- ✓ Pricing tiers configured: Premium 6 Months (RM29), Premium Yearly (RM45)
 - ✓ Premium content gating throughout platform
 - ❌ Stripe integration code missing (infrastructure only)
 - ❌ Billplz integration not implemented at all
@@ -94,9 +105,9 @@ MyMental is a comprehensive mental health assessment and support platform built 
    - No payment check between screening and detailed assessment
 
 3. **Subscription Management**
-   - No upgrade flow (Basic → Premium)
-   - No downgrade flow (Premium → Basic)
-   - No plan switching with proration
+   - No plan switching (6 Months ↔ Yearly)
+   - No upgrade/downgrade flows
+   - No proration handling
 
 4. **Admin Content Creation Tools**
    - No quiz/assessment builder interface
@@ -223,8 +234,8 @@ MyMental is a comprehensive mental health assessment and support platform built 
 
 **Plans:**
 - Free tier (basic assessments)
-- Premium Monthly (RM29.90/month)
-- Premium Yearly (RM299/year)
+- Premium - 6 Months (RM29 for 6 months)
+- Premium - Yearly (RM45/year)
 - Pay-per-assessment option
 
 **Payment Integration:**
@@ -602,6 +613,60 @@ npx tsc --noEmit
 - [ ] Can manage other admins
 - [ ] Can modify system settings
 - [ ] Can access audit logs
+
+---
+
+## 🎯 Next Steps / Priority Tasks
+
+### 🔴 CRITICAL - Payment Integration (Required for Launch)
+1. **Stripe Integration**
+   - Implement Stripe API calls in `/api/v1/payment/route.ts`
+   - Add webhook handler at `/api/v1/payment/stripe/webhook/route.ts`
+   - Test with Stripe test mode cards
+   - Configure products in Stripe Dashboard for RM29 and RM45 plans
+
+2. **Billplz Integration (Malaysian FPX)**
+   - Implement Billplz API calls
+   - Add webhook handler at `/api/v1/payment/billplz/webhook/route.ts`
+   - Test with Billplz sandbox
+   - Configure collection in Billplz Dashboard
+
+3. **Payment Gate Implementation**
+   - Add payment check in `/app/social/page.tsx` after 2nd screening
+   - Redirect unpaid users to `/checkout?plan=premium_6months`
+   - Create `/results/full` page for paid users only
+   - Update preliminary results page to show upgrade prompt
+
+### 🟡 HIGH PRIORITY - Platform Completion
+1. **Admin Content Tools**
+   - Build quiz builder interface for creating intervention quizzes
+   - Build intervention editor (CRUD for modules and chapters)
+   - Add video/media upload interface
+
+2. **Email Templates**
+   - Payment confirmation email (after successful payment)
+   - Payment receipt email
+   - Subscription renewal reminders
+
+3. **Subscription Management**
+   - Plan switching (6 months ↔ yearly)
+   - Proration calculation
+   - Cancellation flow improvements
+
+### 🟢 MEDIUM PRIORITY - Enhancements
+1. **Lottie Animations**
+   - Add Lottie animation UI components in interventions
+   - Upload animation library for breathing exercises, etc.
+
+2. **Testing & QA**
+   - Complete QA testing checklist from `/progress` page
+   - Test all payment flows end-to-end
+   - Cross-browser and mobile testing
+
+3. **Performance Optimization**
+   - Image optimization
+   - Bundle size reduction
+   - API response caching
 
 ---
 

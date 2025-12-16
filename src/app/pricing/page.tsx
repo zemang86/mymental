@@ -12,7 +12,7 @@ export default function PricingPage() {
   const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>('monthly');
+  const [billingInterval, setBillingInterval] = useState<'6_months' | 'yearly'>('6_months');
 
   const simulationMode = isSimulationMode();
 
@@ -21,7 +21,7 @@ export default function PricingPage() {
     if (billingInterval === 'yearly') {
       return plan.interval === 'yearly' || plan.id === 'free';
     }
-    return plan.interval === 'monthly' || plan.id === 'free';
+    return plan.interval === '6_months' || plan.id === 'free';
   });
 
   const handleSelectPlan = async (planId: string) => {
@@ -99,14 +99,14 @@ export default function PricingPage() {
           >
             <div className="glass-card p-1 rounded-full inline-flex">
               <button
-                onClick={() => setBillingInterval('monthly')}
+                onClick={() => setBillingInterval('6_months')}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                  billingInterval === 'monthly'
+                  billingInterval === '6_months'
                     ? 'bg-primary-500 text-white'
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                 }`}
               >
-                Monthly
+                6 Months
               </button>
               <button
                 onClick={() => setBillingInterval('yearly')}
@@ -118,7 +118,7 @@ export default function PricingPage() {
               >
                 Yearly
                 <span className="ml-2 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full">
-                  Save 32%
+                  Save 35%
                 </span>
               </button>
             </div>
@@ -173,10 +173,15 @@ export default function PricingPage() {
                         </span>
                         {plan.price > 0 && (
                           <span className="text-neutral-500">
-                            /{plan.interval === 'yearly' ? 'year' : 'month'}
+                            {plan.interval === 'yearly' ? '/year' : plan.interval === '6_months' ? '' : '/month'}
                           </span>
                         )}
                       </div>
+                      {plan.interval === '6_months' && (
+                        <p className="text-sm text-primary-600 dark:text-primary-400 mt-1">
+                          For 6 months access
+                        </p>
+                      )}
                       {plan.interval === 'yearly' && (
                         <p className="text-sm text-green-600 dark:text-green-400 mt-1">
                           {formatPrice(Math.round(plan.price / 12))}/month billed yearly

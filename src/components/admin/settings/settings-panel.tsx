@@ -464,8 +464,8 @@ export function SettingsPanel({ adminEmail, isSuperAdmin = false }: SettingsPane
               <div className="space-y-4">
                 {[
                   { name: 'Free', price: 'RM 0', features: 'Basic assessments' },
-                  { name: 'Basic', price: 'RM 19/mo', features: 'AI insights, Detailed results' },
-                  { name: 'Premium', price: 'RM 49/mo', features: 'Full interventions, Priority support' },
+                  { name: 'Premium - 6 Months', price: 'RM 29', features: '6 months access, All premium features' },
+                  { name: 'Premium - Yearly', price: 'RM 45', features: 'Best value, 12 months access' },
                 ].map((plan) => (
                   <div key={plan.name} className="flex items-center justify-between py-3 border-b border-neutral-700 last:border-0">
                     <div>

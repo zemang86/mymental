@@ -862,15 +862,15 @@ export default function ProgressPage() {
                     <div className="grid md:grid-cols-3 gap-3 text-xs">
                       <div className="p-2 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 rounded-lg border border-primary-300 dark:border-primary-700">
                         <p className="font-bold text-primary-700 dark:text-primary-400">FREE</p>
-                        <p className="text-neutral-700 dark:text-neutral-300">Basic assessments</p>
+                        <p className="text-neutral-700 dark:text-neutral-300">Initial assessments</p>
                       </div>
                       <div className="p-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/70 dark:to-primary-800/70 rounded-lg border-2 border-primary-500 dark:border-primary-600">
                         <p className="font-bold text-primary-700 dark:text-primary-300">RM29 / 6 months</p>
-                        <p className="text-neutral-700 dark:text-neutral-300">Basic + Results</p>
+                        <p className="text-neutral-700 dark:text-neutral-300">Premium - 6 Months</p>
                       </div>
                       <div className="p-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/70 dark:to-primary-800/70 rounded-lg border-2 border-primary-500 dark:border-primary-600">
                         <p className="font-bold text-primary-700 dark:text-primary-300">RM45 / year</p>
-                        <p className="text-neutral-700 dark:text-neutral-300">Premium Yearly</p>
+                        <p className="text-neutral-700 dark:text-neutral-300">Premium - Yearly</p>
                       </div>
                     </div>
                   </div>
@@ -1072,7 +1072,7 @@ export default function ProgressPage() {
                   <ul className="space-y-1 text-neutral-700 dark:text-neutral-300 text-xs">
                     <li>❌ Payment gate after 2nd screening</li>
                     <li>❌ Real Stripe/Billplz integration</li>
-                    <li>❌ RM29/6mo and RM45/year tiers</li>
+                    <li>❌ Premium pricing tiers (RM29/6mo, RM45/year)</li>
                     <li>❌ Payment confirmation emails</li>
                     <li>❌ Subscription upgrade/downgrade flows</li>
                     <li>❌ Admin quiz builder & intervention editor</li>
@@ -1373,12 +1373,12 @@ export default function ProgressPage() {
                     <p className="text-sm text-neutral-600 dark:text-neutral-400">Basic assessments</p>
                   </div>
                   <div className="bg-primary-100 dark:bg-primary-900/30 rounded-lg p-3">
-                    <p className="font-semibold text-neutral-900 dark:text-white">Premium Monthly</p>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">RM29.90/month</p>
+                    <p className="font-semibold text-neutral-900 dark:text-white">Premium - 6 Months</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">RM29 (6 months access)</p>
                   </div>
                   <div className="bg-primary-100 dark:bg-primary-900/30 rounded-lg p-3">
-                    <p className="font-semibold text-neutral-900 dark:text-white">Premium Yearly</p>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">RM299/year</p>
+                    <p className="font-semibold text-neutral-900 dark:text-white">Premium - Yearly</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">RM45/year</p>
                   </div>
                 </div>
               </GlassCard>
