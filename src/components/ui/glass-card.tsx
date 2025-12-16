@@ -29,10 +29,9 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         className={cn(
           // Base styles
           'rounded-2xl border transition-all duration-300',
-          // Glass effect
-          'bg-white/70 dark:bg-neutral-900/70',
-          'border-white/20 dark:border-neutral-700/30',
-          'shadow-lg shadow-black/5 dark:shadow-black/20',
+          // Glass effect using CSS variables
+          'bg-[var(--card-bg)] border-[var(--card-border)]',
+          'shadow-lg shadow-[var(--glass-shadow)]',
           // Backdrop blur variants
           {
             'backdrop-blur-sm': blur === 'sm',
@@ -44,7 +43,7 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
           {
             'p-6': variant === 'default',
             'p-8 shadow-xl rounded-3xl': variant === 'elevated',
-            'p-4 bg-white/50 dark:bg-neutral-900/50 rounded-xl': variant === 'subtle',
+            'p-4 rounded-xl opacity-80': variant === 'subtle',
           },
           // Hover effect
           hover && 'hover:shadow-xl hover:-translate-y-0.5',

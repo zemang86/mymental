@@ -13,6 +13,151 @@ MyMental is a comprehensive mental health assessment and support platform built 
 
 ---
 
+## Implementation Status (December 16, 2025)
+
+### ✅ FULLY IMPLEMENTED SYSTEMS
+
+#### Assessment System (100% Complete)
+- ✓ All 9 Malaysian assessment instruments with complete question sets
+- ✓ PHQ-9, AST, SEGIST, OCD, PTSD, YSAS, Psychosis, Sexual Addiction, Marital Distress
+- ✓ Complete scoring algorithms with severity ranges
+- ✓ Real-time triage system (low/moderate/high/imminent risk levels)
+- ✓ Emergency detection and crisis resources
+- ✓ AI-powered insights generation with RAG
+- ✓ Results pages with comprehensive data visualization
+- ✓ Premium/free tier access control
+- ✓ Bilingual support (EN/MS)
+
+#### Professional Referral System (100% Complete)
+- ✓ Mental health professionals directory with comprehensive schema
+- ✓ Automatic referral triggers for high/imminent risk users
+- ✓ User-initiated referral requests
+- ✓ Admin referral management dashboard with workflow
+- ✓ Crisis email notifications with Malaysian hotlines
+- ✓ Referral alerts system
+- ✓ Database schema with RLS security
+
+#### Intervention System (95% Complete)
+- ✓ Video integration (YouTube/Vimeo) with react-player
+- ✓ Complete quiz system (4 question types, grading, attempts)
+- ✓ Chapter and module-level progress tracking
+- ✓ Premium content gating (module and chapter level)
+- ✓ Exercise system with step-by-step guidance
+- ⚠ Lottie animations (database ready, library installed, UI not integrated)
+
+#### Email System (90% Complete)
+- ✓ Resend integration with verified domain (noreply@kitamen.my)
+- ✓ Assessment results email template
+- ✓ Crisis resources email (bilingual)
+- ✓ Professional React Email templates
+- ❌ Payment confirmation/receipt emails missing
+
+#### Admin Dashboard (90% Complete)
+- ✓ User management (search, pagination, CRUD)
+- ✓ System alerts monitoring
+- ✓ Comprehensive audit logs
+- ✓ Reports & analytics with visualizations
+- ✓ Data export/import (JSON/CSV)
+- ✓ Settings panel (general, notifications, security, API keys)
+- ✓ Intervention viewing
+- ❌ Intervention CRUD interface missing
+- ❌ Quiz builder for admins missing
+
+### ⚠️ PARTIALLY IMPLEMENTED SYSTEMS
+
+#### Payment & Subscription System (40% Complete)
+- ✓ Complete database schema with webhooks table
+- ✓ Simulation mode fully functional for testing
+- ✓ Checkout UI with Stripe/FPX options
+- ✓ Subscription viewing and basic cancellation
+- ✓ New pricing tiers (RM29/6mo, RM45/year) configured
+- ✓ Premium content gating throughout platform
+- ❌ Stripe integration code missing (infrastructure only)
+- ❌ Billplz integration not implemented at all
+- ❌ Payment gateway router missing
+- ❌ Webhook handlers not implemented
+- ❌ Upgrade/downgrade functionality missing
+- ❌ 2nd screening payment gate not implemented
+- ❌ Real payment processing returns 501 error
+
+### ❌ NOT IMPLEMENTED FROM PLAN
+
+#### Missing Features:
+1. **Real Payment Processing**
+   - No Stripe API integration (only infrastructure prepared)
+   - No Billplz integration
+   - No webhook endpoints (database ready)
+   - No payment gateway router
+
+2. **Payment Gate on 2nd Screening**
+   - Explicitly marked as TODO in progress tracker
+   - No payment check between screening and detailed assessment
+
+3. **Subscription Management**
+   - No upgrade flow (Basic → Premium)
+   - No downgrade flow (Premium → Basic)
+   - No plan switching with proration
+
+4. **Admin Content Creation Tools**
+   - No quiz/assessment builder interface
+   - No intervention editor (create/edit modules and chapters)
+   - No video/animation upload interface
+
+5. **Payment Emails**
+   - No receipt/confirmation email template
+   - No refund notification emails
+
+### 📊 OVERALL IMPLEMENTATION STATUS
+
+| Category | Status | Percentage |
+|----------|--------|-----------|
+| Core Assessment System | Complete | 100% |
+| Referral System | Complete | 100% |
+| Intervention System | Nearly Complete | 95% |
+| Email System | Nearly Complete | 90% |
+| Admin Dashboard | Nearly Complete | 90% |
+| **Payment System** | **Infrastructure Only** | **40%** |
+| Dark Mode & UI | Complete | 100% |
+| Database Schema | Complete | 100% |
+| Security (RLS) | Complete | 100% |
+
+**Production Ready Systems:** Assessment, Referrals, Interventions (user-facing), Email
+**Requires Work:** Real payment processing, Admin content tools, Payment emails
+
+---
+
+## Recent Updates (December 16, 2025)
+
+### Dark Mode Implementation ✅
+- **Completed:** Full dark mode support with theme toggle
+- **Changes:**
+  - Added `next-themes` for theme management
+  - Created `ThemeToggle` component with animated sun/moon icons
+  - Floating theme toggle button (bottom-right corner)
+  - Updated all UI components (GlassButton, GlassModal, GlassCard, GlassInput) for dark mode
+  - Configured Tailwind v4 dark mode variant (`@variant dark`)
+  - Simplified background to solid colors (white for light, off-black for dark)
+  - Added global CSS overrides for text visibility in dark mode
+  - CSS variables for theming (backgrounds, text, borders, shadows)
+- **Default:** Light mode (system preference disabled)
+- **⚠️ REQUIRES TESTING:** Full platform testing in both light and dark modes
+
+### Email Domain Configuration ✅
+- **Completed:** Updated email sending to use verified domain
+- **Changes:**
+  - Changed from `onboarding@resend.dev` to `noreply@kitamen.my`
+  - Updated all email sending functions (OTP, assessment results)
+- **⚠️ REQUIRES TESTING:** Email deliverability testing for OTP codes and results
+
+### Emergency Modal Updates ✅
+- **Completed:** Emergency modal now closable at all risk levels
+- **Changes:**
+  - Removed forced modal lock for imminent risk (suicidal ideation)
+  - Users can now close emergency modal and save progress
+- **⚠️ REQUIRES TESTING:** Crisis flow testing, ensure resources are still visible
+
+---
+
 ## Core Features
 
 ### 1. Mental Health Assessments
@@ -322,6 +467,144 @@ npx tsc --noEmit
 
 ---
 
+## QA Testing Requirements
+
+### 🔴 Critical - Requires Professional Testing
+
+#### 1. Crisis Management & Triage System
+- [ ] **Imminent Risk Detection** - Test suicidal ideation triggers
+- [ ] **Emergency Modal** - Verify closable modal still shows resources
+- [ ] **Crisis Hotlines** - Verify all Malaysian crisis numbers are current
+- [ ] **Risk Level Escalation** - Test all triage pathways (low → moderate → high → imminent)
+- [ ] **Chat Blocking** - Verify high-risk users cannot access chat
+- [ ] **Triage Event Logging** - Confirm all risk events are logged in database
+
+#### 2. Dark Mode Functionality
+- [ ] **Theme Toggle** - Test toggle button on all pages
+- [ ] **Text Visibility** - Check all text is readable in both modes
+- [ ] **Component Styling** - Verify all UI components in dark mode:
+  - [ ] GlassButton (all variants)
+  - [ ] GlassCard (all variants)
+  - [ ] GlassModal (default & emergency variants)
+  - [ ] GlassInput (all states: default, focus, error, disabled)
+  - [ ] Navigation menus
+  - [ ] Footer
+  - [ ] Admin dashboard
+- [ ] **Background Colors** - Verify solid colors (white/off-black, no gradients)
+- [ ] **Forms** - Test all forms in dark mode (login, register, assessments)
+- [ ] **Assessment Flow** - Complete full assessment in dark mode
+- [ ] **Mobile Responsiveness** - Test dark mode on mobile devices
+- [ ] **Theme Persistence** - Verify theme preference is saved across sessions
+
+#### 3. Email Delivery
+- [ ] **OTP Codes** - Test magic link email delivery to various email providers:
+  - [ ] Gmail
+  - [ ] Outlook/Hotmail
+  - [ ] Yahoo Mail
+  - [ ] Malaysian providers (Maxis, TM, etc.)
+- [ ] **Assessment Results** - Test results email after payment
+- [ ] **Spam Filtering** - Check if emails land in spam folders
+- [ ] **Email Content** - Verify bilingual content (EN/MS)
+- [ ] **From Address** - Confirm `noreply@kitamen.my` displays correctly
+
+#### 4. Assessment Accuracy
+- [ ] **Scoring Algorithms** - Validate all assessment scoring:
+  - [ ] PHQ-9 (Depression)
+  - [ ] AST (Anxiety)
+  - [ ] SEGIST (Insomnia)
+  - [ ] PTSD Checklist
+  - [ ] YSAS (Suicidal Ideation)
+  - [ ] OCD Screening
+  - [ ] Psychosis Screening
+  - [ ] Sexual Addiction Screening
+  - [ ] Marital Distress
+- [ ] **Severity Classification** - Test threshold boundaries
+- [ ] **Bilingual Consistency** - Ensure EN/MS versions produce same scores
+
+### 🟡 High Priority - User Acceptance Testing
+
+#### 5. User Experience
+- [ ] **Assessment Flow** - Complete end-to-end assessment flow
+- [ ] **Progress Saving** - Test auto-save and resume functionality
+- [ ] **Mobile Experience** - Test on iOS and Android devices
+- [ ] **Browser Compatibility** - Test on:
+  - [ ] Chrome
+  - [ ] Safari
+  - [ ] Firefox
+  - [ ] Edge
+  - [ ] Mobile browsers
+- [ ] **Language Switching** - Test EN ↔ MS switching mid-flow
+- [ ] **Loading States** - Verify all async operations show loading indicators
+
+#### 6. AI Features
+- [ ] **Chat Support** - Test AI responses for appropriateness
+- [ ] **RAG Integration** - Verify knowledge base retrieval works
+- [ ] **Crisis Detection** - Test if AI detects crisis language
+- [ ] **Safety Guardrails** - Verify AI refuses harmful requests
+- [ ] **Insights Generation** - Test AI-generated insights quality
+
+#### 7. Subscription & Payment
+- [ ] **Payment Flow** - Test checkout process (simulation mode)
+- [ ] **Subscription Management** - Test upgrade/downgrade flows
+- [ ] **Premium Features** - Verify premium content access control
+- [ ] **Payment Gate** - Test 2nd screening payment requirement (when implemented)
+
+### 🟢 Standard Testing
+
+#### 8. Authentication
+- [ ] **Magic Link Login** - Test OTP code delivery and verification
+- [ ] **Session Management** - Test session persistence and logout
+- [ ] **Registration** - Test user registration flow
+- [ ] **Account Settings** - Test profile updates
+
+#### 9. Admin Dashboard
+- [ ] **Admin Login** - Test admin authentication
+- [ ] **User Management** - Test user CRUD operations
+- [ ] **Alert Management** - Test crisis alert handling
+- [ ] **Audit Logs** - Verify all admin actions are logged
+- [ ] **Reports** - Test analytics and reporting features
+- [ ] **Data Export** - Test data export functionality
+
+#### 10. Interventions
+- [ ] **Module Access** - Test free vs premium content access
+- [ ] **Progress Tracking** - Test chapter completion tracking
+- [ ] **Video Playback** - Test video player functionality
+- [ ] **Exercise Completion** - Test exercise marking system
+
+### 📋 Testing Checklist by User Type
+
+#### Anonymous Users
+- [ ] Can complete initial screening
+- [ ] Can view preliminary results
+- [ ] Cannot access chat or interventions
+- [ ] Prompted to register for full features
+
+#### Registered Users (Free)
+- [ ] Can complete full assessments
+- [ ] Can access free interventions
+- [ ] Can use basic chat (with rate limits)
+- [ ] Prompted to upgrade for premium features
+
+#### Premium Users
+- [ ] Can access all assessments
+- [ ] Can access all interventions
+- [ ] Unlimited chat access
+- [ ] Can view detailed insights
+
+#### Admin Users
+- [ ] Can access admin dashboard
+- [ ] Can manage users and content
+- [ ] Can view alerts and logs
+- [ ] Can export data
+
+#### Super Admin Users
+- [ ] All admin permissions
+- [ ] Can manage other admins
+- [ ] Can modify system settings
+- [ ] Can access audit logs
+
+---
+
 ## Credits
 
 Built with culturally-validated Malaysian mental health instruments:
@@ -333,4 +616,4 @@ Built with culturally-validated Malaysian mental health instruments:
 
 ---
 
-*Last Updated: December 15, 2025*
+*Last Updated: December 16, 2025*

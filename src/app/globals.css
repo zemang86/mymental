@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
+/* Configure dark mode variant for Tailwind v4 */
+@variant dark (.dark &);
+
 /* ============================================
    MyMental Design System - Glassmorphism 2025
    ============================================ */
 
 :root {
-  /* Primary Colors - Soft Greens (from mockups) */
+  /* Primary Colors - Soft Greens */
   --primary-50: #f0fdf4;
   --primary-100: #dcfce7;
   --primary-200: #bbf7d0;
@@ -31,14 +34,23 @@
   --neutral-900: #18181b;
   --neutral-950: #09090b;
 
-  /* Glass Effects */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.05);
-
   /* Light Mode */
   --background: #f0fdf4;
   --foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+
+  /* Glass Effects - Light Mode */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: rgba(0, 0, 0, 0.05);
+
+  /* Input - Light Mode */
+  --input-bg: rgba(255, 255, 255, 0.8);
+  --input-border: rgba(0, 0, 0, 0.1);
+  --input-text: #18181b;
+
+  /* Card - Light Mode */
   --card-bg: rgba(255, 255, 255, 0.7);
   --card-border: rgba(255, 255, 255, 0.3);
 
@@ -49,15 +61,25 @@
 }
 
 .dark {
-  /* Dark Mode Glass */
-  --glass-bg: rgba(24, 24, 27, 0.7);
-  --glass-border: rgba(63, 63, 70, 0.3);
-  --glass-shadow: rgba(0, 0, 0, 0.2);
+  /* Dark Mode - VERY DARK Backgrounds */
+  --background: #000000;
+  --foreground: #ffffff;
+  --muted: #0f0f0f;
+  --muted-foreground: #a3a3a3;
 
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card-bg: rgba(24, 24, 27, 0.7);
-  --card-border: rgba(63, 63, 70, 0.3);
+  /* Glass Effects - Dark Mode (Solid Dark) */
+  --glass-bg: #0f0f0f;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.8);
+
+  /* Input - Dark Mode (Very dark) */
+  --input-bg: #1a1a1a;
+  --input-border: rgba(255, 255, 255, 0.2);
+  --input-text: #ffffff;
+
+  /* Card - Dark Mode (Very dark) */
+  --card-bg: #0f0f0f;
+  --card-border: rgba(255, 255, 255, 0.15);
 }
 
 @theme inline {
@@ -95,6 +117,28 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
+}
+
+/* Input placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  opacity: 0.6;
+}
+
+/* Override any hardcoded dark text colors in dark mode */
+.dark .text-neutral-900,
+.dark .text-neutral-800,
+.dark .text-neutral-700,
+.dark .text-black {
+  color: #f5f5f5 !important;
+}
+
+.dark .text-neutral-600 {
+  color: #d4d4d8 !important;
+}
+
+.dark .text-neutral-500 {
+  color: #a1a1aa !important;
 }
 
 /* ============================================
@@ -196,4 +240,16 @@ body {
 
 .animation-delay-4000 {
   animation-delay: 4s;
+}
+
+/* ============================================
+   Force Dark Background (Override Tailwind)
+   ============================================ */
+
+.dark [class*='bg-gradient-to'] {
+  background: #000000 !important;
+}
+
+.dark [class*='animate-blob'] {
+  background: transparent !important;
 }

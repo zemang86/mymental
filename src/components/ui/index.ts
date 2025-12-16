@@ -19,3 +19,5 @@ export type { ProgressBarProps, ProgressStepsProps } from './progress-bar';
 
 export { RiskBadge, SeverityBadge } from './risk-badge';
 export type { RiskBadgeProps, SeverityBadgeProps } from './risk-badge';
+
+export { ThemeToggle } from './theme-toggle';

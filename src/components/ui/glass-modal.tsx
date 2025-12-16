@@ -63,7 +63,7 @@ export function GlassModal({
         <Fragment>
           {/* Overlay */}
           <motion.div
-            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -80,13 +80,13 @@ export function GlassModal({
                 'shadow-2xl',
                 // Default variant
                 variant === 'default' && [
-                  'bg-white/80 dark:bg-neutral-900/80',
-                  'border-white/30 dark:border-neutral-700/30',
+                  'bg-white/95 dark:bg-neutral-900/95',
+                  'border-white/30 dark:border-neutral-700/50',
                 ],
                 // Emergency variant
                 variant === 'emergency' && [
-                  'bg-red-50/95 dark:bg-neutral-900/95',
-                  'border-red-300/50',
+                  'bg-red-50/95 dark:bg-red-950/95',
+                  'border-red-300/50 dark:border-red-900/50',
                 ],
                 // Size variants
                 {

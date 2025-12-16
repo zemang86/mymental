@@ -49,14 +49,14 @@ const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
             className={cn(
               // Base styles
               'w-full rounded-xl px-4 py-3 transition-all duration-300',
-              // Glass effect
-              'bg-white/50 dark:bg-neutral-900/50',
-              'border border-white/20 dark:border-neutral-700/30',
+              // Input styling using CSS variables
+              'bg-[var(--input-bg)] text-[var(--input-text)]',
+              'border border-[var(--input-border)]',
               'backdrop-blur-lg',
               // Focus states
               'focus:outline-none focus:ring-2 focus:ring-primary-500/50',
-              'focus:bg-white/80 dark:focus:bg-neutral-900/80',
-              'focus:border-primary-400',
+              'focus:border-primary-500',
+              'focus:bg-white/90 dark:focus:bg-neutral-800',
               // Placeholder
               'placeholder:text-neutral-400 dark:placeholder:text-neutral-500',
               // Error state

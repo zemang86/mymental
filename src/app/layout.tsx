@@ -6,6 +6,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { GradientBackground } from '@/components/layout';
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import { FloatingThemeToggle } from '@/components/layout/floating-theme-toggle';
 import './globals.css';
 
 const geistSans = Geist({
@@ -109,16 +111,24 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen`}
       >
-        <NextIntlClientProvider messages={messages}>
-          <GradientBackground />
-          {children}
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              className: 'glass rounded-xl',
-            }}
-          />
-        </NextIntlClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <NextIntlClientProvider messages={messages}>
+            <GradientBackground />
+            {children}
+            <FloatingThemeToggle />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                className: 'glass rounded-xl',
+              }}
+            />
+          </NextIntlClientProvider>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>
