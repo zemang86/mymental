@@ -100,13 +100,13 @@ interface DbChapter {
   is_free_preview: boolean;
   has_quiz?: boolean;
   video_url?: string;
-  kb_articles?: Array<{
+  kb_articles?: {
     id?: string;
     title?: string;
     content?: string;
     exercise_steps?: string[];
     estimated_duration_minutes?: number;
-  }>;
+  }[];
 }
 
 /**
@@ -245,22 +245,26 @@ export async function getInterventionBySlug(
   }
 
   const transformedChapters: InterventionChapter[] = (chapters || []).map(
-    (ch: DbChapter) => ({
-      id: ch.id,
-      interventionId: ch.intervention_id,
-      kbArticleId: ch.kb_article_id,
-      chapterOrder: ch.chapter_order,
-      title: ch.title,
-      titleMs: ch.title_ms || ch.title,
-      description: ch.description,
-      descriptionMs: ch.description_ms || ch.description,
-      isFreePreview: ch.is_free_preview,
-      hasQuiz: ch.has_quiz || false,
-      content: ch.kb_articles?.[0]?.content,
-      exerciseSteps: ch.kb_articles?.[0]?.exercise_steps || [],
-      estimatedDuration: ch.kb_articles?.[0]?.estimated_duration_minutes,
-      isCompleted: chapterProgress[ch.id]?.completed || false,
-    })
+    (ch: any) => {
+      // Supabase returns kb_articles as object for one-to-one, but TS infers array
+      const kbArticle = ch.kb_articles as { content?: string; exercise_steps?: string[]; estimated_duration_minutes?: number } | null;
+      return {
+        id: ch.id,
+        interventionId: ch.intervention_id,
+        kbArticleId: ch.kb_article_id,
+        chapterOrder: ch.chapter_order,
+        title: ch.title,
+        titleMs: ch.title_ms || ch.title,
+        description: ch.description,
+        descriptionMs: ch.description_ms || ch.description,
+        isFreePreview: ch.is_free_preview,
+        hasQuiz: ch.has_quiz || false,
+        content: kbArticle?.content,
+        exerciseSteps: kbArticle?.exercise_steps || [],
+        estimatedDuration: kbArticle?.estimated_duration_minutes,
+        isCompleted: chapterProgress[ch.id]?.completed || false,
+      };
+    }
   );
 
   return {
