@@ -34,6 +34,77 @@
   --neutral-900: #18181b;
   --neutral-950: #09090b;
 
+  /* ============================================
+     Wellness Color Palette - Calm & Mindful
+     ============================================ */
+
+  /* Sage - Soft, muted greens for calm */
+  --wellness-sage-50: #f6f7f4;
+  --wellness-sage-100: #e8ebe3;
+  --wellness-sage-200: #d1d8c8;
+  --wellness-sage-300: #b3bfa3;
+  --wellness-sage-400: #94a37e;
+  --wellness-sage-500: #7a8a64;
+  --wellness-sage-600: #5f6c4e;
+  --wellness-sage-700: #4a5440;
+  --wellness-sage-800: #3d4536;
+  --wellness-sage-900: #343a2f;
+
+  /* Warm - Cream/sand tones for comfort */
+  --wellness-warm-50: #faf9f7;
+  --wellness-warm-100: #f5f3ef;
+  --wellness-warm-200: #e8e4dd;
+  --wellness-warm-300: #d9d2c7;
+  --wellness-warm-400: #c4b9a8;
+  --wellness-warm-500: #b0a28e;
+  --wellness-warm-600: #9a8a74;
+  --wellness-warm-700: #7d7060;
+  --wellness-warm-800: #675d51;
+  --wellness-warm-900: #574f46;
+
+  /* Lavender - Soft purple for accents */
+  --wellness-lavender-50: #f8f7fa;
+  --wellness-lavender-100: #f0eef5;
+  --wellness-lavender-200: #e3dfed;
+  --wellness-lavender-300: #cec6de;
+  --wellness-lavender-400: #b8a9c9;
+  --wellness-lavender-500: #a08db5;
+  --wellness-lavender-600: #8a74a0;
+  --wellness-lavender-700: #745f87;
+  --wellness-lavender-800: #614f70;
+  --wellness-lavender-900: #52445c;
+
+  /* Ocean - Soft blue for tranquility */
+  --wellness-ocean-50: #f4f9fa;
+  --wellness-ocean-100: #e6f2f5;
+  --wellness-ocean-200: #cee5eb;
+  --wellness-ocean-300: #a8d1dc;
+  --wellness-ocean-400: #7bb8c8;
+  --wellness-ocean-500: #5a9bac;
+  --wellness-ocean-600: #4a8193;
+  --wellness-ocean-700: #406a79;
+  --wellness-ocean-800: #3a5965;
+  --wellness-ocean-900: #344b55;
+
+  /* Mood Colors - For emotion tracking */
+  --mood-calm: #a8c5b5;
+  --mood-happy: #d4c98e;
+  --mood-neutral: #c4beb4;
+  --mood-anxious: #e8c49a;
+  --mood-sad: #9bb5ce;
+  --mood-stressed: #d4a5a5;
+  --mood-energized: #c9d4a5;
+
+  /* Category Colors - For intervention types */
+  --category-anxiety: #b8a9c9;
+  --category-depression: #9bb5ce;
+  --category-stress: #e8c49a;
+  --category-sleep: #a8c5b5;
+  --category-mindfulness: #c9d4a5;
+  --category-relationships: #d4a5b8;
+  --category-ptsd: #c4beb4;
+  --category-ocd: #b5c4ce;
+
   /* Light Mode */
   --background: #f0fdf4;
   --foreground: #18181b;
@@ -98,6 +169,54 @@
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Wellness Sage Colors */
+  --color-sage-50: var(--wellness-sage-50);
+  --color-sage-100: var(--wellness-sage-100);
+  --color-sage-200: var(--wellness-sage-200);
+  --color-sage-300: var(--wellness-sage-300);
+  --color-sage-400: var(--wellness-sage-400);
+  --color-sage-500: var(--wellness-sage-500);
+  --color-sage-600: var(--wellness-sage-600);
+  --color-sage-700: var(--wellness-sage-700);
+  --color-sage-800: var(--wellness-sage-800);
+  --color-sage-900: var(--wellness-sage-900);
+
+  /* Wellness Warm Colors */
+  --color-warm-50: var(--wellness-warm-50);
+  --color-warm-100: var(--wellness-warm-100);
+  --color-warm-200: var(--wellness-warm-200);
+  --color-warm-300: var(--wellness-warm-300);
+  --color-warm-400: var(--wellness-warm-400);
+  --color-warm-500: var(--wellness-warm-500);
+  --color-warm-600: var(--wellness-warm-600);
+  --color-warm-700: var(--wellness-warm-700);
+  --color-warm-800: var(--wellness-warm-800);
+  --color-warm-900: var(--wellness-warm-900);
+
+  /* Wellness Lavender Colors */
+  --color-lavender-50: var(--wellness-lavender-50);
+  --color-lavender-100: var(--wellness-lavender-100);
+  --color-lavender-200: var(--wellness-lavender-200);
+  --color-lavender-300: var(--wellness-lavender-300);
+  --color-lavender-400: var(--wellness-lavender-400);
+  --color-lavender-500: var(--wellness-lavender-500);
+  --color-lavender-600: var(--wellness-lavender-600);
+  --color-lavender-700: var(--wellness-lavender-700);
+  --color-lavender-800: var(--wellness-lavender-800);
+  --color-lavender-900: var(--wellness-lavender-900);
+
+  /* Wellness Ocean Colors */
+  --color-ocean-50: var(--wellness-ocean-50);
+  --color-ocean-100: var(--wellness-ocean-100);
+  --color-ocean-200: var(--wellness-ocean-200);
+  --color-ocean-300: var(--wellness-ocean-300);
+  --color-ocean-400: var(--wellness-ocean-400);
+  --color-ocean-500: var(--wellness-ocean-500);
+  --color-ocean-600: var(--wellness-ocean-600);
+  --color-ocean-700: var(--wellness-ocean-700);
+  --color-ocean-800: var(--wellness-ocean-800);
+  --color-ocean-900: var(--wellness-ocean-900);
 
   /* Fonts */
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
@@ -252,4 +371,176 @@ textarea::placeholder {
 
 .dark [class*='animate-blob'] {
   background: transparent !important;
+}
+
+/* ============================================
+   Wellness UI - Soft Shadows & Effects
+   ============================================ */
+
+.wellness-shadow {
+  box-shadow:
+    0 4px 20px -4px rgba(122, 138, 100, 0.15),
+    0 2px 8px -2px rgba(122, 138, 100, 0.08);
+}
+
+.wellness-shadow-lg {
+  box-shadow:
+    0 8px 30px -6px rgba(122, 138, 100, 0.2),
+    0 4px 12px -4px rgba(122, 138, 100, 0.1);
+}
+
+.dark .wellness-shadow,
+.dark .wellness-shadow-lg {
+  box-shadow:
+    0 4px 20px -4px rgba(0, 0, 0, 0.4),
+    0 2px 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Soft glow effects for interactive states */
+.wellness-glow {
+  box-shadow: 0 0 20px rgba(168, 197, 181, 0.3);
+}
+
+.wellness-glow-sage {
+  box-shadow: 0 0 20px rgba(122, 138, 100, 0.25);
+}
+
+.wellness-glow-lavender {
+  box-shadow: 0 0 20px rgba(184, 169, 201, 0.3);
+}
+
+.wellness-glow-ocean {
+  box-shadow: 0 0 20px rgba(123, 184, 200, 0.3);
+}
+
+.dark .wellness-glow,
+.dark .wellness-glow-sage,
+.dark .wellness-glow-lavender,
+.dark .wellness-glow-ocean {
+  box-shadow: 0 0 25px rgba(168, 197, 181, 0.15);
+}
+
+/* ============================================
+   Wellness Animations - Breathing & Pulse
+   ============================================ */
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes breathe-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes soft-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-breathe-slow {
+  animation: breathe-slow 6s ease-in-out infinite;
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+.animate-soft-bounce {
+  animation: soft-bounce 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   Wellness Card Styles
+   ============================================ */
+
+.wellness-card {
+  background: var(--wellness-warm-50);
+  border: 1px solid var(--wellness-warm-200);
+  border-radius: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.wellness-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 30px -6px rgba(122, 138, 100, 0.18),
+    0 4px 12px -4px rgba(122, 138, 100, 0.08);
+}
+
+.dark .wellness-card {
+  background: #1a1a1a;
+  border-color: rgba(168, 197, 181, 0.15);
+}
+
+.dark .wellness-card:hover {
+  border-color: rgba(168, 197, 181, 0.25);
+  box-shadow:
+    0 8px 30px -6px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(168, 197, 181, 0.08);
+}
+
+/* ============================================
+   Wellness Progress Ring
+   ============================================ */
+
+.progress-ring-bg {
+  stroke: var(--wellness-warm-200);
+}
+
+.progress-ring-fill {
+  stroke: var(--wellness-sage-500);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.dark .progress-ring-bg {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.dark .progress-ring-fill {
+  stroke: var(--wellness-sage-400);
 }

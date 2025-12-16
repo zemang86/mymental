@@ -2,41 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
   Clock,
   BookOpen,
   Share2,
-  Loader2,
   Lock,
+  Play,
+  Sparkles,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton } from '@/components/ui';
+import { BreathingCircle } from '@/components/ui/lottie-animation';
 import { ExerciseDetail } from '@/components/intervention/exercise-detail';
-import { ProgressTracker, CompletionBanner } from '@/components/intervention/progress-tracker';
+import { MindfulProgress } from '@/components/intervention/mindful-progress';
+import { JourneyPath } from '@/components/intervention/journey-map';
 import { PremiumGate, PremiumBadge } from '@/components/premium';
 import { useSubscription } from '@/hooks/use-subscription';
 import { createClient } from '@/lib/supabase/client';
+import { cn } from '@/lib/utils/cn';
 import type { InterventionModule, InterventionChapter } from '@/lib/interventions/modules';
-
-// Default images for categories
-const CATEGORY_IMAGES: Record<string, string> = {
-  anxiety: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=450&fit=crop',
-  depression: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=800&h=450&fit=crop',
-  ptsd: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&h=450&fit=crop',
-  ocd: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&h=450&fit=crop',
-  insomnia: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=450&fit=crop',
-  stress: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&h=450&fit=crop',
-  mindfulness: 'https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=800&h=450&fit=crop',
-  default: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=450&fit=crop',
-};
 
 export default function InterventionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { subscription, isPremium, isBasic } = useSubscription();
+  const { isPremium, isBasic } = useSubscription();
   const [userId, setUserId] = useState<string | null>(null);
   const slug = params.id as string;
 
@@ -157,10 +148,13 @@ export default function InterventionDetailPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-warm-50 dark:bg-neutral-950">
         <Header />
-        <main className="flex-1 pt-24 pb-12 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+        <main className="flex-1 pt-24 pb-12 flex flex-col items-center justify-center gap-4">
+          <BreathingCircle size="lg" color="sage" />
+          <p className="text-neutral-500 dark:text-neutral-400">
+            {locale === 'ms' ? 'Memuatkan...' : 'Loading...'}
+          </p>
         </main>
         <Footer />
       </div>
@@ -170,22 +164,25 @@ export default function InterventionDetailPage() {
   // Not found state
   if (!intervention) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-warm-50 dark:bg-neutral-950">
         <Header />
-        <main className="flex-1 pt-24 pb-12 flex items-center justify-center">
-          <GlassCard className="text-center max-w-md">
+        <main className="flex-1 pt-24 pb-12 flex items-center justify-center px-4">
+          <div className="wellness-card text-center max-w-md p-8">
+            <div className="w-16 h-16 rounded-full bg-warm-100 dark:bg-warm-900/30 flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="w-8 h-8 text-warm-400" />
+            </div>
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
-              {locale === 'ms' ? 'Intervensi Tidak Dijumpai' : 'Intervention Not Found'}
+              {locale === 'ms' ? 'Modul Tidak Dijumpai' : 'Module Not Found'}
             </h1>
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
               {locale === 'ms'
-                ? 'Intervensi yang anda cari tidak wujud.'
-                : "The intervention you're looking for doesn't exist."}
+                ? 'Modul yang anda cari tidak wujud.'
+                : "The module you're looking for doesn't exist."}
             </p>
-            <GlassButton variant="primary" onClick={() => router.push('/interventions')}>
-              {locale === 'ms' ? 'Lihat Intervensi' : 'Browse Interventions'}
+            <GlassButton variant="wellness" onClick={() => router.push('/interventions')}>
+              {locale === 'ms' ? 'Lihat Modul' : 'Browse Modules'}
             </GlassButton>
-          </GlassCard>
+          </div>
         </main>
         <Footer />
       </div>
@@ -198,7 +195,6 @@ export default function InterventionDetailPage() {
   const currentChapter = chapters[currentChapterIndex];
   const completedCount = chapters.filter((ch) => ch.isCompleted).length;
   const isModuleCompleted = completedCount === chapters.length && chapters.length > 0;
-  const thumbnail = intervention.thumbnailUrl || CATEGORY_IMAGES[intervention.category] || CATEGORY_IMAGES.default;
 
   // Check if user can access chapter
   const canAccessChapter = (index: number): boolean => {
@@ -209,7 +205,7 @@ export default function InterventionDetailPage() {
   };
 
   const formatDuration = (minutes?: number): string => {
-    if (!minutes) return '';
+    if (!minutes) return '~15 min';
     if (minutes < 60) {
       return `${minutes} ${locale === 'ms' ? 'min' : 'min'}`;
     }
@@ -219,10 +215,10 @@ export default function InterventionDetailPage() {
   };
 
   const content = (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-warm-50 dark:bg-neutral-950">
       <Header />
 
-      <main className="flex-1 pt-24 pb-12">
+      <main className="flex-1 pt-20 pb-12">
         <div className="mx-auto max-w-6xl px-4">
           {/* Back button */}
           <motion.div
@@ -232,10 +228,10 @@ export default function InterventionDetailPage() {
           >
             <button
               onClick={() => router.push('/interventions')}
-              className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 transition-colors"
+              className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-sage-600 dark:hover:text-sage-400 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              {locale === 'ms' ? 'Kembali ke Intervensi' : 'Back to Interventions'}
+              {locale === 'ms' ? 'Kembali' : 'Back'}
             </button>
           </motion.div>
 
@@ -246,39 +242,92 @@ export default function InterventionDetailPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6"
             >
-              <CompletionBanner moduleName={name} locale={locale} />
+              <div className="wellness-card p-6 text-center bg-sage-100 dark:bg-sage-900/30 border-sage-200 dark:border-sage-700/50">
+                <Sparkles className="w-8 h-8 text-sage-600 dark:text-sage-400 mx-auto mb-2" />
+                <h3 className="text-lg font-semibold text-sage-800 dark:text-sage-200 mb-1">
+                  {locale === 'ms' ? 'Tahniah!' : 'Congratulations!'}
+                </h3>
+                <p className="text-sage-700 dark:text-sage-300">
+                  {locale === 'ms'
+                    ? `Anda telah menyelesaikan "${name}"`
+                    : `You've completed "${name}"`}
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Journey Path (horizontal on desktop) */}
+          {chapters.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 hidden md:block"
+            >
+              <JourneyPath
+                chapters={chapters}
+                currentChapterIndex={currentChapterIndex}
+                onChapterSelect={handleChapterSelect}
+                locale={locale}
+              />
             </motion.div>
           )}
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main content */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Video Intro or Start Screen */}
+              {/* Start Screen */}
               {!isStarted && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <GlassCard className="relative overflow-hidden">
-                    <div className="relative aspect-video rounded-xl overflow-hidden">
-                      <Image
-                        src={thumbnail}
-                        alt={name}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <GlassButton
-                          variant="primary"
-                          size="lg"
-                          onClick={handleStart}
-                          className="px-8"
-                        >
-                          {locale === 'ms' ? 'Mula Belajar' : 'Start Learning'}
-                        </GlassButton>
+                  <div className="wellness-card p-8 text-center">
+                    {/* Breathing animation */}
+                    <div className="flex justify-center mb-6">
+                      <BreathingCircle size="xl" color="sage" />
+                    </div>
+
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                      <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+                        {name}
+                      </h1>
+                      {intervention.isPremium && <PremiumBadge />}
+                    </div>
+
+                    <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-xl mx-auto">
+                      {description}
+                    </p>
+
+                    {/* Meta info */}
+                    <div className="flex flex-wrap justify-center gap-4 text-sm text-neutral-500 dark:text-neutral-400 mb-8">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        {formatDuration(intervention.estimatedDuration)}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <BookOpen className="w-4 h-4" />
+                        {chapters.length} {locale === 'ms' ? 'langkah' : 'moments'}
+                      </div>
+                      <div className="flex items-center gap-2 capitalize">
+                        <span className="w-2 h-2 rounded-full bg-sage-500" />
+                        {intervention.category}
                       </div>
                     </div>
-                  </GlassCard>
+
+                    <motion.button
+                      onClick={handleStart}
+                      className={cn(
+                        'inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-medium text-lg transition-all',
+                        'bg-sage-500 text-white hover:bg-sage-600',
+                        'focus:outline-none focus:ring-4 focus:ring-sage-300/50'
+                      )}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Play className="w-5 h-5 fill-current" />
+                      {locale === 'ms' ? 'Mulakan Perjalanan' : 'Begin Journey'}
+                    </motion.button>
+                  </div>
                 </motion.div>
               )}
 
@@ -308,78 +357,39 @@ export default function InterventionDetailPage() {
                       locale={locale}
                     />
                   ) : (
-                    <GlassCard className="text-center py-12">
-                      <Lock className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+                    <div className="wellness-card text-center py-12 px-6">
+                      <div className="w-16 h-16 rounded-full bg-lavender-100 dark:bg-lavender-900/30 flex items-center justify-center mx-auto mb-4">
+                        <Lock className="w-8 h-8 text-lavender-500" />
+                      </div>
                       <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
                         {locale === 'ms' ? 'Kandungan Premium' : 'Premium Content'}
                       </h3>
-                      <p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                      <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                         {locale === 'ms'
-                          ? 'Tingkatkan ke Premium untuk akses bab ini.'
-                          : 'Upgrade to Premium to access this chapter.'}
+                          ? 'Tingkatkan ke Premium untuk akses kandungan ini.'
+                          : 'Upgrade to Premium to access this content.'}
                       </p>
                       <GlassButton
-                        variant="primary"
+                        variant="wellness"
                         onClick={() => router.push('/pricing')}
                       >
                         {locale === 'ms' ? 'Tingkatkan Sekarang' : 'Upgrade Now'}
                       </GlassButton>
-                    </GlassCard>
+                    </div>
                   )}
-                </motion.div>
-              )}
-
-              {/* Title and description (shown when not started) */}
-              {!isStarted && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <GlassCard>
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div>
-                        <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-1">
-                          {name}
-                        </h1>
-                      </div>
-                      {intervention.isPremium && <PremiumBadge />}
-                    </div>
-
-                    <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-                      {description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-4 text-sm text-neutral-500">
-                      {intervention.estimatedDuration && (
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4" />
-                          {formatDuration(intervention.estimatedDuration)}
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <BookOpen className="w-4 h-4" />
-                        {chapters.length} {locale === 'ms' ? 'bab' : 'chapters'}
-                      </div>
-                      <div className="flex items-center gap-2 capitalize">
-                        <span className="w-2 h-2 rounded-full bg-primary-500" />
-                        {intervention.category}
-                      </div>
-                    </div>
-                  </GlassCard>
                 </motion.div>
               )}
             </div>
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Progress Tracker */}
+              {/* Mindful Progress */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
               >
-                <ProgressTracker
+                <MindfulProgress
                   chapters={chapters}
                   progress={intervention.userProgress}
                   currentChapterIndex={currentChapterIndex}
@@ -394,18 +404,16 @@ export default function InterventionDetailPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
               >
-                <GlassCard>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-3">
-                    {locale === 'ms' ? 'Kongsi Modul Ini' : 'Share This Module'}
+                <div className="wellness-card p-5">
+                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">
+                    {locale === 'ms' ? 'Kongsi' : 'Share'}
                   </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
                     {locale === 'ms'
-                      ? 'Bantu orang lain dalam perjalanan kesihatan mental mereka'
-                      : 'Help others on their mental wellness journey'}
+                      ? 'Bantu orang lain dalam perjalanan kesejahteraan mereka'
+                      : 'Help others on their wellness journey'}
                   </p>
-                  <GlassButton
-                    variant="secondary"
-                    className="w-full"
+                  <button
                     onClick={() => {
                       if (navigator.share) {
                         navigator.share({
@@ -415,11 +423,16 @@ export default function InterventionDetailPage() {
                         });
                       }
                     }}
+                    className={cn(
+                      'w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all',
+                      'bg-warm-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300',
+                      'hover:bg-sage-100 dark:hover:bg-sage-900/30 hover:text-sage-700 dark:hover:text-sage-300'
+                    )}
                   >
-                    <Share2 className="w-4 h-4 mr-2" />
-                    {locale === 'ms' ? 'Kongsi' : 'Share'}
-                  </GlassButton>
-                </GlassCard>
+                    <Share2 className="w-4 h-4" />
+                    {locale === 'ms' ? 'Kongsi Modul' : 'Share Module'}
+                  </button>
+                </div>
               </motion.div>
             </div>
           </div>

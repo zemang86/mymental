@@ -44,32 +44,31 @@ export function ExerciseDetail({
   const [quizPassed, setQuizPassed] = useState(false);
   const [quizId, setQuizId] = useState<string | null>(null);
 
-  // Fetch quiz ID if chapter has quiz
+  // Always check if chapter has quiz (don't rely on hasQuiz flag)
   useEffect(() => {
     async function fetchQuizId() {
-      console.log('🔍 Chapter data:', chapter);
-      console.log('🔍 hasQuiz:', chapter.hasQuiz);
-      console.log('🔍 chapter.id:', chapter.id);
+      if (!chapter.id) return;
 
-      if (chapter.hasQuiz && chapter.id) {
-        console.log('✅ Chapter has quiz! Fetching quiz ID...');
-        try {
-          const response = await fetch(`/api/v1/intervention/chapter/${chapter.id}/quiz`);
-          const data = await response.json();
-          console.log('📝 Quiz data:', data);
-          if (data.success && data.quizId) {
-            setQuizId(data.quizId);
-            console.log('✅ Quiz ID set:', data.quizId);
-          }
-        } catch (error) {
-          console.error('❌ Error fetching quiz:', error);
+      try {
+        const response = await fetch(`/api/v1/intervention/chapter/${chapter.id}/quiz`);
+        const data = await response.json();
+        if (data.success && data.quizId) {
+          setQuizId(data.quizId);
+        } else {
+          setQuizId(null);
         }
-      } else {
-        console.log('❌ No quiz for this chapter');
+      } catch (error) {
+        console.error('Error fetching quiz:', error);
+        setQuizId(null);
       }
     }
+
+    // Reset quiz state when chapter changes
+    setQuizId(null);
+    setShowQuiz(false);
+    setQuizPassed(false);
     fetchQuizId();
-  }, [chapter.id, chapter.hasQuiz]);
+  }, [chapter.id]);
 
   const title = locale === 'ms' ? chapter.titleMs : chapter.title;
   const description = locale === 'ms' ? chapter.descriptionMs : chapter.description;
@@ -317,7 +316,20 @@ export function ExerciseDetail({
         </div>
 
         <div className="flex gap-2">
-          {!chapter.isCompleted && (
+          {/* Show Take Quiz button if chapter has quiz */}
+          {quizId && (
+            <GlassButton
+              variant={chapter.isCompleted ? 'secondary' : 'primary'}
+              onClick={() => setShowQuiz(true)}
+            >
+              <BookOpen className="w-4 h-4 mr-1" />
+              {chapter.isCompleted
+                ? (locale === 'ms' ? 'Ulang Kuiz' : 'Retake Quiz')
+                : (locale === 'ms' ? 'Ambil Kuiz' : 'Take Quiz')
+              }
+            </GlassButton>
+          )}
+          {!chapter.isCompleted && !quizId && (
             <GlassButton variant="primary" onClick={handleMarkComplete}>
               <CheckCircle className="w-4 h-4 mr-1" />
               {locale === 'ms' ? 'Tandakan Selesai' : 'Mark Complete'}

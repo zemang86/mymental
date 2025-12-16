@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CheckCircle, XCircle, Award, Clock, RotateCcw } from 'lucide-react';
-import { GlassCard, GlassButton } from '@/components/ui';
+import { Check, RefreshCw, Sparkles, Clock, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
+import { BreathingCircle } from '@/components/ui/lottie-animation';
 
 interface QuizResultsProps {
   result: {
@@ -25,6 +25,58 @@ interface QuizResultsProps {
   answers: Record<string, any>;
 }
 
+// Circular Score Ring
+function ScoreRing({ score, passed }: { score: number; passed: boolean }) {
+  const radius = 58;
+  const circumference = 2 * Math.PI * radius;
+  const progress = (score / 100) * circumference;
+
+  return (
+    <div className="relative w-36 h-36 mx-auto">
+      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 128 128">
+        {/* Background ring */}
+        <circle
+          cx="64"
+          cy="64"
+          r={radius}
+          fill="none"
+          className="stroke-warm-200 dark:stroke-neutral-700"
+          strokeWidth="8"
+        />
+        {/* Progress ring */}
+        <motion.circle
+          cx="64"
+          cy="64"
+          r={radius}
+          fill="none"
+          className={passed ? 'stroke-sage-500' : 'stroke-warm-400'}
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference - progress }}
+          transition={{ duration: 1.5, ease: 'easeOut', delay: 0.3 }}
+        />
+      </svg>
+      {/* Center content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <motion.span
+          className={cn(
+            'text-3xl font-bold',
+            passed ? 'text-sage-600 dark:text-sage-400' : 'text-warm-600 dark:text-warm-400'
+          )}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          {score}%
+        </motion.span>
+        <span className="text-xs text-neutral-500 dark:text-neutral-400">Score</span>
+      </div>
+    </div>
+  );
+}
+
 export function QuizResults({ result, quiz, answers }: QuizResultsProps) {
   const { score, passed, correctAnswers, totalQuestions, passingScore, timeTaken } = result;
 
@@ -38,81 +90,116 @@ export function QuizResults({ result, quiz, answers }: QuizResultsProps) {
   return (
     <div className="space-y-6">
       {/* Overall Result */}
-      <GlassCard className="p-8">
+      <div className="wellness-card p-8">
         <div className="text-center">
+          {/* Success/Encourage Icon */}
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', duration: 0.5 }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', duration: 0.6 }}
+            className="mb-6"
           >
             {passed ? (
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <Award className="w-10 h-10 text-green-600 dark:text-green-400" />
+              <div className="w-20 h-20 mx-auto rounded-full bg-sage-100 dark:bg-sage-900/30 flex items-center justify-center wellness-glow-sage">
+                <Sparkles className="w-10 h-10 text-sage-600 dark:text-sage-400" />
               </div>
             ) : (
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-                <RotateCcw className="w-10 h-10 text-orange-600 dark:text-orange-400" />
+              <div className="w-20 h-20 mx-auto rounded-full bg-warm-100 dark:bg-warm-900/30 flex items-center justify-center">
+                <Heart className="w-10 h-10 text-warm-500 dark:text-warm-400" />
               </div>
             )}
           </motion.div>
 
-          <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
-            {passed ? 'Congratulations!' : 'Good Effort!'}
-          </h2>
+          {/* Title */}
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className={cn(
+              'text-2xl font-bold mb-2',
+              passed ? 'text-sage-700 dark:text-sage-300' : 'text-warm-700 dark:text-warm-300'
+            )}
+          >
+            {passed ? 'Well Done!' : 'Keep Going!'}
+          </motion.h2>
 
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-neutral-600 dark:text-neutral-400 mb-8 max-w-md mx-auto"
+          >
             {passed
-              ? 'You passed the quiz! Great job understanding the material.'
-              : `You need ${passingScore}% to pass. Review the material and try again.`}
-          </p>
+              ? "You've shown great understanding. Take a moment to appreciate your progress."
+              : `You're on the right path. A ${passingScore}% is needed to pass. Take your time and try again when ready.`}
+          </motion.p>
 
-          {/* Score Display */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-              <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-                {score}%
-              </div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">
-                Your Score
-              </div>
-            </div>
+          {/* Score Ring */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <ScoreRing score={score} passed={passed} />
+          </motion.div>
 
-            <div className="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-              <div className="text-3xl font-bold text-neutral-900 dark:text-white">
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="grid grid-cols-2 gap-4 mt-8 max-w-xs mx-auto"
+          >
+            <div className="p-4 rounded-2xl bg-warm-50 dark:bg-neutral-800/50">
+              <div className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {correctAnswers}/{totalQuestions}
               </div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">
-                Correct Answers
+              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                Correct
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-              <div className="text-3xl font-bold text-neutral-900 dark:text-white flex items-center justify-center gap-2">
-                <Clock className="w-6 h-6" />
+            <div className="p-4 rounded-2xl bg-warm-50 dark:bg-neutral-800/50">
+              <div className="text-2xl font-bold text-neutral-900 dark:text-white flex items-center justify-center gap-1">
+                <Clock className="w-5 h-5 text-neutral-400" />
                 {formatTime(timeTaken)}
               </div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">
-                Time Taken
+              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                Time
               </div>
             </div>
-          </div>
+          </motion.div>
 
+          {/* Retry Button */}
           {!passed && (
-            <GlassButton
-              variant="primary"
-              onClick={() => window.location.reload()}
-              leftIcon={<RotateCcw className="w-4 h-4" />}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-8"
             >
-              Retake Quiz
-            </GlassButton>
+              <motion.button
+                onClick={() => window.location.reload()}
+                className={cn(
+                  'inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-medium transition-all',
+                  'bg-warm-100 dark:bg-warm-900/30 text-warm-700 dark:text-warm-300',
+                  'hover:bg-warm-200 dark:hover:bg-warm-900/50'
+                )}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <RefreshCw className="w-4 h-4" />
+                Try Again
+              </motion.button>
+            </motion.div>
           )}
         </div>
-      </GlassCard>
+      </div>
 
       {/* Question Review */}
-      <GlassCard className="p-6">
-        <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">
-          Answer Review
+      <div className="wellness-card p-6">
+        <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-6 text-center">
+          Review Your Answers
         </h3>
 
         <div className="space-y-4">
@@ -127,40 +214,62 @@ export function QuizResults({ result, quiz, answers }: QuizResultsProps) {
             const isReflection = question.type === 'reflection';
 
             return (
-              <div
+              <motion.div
                 key={question.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
                 className={cn(
-                  'p-4 rounded-lg border-2',
+                  'p-5 rounded-2xl border-2 transition-all',
                   isReflection
-                    ? 'border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50'
+                    ? 'border-lavender-200 dark:border-lavender-800/50 bg-lavender-50/50 dark:bg-lavender-900/10'
                     : isCorrect
-                    ? 'border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20'
-                    : 'border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20'
+                    ? 'border-sage-200 dark:border-sage-800/50 bg-sage-50/50 dark:bg-sage-900/10'
+                    : 'border-warm-200 dark:border-warm-800/50 bg-warm-50/50 dark:bg-warm-900/10'
                 )}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-4">
+                  {/* Status indicator */}
                   {!isReflection && (
-                    <div className="flex-shrink-0 mt-1">
+                    <div
+                      className={cn(
+                        'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
+                        isCorrect
+                          ? 'bg-sage-200 dark:bg-sage-800'
+                          : 'bg-warm-200 dark:bg-warm-800'
+                      )}
+                    >
                       {isCorrect ? (
-                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        <Check className="w-4 h-4 text-sage-700 dark:text-sage-300" />
                       ) : (
-                        <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                        <span className="text-sm font-medium text-warm-700 dark:text-warm-300">!</span>
                       )}
                     </div>
                   )}
 
-                  <div className="flex-1">
-                    <p className="font-medium text-neutral-900 dark:text-white mb-2">
+                  {isReflection && (
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-lavender-200 dark:bg-lavender-800 flex items-center justify-center">
+                      <Heart className="w-4 h-4 text-lavender-700 dark:text-lavender-300" />
+                    </div>
+                  )}
+
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-neutral-800 dark:text-neutral-100 mb-3">
                       {index + 1}. {question.question}
                     </p>
 
                     {!isReflection && (
-                      <>
-                        <div className="text-sm mb-1">
-                          <span className="text-neutral-600 dark:text-neutral-400">
+                      <div className="space-y-2">
+                        <div className="text-sm">
+                          <span className="text-neutral-500 dark:text-neutral-400">
                             Your answer:{' '}
                           </span>
-                          <span className="font-medium text-neutral-900 dark:text-white">
+                          <span className={cn(
+                            'font-medium',
+                            isCorrect
+                              ? 'text-sage-700 dark:text-sage-300'
+                              : 'text-warm-700 dark:text-warm-300'
+                          )}>
                             {Array.isArray(questionResult.userAnswer)
                               ? questionResult.userAnswer.join(', ')
                               : questionResult.userAnswer}
@@ -168,11 +277,11 @@ export function QuizResults({ result, quiz, answers }: QuizResultsProps) {
                         </div>
 
                         {!isCorrect && (
-                          <div className="text-sm mb-2">
-                            <span className="text-neutral-600 dark:text-neutral-400">
+                          <div className="text-sm">
+                            <span className="text-neutral-500 dark:text-neutral-400">
                               Correct answer:{' '}
                             </span>
-                            <span className="font-medium text-green-700 dark:text-green-400">
+                            <span className="font-medium text-sage-700 dark:text-sage-300">
                               {Array.isArray(questionResult.correctAnswer)
                                 ? questionResult.correctAnswer.join(', ')
                                 : questionResult.correctAnswer}
@@ -181,27 +290,42 @@ export function QuizResults({ result, quiz, answers }: QuizResultsProps) {
                         )}
 
                         {questionResult.explanation && (
-                          <div className="mt-2 p-3 rounded bg-neutral-100 dark:bg-neutral-700/50">
+                          <div className="mt-3 p-3 rounded-xl bg-white/60 dark:bg-neutral-800/60">
                             <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                              <strong>Explanation:</strong> {questionResult.explanation}
+                              <span className="font-medium text-sage-700 dark:text-sage-400">Insight:</span>{' '}
+                              {questionResult.explanation}
                             </p>
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
 
                     {isReflection && (
-                      <div className="text-sm text-neutral-600 dark:text-neutral-400 italic">
-                        Reflection question - not graded
-                      </div>
+                      <p className="text-sm text-lavender-600 dark:text-lavender-400 italic">
+                        Personal reflection — thank you for sharing
+                      </p>
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
-      </GlassCard>
+      </div>
+
+      {/* Encouraging footer */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="text-center py-4"
+      >
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          {passed
+            ? "Every step forward is progress. You're doing great."
+            : "Learning takes time. Be gentle with yourself."}
+        </p>
+      </motion.div>
     </div>
   );
 }

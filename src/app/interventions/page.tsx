@@ -2,38 +2,36 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Play, Clock, Search, BookOpen, Loader2 } from 'lucide-react';
+import { Search, Sparkles, Loader2, Heart, Brain, Moon, Wind, Smile, Users } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
-import { GlassCard, GlassButton, GlassInput } from '@/components/ui';
-import { PremiumBadge } from '@/components/premium';
-import { ProgressBadge } from '@/components/intervention/progress-tracker';
+import { GlassInput } from '@/components/ui';
+import { BreathingCircle } from '@/components/ui/lottie-animation';
+import { WellnessCard, WellnessCardFeatured } from '@/components/intervention/wellness-card';
 import { useSubscription } from '@/hooks/use-subscription';
 import { createClient } from '@/lib/supabase/client';
+import { cn } from '@/lib/utils/cn';
 import type { InterventionModule } from '@/lib/interventions/modules';
 
+// Categories with icons and colors
 const CATEGORIES = [
-  { value: 'all', label: 'All', labelMs: 'Semua' },
-  { value: 'anxiety', label: 'Anxiety', labelMs: 'Kebimbangan' },
-  { value: 'depression', label: 'Depression', labelMs: 'Kemurungan' },
-  { value: 'ptsd', label: 'PTSD', labelMs: 'PTSD' },
-  { value: 'ocd', label: 'OCD', labelMs: 'OCD' },
-  { value: 'insomnia', label: 'Insomnia', labelMs: 'Insomnia' },
-  { value: 'stress', label: 'Stress', labelMs: 'Tekanan' },
-  { value: 'mindfulness', label: 'Mindfulness', labelMs: 'Kesedaran Penuh' },
+  { value: 'all', label: 'All', labelMs: 'Semua', icon: Sparkles, color: 'sage' },
+  { value: 'anxiety', label: 'Anxiety', labelMs: 'Kebimbangan', icon: Wind, color: 'lavender' },
+  { value: 'depression', label: 'Depression', labelMs: 'Kemurungan', icon: Heart, color: 'ocean' },
+  { value: 'ptsd', label: 'PTSD', labelMs: 'PTSD', icon: Brain, color: 'warm' },
+  { value: 'ocd', label: 'OCD', labelMs: 'OCD', icon: Brain, color: 'lavender' },
+  { value: 'insomnia', label: 'Sleep', labelMs: 'Tidur', icon: Moon, color: 'sage' },
+  { value: 'suicidal', label: 'Crisis Support', labelMs: 'Sokongan Krisis', icon: Heart, color: 'ocean' },
+  { value: 'sexual-addiction', label: 'Recovery', labelMs: 'Pemulihan', icon: Smile, color: 'warm' },
+  { value: 'marital-distress', label: 'Relationships', labelMs: 'Hubungan', icon: Users, color: 'lavender' },
 ];
 
-// Default placeholder images for categories
-const CATEGORY_IMAGES: Record<string, string> = {
-  anxiety: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=450&fit=crop',
-  depression: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=800&h=450&fit=crop',
-  ptsd: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&h=450&fit=crop',
-  ocd: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&h=450&fit=crop',
-  insomnia: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=450&fit=crop',
-  stress: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&h=450&fit=crop',
-  mindfulness: 'https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=800&h=450&fit=crop',
-  default: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=450&fit=crop',
+// Category color styles
+const categoryColorStyles: Record<string, string> = {
+  sage: 'bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-300 border-sage-200 dark:border-sage-700/50',
+  lavender: 'bg-lavender-100 dark:bg-lavender-900/30 text-lavender-700 dark:text-lavender-300 border-lavender-200 dark:border-lavender-700/50',
+  ocean: 'bg-ocean-100 dark:bg-ocean-900/30 text-ocean-700 dark:text-ocean-300 border-ocean-200 dark:border-ocean-700/50',
+  warm: 'bg-warm-100 dark:bg-warm-900/30 text-warm-700 dark:text-warm-300 border-warm-200 dark:border-warm-700/50',
 };
 
 export default function InterventionsPage() {
@@ -60,10 +58,10 @@ export default function InterventionsPage() {
   }, []);
 
   useEffect(() => {
-    if (userId) {
+    if (userId && interventions.length > 0) {
       fetchUserProgress();
     }
-  }, [userId]);
+  }, [userId, interventions]);
 
   const fetchInterventions = async () => {
     try {
@@ -110,168 +108,182 @@ export default function InterventionsPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const formatDuration = (minutes?: number): string => {
-    if (!minutes) return '';
-    if (minutes < 60) {
-      return `${minutes} ${locale === 'ms' ? 'min' : 'min'}`;
-    }
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-  };
+  // Get featured intervention (first with progress, or first premium, or just first)
+  const featuredIntervention = filteredInterventions.find(i =>
+    userProgress[i.id]?.completed > 0
+  ) || filteredInterventions.find(i => i.isPremium) || filteredInterventions[0];
+
+  const otherInterventions = filteredInterventions.filter(i => i.id !== featuredIntervention?.id);
+
+  const isPremiumUser = subscription?.status === 'active';
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-warm-50 dark:bg-neutral-950">
       <Header />
 
-      <main className="flex-1 pt-24 pb-12">
-        <div className="mx-auto max-w-6xl px-4">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-8"
-          >
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
-              {locale === 'ms' ? 'Intervensi Bantuan Diri' : 'Self-Help Interventions'}
-            </h1>
-            <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-              {locale === 'ms'
-                ? 'Modul dan latihan berasaskan bukti untuk menyokong perjalanan kesihatan mental anda.'
-                : 'Evidence-based modules and exercises to support your mental well-being journey.'}
-            </p>
-          </motion.div>
+      <main className="flex-1 pt-20 pb-12">
+        {/* Hero Section with Breathing Animation */}
+        <section className="relative overflow-hidden py-12 md:py-16">
+          {/* Background decorations */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 left-1/4 w-64 h-64 bg-sage-200/40 dark:bg-sage-900/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-lavender-200/30 dark:bg-lavender-900/10 rounded-full blur-3xl" />
+          </div>
 
-          {/* Search and Filter */}
+          <div className="relative mx-auto max-w-6xl px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center"
+            >
+              {/* Breathing circle */}
+              <div className="flex justify-center mb-6">
+                <BreathingCircle size="lg" color="sage" />
+              </div>
+
+              <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-3">
+                {locale === 'ms' ? 'Perjalanan Kesejahteraan Anda' : 'Your Wellness Journey'}
+              </h1>
+              <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+                {locale === 'ms'
+                  ? 'Luangkan masa untuk diri anda dengan latihan dan modul yang direka untuk menyokong kesihatan mental anda.'
+                  : 'Take time for yourself with exercises and modules designed to support your mental well-being.'}
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        <div className="mx-auto max-w-6xl px-4">
+          {/* Search */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-8"
+            className="mb-6"
           >
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <GlassInput
+            <div className="max-w-md mx-auto">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                <input
                   type="text"
-                  placeholder={locale === 'ms' ? 'Cari intervensi...' : 'Search interventions...'}
+                  placeholder={locale === 'ms' ? 'Cari modul...' : 'Search modules...'}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  leftIcon={<Search className="w-5 h-5" />}
+                  className={cn(
+                    'w-full pl-12 pr-4 py-3 rounded-2xl transition-all',
+                    'bg-white dark:bg-neutral-900',
+                    'border border-warm-200 dark:border-neutral-800',
+                    'text-neutral-900 dark:text-white',
+                    'placeholder:text-neutral-400 dark:placeholder:text-neutral-500',
+                    'focus:outline-none focus:ring-2 focus:ring-sage-400/50 focus:border-sage-400'
+                  )}
                 />
               </div>
-              <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
-                {CATEGORIES.map((category) => (
-                  <button
+            </div>
+          </motion.div>
+
+          {/* Category Pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-8"
+          >
+            <div className="flex flex-wrap justify-center gap-2">
+              {CATEGORIES.map((category) => {
+                const Icon = category.icon;
+                const isSelected = selectedCategory === category.value;
+                const colorStyle = categoryColorStyles[category.color];
+
+                return (
+                  <motion.button
                     key={category.value}
                     onClick={() => setSelectedCategory(category.value)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                      selectedCategory === category.value
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-white/70 dark:bg-neutral-800/70 text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-800'
-                    }`}
+                    className={cn(
+                      'inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-medium transition-all border',
+                      isSelected
+                        ? colorStyle
+                        : 'bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border-warm-200 dark:border-neutral-800 hover:border-sage-300 dark:hover:border-sage-700'
+                    )}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
+                    <Icon className="w-4 h-4" />
                     {locale === 'ms' ? category.labelMs : category.label}
-                  </button>
-                ))}
-              </div>
+                  </motion.button>
+                );
+              })}
             </div>
           </motion.div>
 
           {/* Loading State */}
           {loading && (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+            <div className="flex flex-col items-center justify-center py-16 gap-4">
+              <BreathingCircle size="lg" color="sage" />
+              <p className="text-neutral-500 dark:text-neutral-400">
+                {locale === 'ms' ? 'Memuatkan...' : 'Loading...'}
+              </p>
             </div>
           )}
 
-          {/* Interventions Grid */}
-          {!loading && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredInterventions.map((intervention, index) => {
-                const name = locale === 'ms' ? intervention.nameMs : intervention.name;
-                const description = locale === 'ms' ? intervention.descriptionMs : intervention.description;
-                const progress = userProgress[intervention.id];
-                const thumbnail = intervention.thumbnailUrl || CATEGORY_IMAGES[intervention.category] || CATEGORY_IMAGES.default;
+          {/* Content */}
+          {!loading && filteredInterventions.length > 0 && (
+            <div className="space-y-8">
+              {/* Featured Intervention */}
+              {featuredIntervention && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <WellnessCardFeatured
+                    intervention={featuredIntervention}
+                    progress={userProgress[featuredIntervention.id]}
+                    isPremium={featuredIntervention.isPremium}
+                    locale={locale}
+                    onClick={() => router.push(`/interventions/${featuredIntervention.slug}`)}
+                  />
+                </motion.div>
+              )}
 
-                return (
-                  <motion.div
-                    key={intervention.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + index * 0.05 }}
-                  >
-                    <GlassCard
-                      className="h-full cursor-pointer hover:border-primary-400 transition-all group"
-                      onClick={() => router.push(`/interventions/${intervention.slug}`)}
-                    >
-                      {/* Thumbnail */}
-                      <div className="relative aspect-video rounded-xl overflow-hidden mb-4">
-                        <Image
-                          src={thumbnail}
-                          alt={name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+              {/* Other Interventions Grid */}
+              {otherInterventions.length > 0 && (
+                <div>
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
+                    {locale === 'ms' ? 'Semua Modul' : 'All Modules'}
+                  </h2>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {otherInterventions.map((intervention, index) => {
+                      const progress = userProgress[intervention.id];
+                      const isLocked = intervention.isPremium && !isPremiumUser;
 
-                        {/* Play button overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Play className="w-6 h-6 text-primary-600 ml-1" />
-                          </div>
-                        </div>
-
-                        {/* Duration badge */}
-                        {intervention.estimatedDuration && (
-                          <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/70 rounded text-white text-xs flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {formatDuration(intervention.estimatedDuration)}
-                          </div>
-                        )}
-
-                        {/* Premium badge */}
-                        {intervention.isPremium && (
-                          <div className="absolute top-2 right-2">
-                            <PremiumBadge />
-                          </div>
-                        )}
-
-                        {/* Progress indicator */}
-                        {progress && progress.completed > 0 && (
-                          <div className="absolute top-2 left-2">
-                            <ProgressBadge
-                              completed={progress.completed}
-                              total={progress.total || intervention.totalChapters}
-                              size="sm"
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div>
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <h3 className="font-semibold text-neutral-900 dark:text-white line-clamp-2">
-                            {name}
-                          </h3>
-                        </div>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-3">
-                          {description}
-                        </p>
-                        <div className="flex items-center gap-2 text-xs text-neutral-500">
-                          <span className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded-full capitalize">
-                            {intervention.category}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <BookOpen className="w-3 h-3" />
-                            {intervention.totalChapters} {locale === 'ms' ? 'bab' : 'chapters'}
-                          </span>
-                        </div>
-                      </div>
-                    </GlassCard>
-                  </motion.div>
-                );
-              })}
+                      return (
+                        <motion.div
+                          key={intervention.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.25 + index * 0.05 }}
+                        >
+                          <WellnessCard
+                            intervention={intervention}
+                            progress={progress}
+                            isPremium={intervention.isPremium}
+                            isLocked={isLocked}
+                            locale={locale}
+                            onClick={() => {
+                              if (isLocked) {
+                                router.push('/pricing');
+                              } else {
+                                router.push(`/interventions/${intervention.slug}`);
+                              }
+                            }}
+                          />
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -280,19 +292,21 @@ export default function InterventionsPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-12"
+              className="text-center py-16"
             >
-              <GlassCard className="max-w-md mx-auto">
-                <Search className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+              <div className="wellness-card max-w-md mx-auto p-8">
+                <div className="w-16 h-16 rounded-full bg-warm-100 dark:bg-warm-900/30 flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-8 h-8 text-warm-400" />
+                </div>
                 <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">
-                  {locale === 'ms' ? 'Tiada intervensi dijumpai' : 'No interventions found'}
+                  {locale === 'ms' ? 'Tiada modul dijumpai' : 'No modules found'}
                 </h3>
-                <p className="text-neutral-500 text-sm">
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm">
                   {locale === 'ms'
-                    ? 'Cuba laraskan carian atau kriteria penapis anda.'
-                    : 'Try adjusting your search or filter criteria.'}
+                    ? 'Cuba laraskan carian atau pilih kategori lain.'
+                    : 'Try adjusting your search or selecting a different category.'}
                 </p>
-              </GlassCard>
+              </div>
             </motion.div>
           )}
         </div>

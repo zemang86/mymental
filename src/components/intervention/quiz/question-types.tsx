@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
 interface BaseQuestionProps {
@@ -10,7 +11,7 @@ interface BaseQuestionProps {
   disabled?: boolean;
 }
 
-// Multiple Choice Question
+// Multiple Choice Question - Wellness Style
 interface MultipleChoiceProps extends BaseQuestionProps {
   options: string[];
 }
@@ -23,52 +24,61 @@ export function MultipleChoiceQuestion({
   disabled,
 }: MultipleChoiceProps) {
   return (
-    <div className="space-y-3">
-      <p className="text-lg font-medium text-neutral-900 dark:text-white mb-4">
+    <div className="space-y-4">
+      <p className="text-lg font-medium text-neutral-800 dark:text-neutral-100 leading-relaxed">
         {question}
       </p>
-      <div className="space-y-2">
-        {options.map((option, index) => (
-          <motion.button
-            key={index}
-            whileHover={{ scale: disabled ? 1 : 1.01 }}
-            whileTap={{ scale: disabled ? 1 : 0.99 }}
-            onClick={() => !disabled && onChange(option)}
-            disabled={disabled}
-            className={cn(
-              'w-full text-left p-4 rounded-lg border-2 transition-all',
-              'hover:shadow-md',
-              value === option
-                ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800',
-              disabled && 'opacity-60 cursor-not-allowed'
-            )}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className={cn(
-                  'w-5 h-5 rounded-full border-2 flex items-center justify-center',
-                  value === option
-                    ? 'border-primary-500 bg-primary-500'
-                    : 'border-neutral-300 dark:border-neutral-600'
-                )}
-              >
-                {value === option && (
-                  <div className="w-2 h-2 rounded-full bg-white" />
-                )}
+      <div className="space-y-3">
+        {options.map((option, index) => {
+          const isSelected = value === option;
+          return (
+            <motion.button
+              key={index}
+              whileHover={{ scale: disabled ? 1 : 1.01 }}
+              whileTap={{ scale: disabled ? 1 : 0.99 }}
+              onClick={() => !disabled && onChange(option)}
+              disabled={disabled}
+              className={cn(
+                'w-full text-left p-4 rounded-2xl border-2 transition-all duration-200',
+                isSelected
+                  ? 'border-sage-400 bg-sage-50 dark:bg-sage-900/30 dark:border-sage-600 wellness-glow-sage'
+                  : 'border-warm-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 hover:border-sage-300 dark:hover:border-sage-700',
+                disabled && 'opacity-60 cursor-not-allowed'
+              )}
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className={cn(
+                    'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all',
+                    isSelected
+                      ? 'border-sage-500 bg-sage-500'
+                      : 'border-warm-300 dark:border-neutral-600'
+                  )}
+                >
+                  {isSelected && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="w-2.5 h-2.5 rounded-full bg-white"
+                    />
+                  )}
+                </div>
+                <span className={cn(
+                  'text-neutral-700 dark:text-neutral-200',
+                  isSelected && 'text-sage-800 dark:text-sage-200 font-medium'
+                )}>
+                  {option}
+                </span>
               </div>
-              <span className="text-neutral-700 dark:text-neutral-200">
-                {option}
-              </span>
-            </div>
-          </motion.button>
-        ))}
+            </motion.button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-// True/False Question
+// True/False Question - Wellness Style
 export function TrueFalseQuestion({
   question,
   value,
@@ -76,35 +86,40 @@ export function TrueFalseQuestion({
   disabled,
 }: BaseQuestionProps) {
   return (
-    <div className="space-y-3">
-      <p className="text-lg font-medium text-neutral-900 dark:text-white mb-4">
+    <div className="space-y-4">
+      <p className="text-lg font-medium text-neutral-800 dark:text-neutral-100 leading-relaxed">
         {question}
       </p>
-      <div className="grid grid-cols-2 gap-3">
-        {['True', 'False'].map((option) => (
-          <motion.button
-            key={option}
-            whileHover={{ scale: disabled ? 1 : 1.02 }}
-            whileTap={{ scale: disabled ? 1 : 0.98 }}
-            onClick={() => !disabled && onChange(option)}
-            disabled={disabled}
-            className={cn(
-              'p-6 rounded-lg border-2 font-medium transition-all',
-              value === option
-                ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200',
-              disabled && 'opacity-60 cursor-not-allowed'
-            )}
-          >
-            {option}
-          </motion.button>
-        ))}
+      <div className="grid grid-cols-2 gap-4">
+        {['True', 'False'].map((option) => {
+          const isSelected = value === option;
+          return (
+            <motion.button
+              key={option}
+              whileHover={{ scale: disabled ? 1 : 1.02 }}
+              whileTap={{ scale: disabled ? 1 : 0.98 }}
+              onClick={() => !disabled && onChange(option)}
+              disabled={disabled}
+              className={cn(
+                'p-6 rounded-2xl border-2 font-medium transition-all duration-200 text-center',
+                isSelected
+                  ? option === 'True'
+                    ? 'border-sage-400 bg-sage-50 dark:bg-sage-900/30 text-sage-700 dark:text-sage-300 wellness-glow-sage'
+                    : 'border-warm-400 bg-warm-50 dark:bg-warm-900/30 text-warm-700 dark:text-warm-300'
+                  : 'border-warm-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 text-neutral-600 dark:text-neutral-300 hover:border-sage-300 dark:hover:border-sage-700',
+                disabled && 'opacity-60 cursor-not-allowed'
+              )}
+            >
+              {option}
+            </motion.button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-// Checkbox (Multiple Select) Question
+// Checkbox (Multiple Select) Question - Wellness Style
 interface CheckboxProps extends BaseQuestionProps {
   options: string[];
   value: string[];
@@ -128,14 +143,14 @@ export function CheckboxQuestion({
   };
 
   return (
-    <div className="space-y-3">
-      <p className="text-lg font-medium text-neutral-900 dark:text-white mb-4">
+    <div className="space-y-4">
+      <p className="text-lg font-medium text-neutral-800 dark:text-neutral-100 leading-relaxed">
         {question}
       </p>
-      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400">
         Select all that apply
       </p>
-      <div className="space-y-2">
+      <div className="space-y-3">
         {options.map((option, index) => {
           const isSelected = value.includes(option);
           return (
@@ -146,39 +161,35 @@ export function CheckboxQuestion({
               onClick={() => handleToggle(option)}
               disabled={disabled}
               className={cn(
-                'w-full text-left p-4 rounded-lg border-2 transition-all',
+                'w-full text-left p-4 rounded-2xl border-2 transition-all duration-200',
                 isSelected
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800',
+                  ? 'border-sage-400 bg-sage-50 dark:bg-sage-900/30 dark:border-sage-600'
+                  : 'border-warm-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/50 hover:border-sage-300 dark:hover:border-sage-700',
                 disabled && 'opacity-60 cursor-not-allowed'
               )}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div
                   className={cn(
-                    'w-5 h-5 rounded border-2 flex items-center justify-center',
+                    'w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all',
                     isSelected
-                      ? 'border-primary-500 bg-primary-500'
-                      : 'border-neutral-300 dark:border-neutral-600'
+                      ? 'border-sage-500 bg-sage-500'
+                      : 'border-warm-300 dark:border-neutral-600'
                   )}
                 >
                   {isSelected && (
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={3}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                      <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                    </motion.div>
                   )}
                 </div>
-                <span className="text-neutral-700 dark:text-neutral-200">
+                <span className={cn(
+                  'text-neutral-700 dark:text-neutral-200',
+                  isSelected && 'text-sage-800 dark:text-sage-200 font-medium'
+                )}>
                   {option}
                 </span>
               </div>
@@ -190,7 +201,7 @@ export function CheckboxQuestion({
   );
 }
 
-// Reflection (Open-ended) Question
+// Reflection (Open-ended) Question - Wellness Style
 export function ReflectionQuestion({
   question,
   value,
@@ -198,11 +209,11 @@ export function ReflectionQuestion({
   disabled,
 }: BaseQuestionProps) {
   return (
-    <div className="space-y-3">
-      <p className="text-lg font-medium text-neutral-900 dark:text-white mb-4">
+    <div className="space-y-4">
+      <p className="text-lg font-medium text-neutral-800 dark:text-neutral-100 leading-relaxed">
         {question}
       </p>
-      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+      <p className="text-sm text-sage-600 dark:text-sage-400">
         Take a moment to reflect and share your thoughts
       </p>
       <textarea
@@ -212,18 +223,18 @@ export function ReflectionQuestion({
         placeholder="Type your reflection here..."
         rows={6}
         className={cn(
-          'w-full p-4 rounded-lg border-2',
-          'border-neutral-200 dark:border-neutral-700',
-          'bg-white dark:bg-neutral-800',
-          'text-neutral-900 dark:text-white',
+          'w-full p-4 rounded-2xl border-2 transition-all duration-200',
+          'border-warm-200 dark:border-neutral-700',
+          'bg-white dark:bg-neutral-800/50',
+          'text-neutral-800 dark:text-neutral-100',
           'placeholder:text-neutral-400 dark:placeholder:text-neutral-500',
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
+          'focus:outline-none focus:border-sage-400 focus:ring-2 focus:ring-sage-200 dark:focus:ring-sage-800',
           'resize-none',
           disabled && 'opacity-60 cursor-not-allowed'
         )}
       />
-      <p className="text-xs text-neutral-400 dark:text-neutral-500">
-        This is not graded - it's for your personal reflection
+      <p className="text-xs text-neutral-400 dark:text-neutral-500 italic">
+        This is for your personal reflection and won't be graded
       </p>
     </div>
   );

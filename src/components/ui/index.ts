@@ -21,3 +21,14 @@ export { RiskBadge, SeverityBadge } from './risk-badge';
 export type { RiskBadgeProps, SeverityBadgeProps } from './risk-badge';
 
 export { ThemeToggle } from './theme-toggle';
+
+// Lottie Animations
+export {
+  LottieAnimation,
+  BreathingAnimation,
+  SuccessAnimation,
+  ConfettiAnimation,
+  LoadingAnimation,
+  BreathingCircle,
+} from './lottie-animation';
+export type { LottieAnimationProps, AnimationType } from './lottie-animation';

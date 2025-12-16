@@ -7,7 +7,7 @@ import { Loader2 } from 'lucide-react';
 
 export interface GlassButtonProps
   extends Omit<HTMLMotionProps<'button'>, 'children'> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'wellness' | 'wellness-outline';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   leftIcon?: React.ReactNode;
@@ -85,6 +85,20 @@ const GlassButton = forwardRef<HTMLButtonElement, GlassButtonProps>(
               variant === 'danger',
             'hover:from-red-600 hover:to-red-700 focus:ring-red-500/50':
               variant === 'danger' && !isDisabled,
+
+            // Wellness - Soft sage gradient, rounded, calm feel
+            'bg-gradient-to-r from-sage-500 to-sage-600 text-white border-sage-400/50 rounded-2xl':
+              variant === 'wellness',
+            'hover:from-sage-600 hover:to-sage-700 focus:ring-sage-500/50':
+              variant === 'wellness' && !isDisabled,
+
+            // Wellness Outline - Soft bordered button
+            'bg-transparent border-2 border-sage-400 text-sage-700 rounded-2xl':
+              variant === 'wellness-outline',
+            'dark:border-sage-500 dark:text-sage-300':
+              variant === 'wellness-outline',
+            'hover:bg-sage-50 dark:hover:bg-sage-950/50 focus:ring-sage-400/50':
+              variant === 'wellness-outline' && !isDisabled,
           },
           className
         )}

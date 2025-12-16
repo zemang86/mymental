@@ -5,8 +5,8 @@ import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils/cn';
 
 export interface GlassCardProps extends HTMLMotionProps<'div'> {
-  variant?: 'default' | 'elevated' | 'subtle';
-  blur?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'default' | 'elevated' | 'subtle' | 'wellness' | 'wellness-soft';
+  blur?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
   hover?: boolean;
   asChild?: boolean;
 }
@@ -38,12 +38,19 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
             'backdrop-blur-md': blur === 'md',
             'backdrop-blur-lg': blur === 'lg',
             'backdrop-blur-xl': blur === 'xl',
+            'backdrop-blur-none': blur === 'none',
           },
           // Variant styles
           {
             'p-6': variant === 'default',
             'p-8 shadow-xl rounded-3xl': variant === 'elevated',
             'p-4 rounded-xl opacity-80': variant === 'subtle',
+            // Wellness - Warm, soft card with rounded corners
+            'p-6 rounded-3xl bg-warm-50 border-warm-200 dark:bg-neutral-900 dark:border-sage-800/30':
+              variant === 'wellness',
+            // Wellness Soft - Even softer with sage tint
+            'p-5 rounded-2xl bg-sage-50/50 border-sage-200/50 dark:bg-sage-950/20 dark:border-sage-700/20':
+              variant === 'wellness-soft',
           },
           // Hover effect
           hover && 'hover:shadow-xl hover:-translate-y-0.5',

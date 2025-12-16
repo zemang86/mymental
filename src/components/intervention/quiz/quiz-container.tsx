@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { GlassCard, GlassButton } from '@/components/ui';
+import { ArrowRight, ArrowLeft, CheckCircle, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils/cn';
+import { BreathingCircle } from '@/components/ui/lottie-animation';
 import {
   MultipleChoiceQuestion,
   TrueFalseQuestion,
@@ -27,6 +28,42 @@ interface QuizQuestion {
 interface QuizContainerProps {
   quizId: string;
   onComplete?: (passed: boolean, score: number) => void;
+}
+
+// Progress Dots Component
+function ProgressDots({
+  total,
+  current,
+  answered,
+}: {
+  total: number;
+  current: number;
+  answered: Record<string, any>;
+}) {
+  return (
+    <div className="flex items-center justify-center gap-2">
+      {Array.from({ length: total }).map((_, index) => {
+        const isAnswered = Object.keys(answered).length > index;
+        const isCurrent = index === current;
+
+        return (
+          <motion.div
+            key={index}
+            className={cn(
+              'w-2.5 h-2.5 rounded-full transition-all duration-300',
+              isCurrent
+                ? 'w-8 bg-sage-500'
+                : isAnswered
+                ? 'bg-sage-400'
+                : 'bg-warm-200 dark:bg-neutral-700'
+            )}
+            animate={isCurrent ? { scale: [1, 1.1, 1] } : {}}
+            transition={isCurrent ? { repeat: Infinity, duration: 2 } : {}}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 export function QuizContainer({ quizId, onComplete }: QuizContainerProps) {
@@ -120,57 +157,52 @@ export function QuizContainer({ quizId, onComplete }: QuizContainerProps) {
 
   if (isLoading) {
     return (
-      <GlassCard className="p-8">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto" />
-          <p className="mt-4 text-neutral-600 dark:text-neutral-400">
+      <div className="wellness-card p-8">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <BreathingCircle size="lg" color="sage" />
+          <p className="text-neutral-500 dark:text-neutral-400">
             Loading quiz...
           </p>
         </div>
-      </GlassCard>
+      </div>
     );
   }
 
   if (!quiz || totalQuestions === 0) {
     return (
-      <GlassCard className="p-8">
-        <p className="text-center text-neutral-600 dark:text-neutral-400">
+      <div className="wellness-card p-8 text-center">
+        <div className="w-12 h-12 rounded-full bg-warm-100 dark:bg-warm-900/30 flex items-center justify-center mx-auto mb-4">
+          <Sparkles className="w-6 h-6 text-warm-400" />
+        </div>
+        <p className="text-neutral-600 dark:text-neutral-400">
           Quiz not found
         </p>
-      </GlassCard>
+      </div>
     );
   }
 
-  const progress = ((currentQuestion + 1) / totalQuestions) * 100;
   const isLastQuestion = currentQuestion === totalQuestions - 1;
   const hasAnswer = answers[currentQ.id] !== undefined && answers[currentQ.id] !== null &&
     (Array.isArray(answers[currentQ.id]) ? answers[currentQ.id].length > 0 : answers[currentQ.id] !== '');
 
   return (
-    <GlassCard className="p-6 md:p-8">
+    <div className="wellness-card p-6 md:p-8">
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
-            {quiz.title}
-          </h2>
-          <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-            <Clock className="w-4 h-4" />
-            <span>
-              Question {currentQuestion + 1} of {totalQuestions}
-            </span>
-          </div>
-        </div>
+      <div className="mb-8 text-center">
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+          {quiz.title}
+        </h2>
 
-        {/* Progress bar */}
-        <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
-          <motion.div
-            className="bg-primary-500 h-2 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3 }}
-          />
-        </div>
+        {/* Progress Dots */}
+        <ProgressDots
+          total={totalQuestions}
+          current={currentQuestion}
+          answered={answers}
+        />
+
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-3">
+          {currentQuestion + 1} of {totalQuestions}
+        </p>
       </div>
 
       {/* Question */}
@@ -220,43 +252,75 @@ export function QuizContainer({ quizId, onComplete }: QuizContainerProps) {
       </AnimatePresence>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <GlassButton
-          variant="secondary"
+      <div className="flex items-center justify-between gap-4">
+        <motion.button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          leftIcon={<ArrowLeft className="w-4 h-4" />}
+          className={cn(
+            'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all',
+            'bg-warm-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300',
+            'hover:bg-warm-200 dark:hover:bg-neutral-700',
+            'disabled:opacity-40 disabled:cursor-not-allowed'
+          )}
+          whileHover={{ scale: currentQuestion === 0 ? 1 : 1.02 }}
+          whileTap={{ scale: currentQuestion === 0 ? 1 : 0.98 }}
         >
-          Previous
-        </GlassButton>
+          <ArrowLeft className="w-4 h-4" />
+          Back
+        </motion.button>
 
         {isLastQuestion ? (
-          <GlassButton
-            variant="primary"
+          <motion.button
             onClick={handleSubmit}
             disabled={!hasAnswer || isSubmitting}
-            rightIcon={<CheckCircle className="w-4 h-4" />}
+            className={cn(
+              'inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all',
+              'bg-sage-500 text-white hover:bg-sage-600',
+              'disabled:opacity-40 disabled:cursor-not-allowed'
+            )}
+            whileHover={{ scale: !hasAnswer || isSubmitting ? 1 : 1.02 }}
+            whileTap={{ scale: !hasAnswer || isSubmitting ? 1 : 0.98 }}
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Quiz'}
-          </GlassButton>
+            {isSubmitting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                Complete
+                <CheckCircle className="w-4 h-4" />
+              </>
+            )}
+          </motion.button>
         ) : (
-          <GlassButton
-            variant="primary"
+          <motion.button
             onClick={handleNext}
             disabled={!hasAnswer}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
+            className={cn(
+              'inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all',
+              'bg-sage-500 text-white hover:bg-sage-600',
+              'disabled:opacity-40 disabled:cursor-not-allowed'
+            )}
+            whileHover={{ scale: !hasAnswer ? 1 : 1.02 }}
+            whileTap={{ scale: !hasAnswer ? 1 : 0.98 }}
           >
-            Next
-          </GlassButton>
+            Continue
+            <ArrowRight className="w-4 h-4" />
+          </motion.button>
         )}
       </div>
 
-      {/* Answer requirement hint */}
+      {/* Answer hint */}
       {!hasAnswer && (
-        <p className="text-sm text-center text-neutral-500 dark:text-neutral-400 mt-4">
-          Please select an answer to continue
-        </p>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-sm text-center text-sage-600 dark:text-sage-400 mt-6"
+        >
+          Select an answer to continue
+        </motion.p>
       )}
-    </GlassCard>
+    </div>
   );
 }
