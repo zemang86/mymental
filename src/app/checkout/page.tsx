@@ -30,14 +30,18 @@ const FPX_BANKS = [
 ];
 
 type PaymentMethod = 'card' | 'fpx';
-type CheckoutStep = 'select-method' | 'card-details' | 'fpx-bank' | 'processing' | 'success';
+type CheckoutStep = 'email' | 'verify-otp' | 'select-method' | 'card-details' | 'fpx-bank' | 'processing' | 'success';
 
 function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const planId = searchParams.get('plan') || 'premium_monthly';
 
-  const [step, setStep] = useState<CheckoutStep>('select-method');
+  const [step, setStep] = useState<CheckoutStep>('email');
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -49,6 +53,51 @@ function CheckoutContent() {
   });
 
   const plan = PRICING_PLANS.find((p) => p.id === planId) || PRICING_PLANS[1];
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSendingOtp(true);
+
+    try {
+      // Send magic link via Supabase
+      const response = await fetch('/api/auth/send-magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setStep('verify-otp');
+      }
+    } catch (error) {
+      console.error('Error sending magic link:', error);
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsProcessing(true);
+
+    try {
+      // Verify OTP
+      const response = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      if (response.ok) {
+        setIsVerified(true);
+        setStep('select-method');
+      }
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const handleSelectMethod = (method: PaymentMethod) => {
     setPaymentMethod(method);
@@ -91,22 +140,22 @@ function CheckoutContent() {
 
       if (data.success) {
         setStep('success');
-        // Redirect after showing success
+        // Redirect to full results page
         setTimeout(() => {
-          router.push('/my-assessments');
+          router.push('/results/full');
         }, 2000);
       } else {
         // Handle error - for demo, still show success
         setStep('success');
         setTimeout(() => {
-          router.push('/my-assessments');
+          router.push('/results/full');
         }, 2000);
       }
     } catch (error) {
       // For demo purposes, show success anyway
       setStep('success');
       setTimeout(() => {
-        router.push('/my-assessments');
+        router.push('/results/full');
       }, 2000);
     }
   };
@@ -137,12 +186,14 @@ function CheckoutContent() {
       <main className="flex-1 pt-24 pb-12">
         <div className="mx-auto max-w-xl px-4">
           {/* Back Button */}
-          {step !== 'processing' && step !== 'success' && (
+          {step !== 'processing' && step !== 'success' && step !== 'email' && (
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onClick={() => {
-                if (step === 'select-method') {
+                if (step === 'verify-otp') {
+                  setStep('email');
+                } else if (step === 'select-method') {
                   router.push('/pricing');
                 } else {
                   setStep('select-method');
@@ -152,7 +203,7 @@ function CheckoutContent() {
               className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              {step === 'select-method' ? 'Back to Pricing' : 'Change Payment Method'}
+              Back
             </motion.button>
           )}
 
@@ -188,7 +239,106 @@ function CheckoutContent() {
           )}
 
           <AnimatePresence mode="wait">
-            {/* Step 1: Select Payment Method */}
+            {/* Step 0: Email Collection */}
+            {step === 'email' && (
+              <motion.div
+                key="email"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <GlassCard>
+                  <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+                    Enter your email
+                  </h2>
+                  <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+                    We'll send you a code to verify your email and create your account
+                  </p>
+
+                  <form onSubmit={handleEmailSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+
+                    <GlassButton
+                      type="submit"
+                      variant="primary"
+                      disabled={isSendingOtp}
+                      loading={isSendingOtp}
+                      className="w-full"
+                    >
+                      {isSendingOtp ? 'Sending code...' : 'Send verification code'}
+                    </GlassButton>
+                  </form>
+                </GlassCard>
+              </motion.div>
+            )}
+
+            {/* Step 1: Verify OTP */}
+            {step === 'verify-otp' && (
+              <motion.div
+                key="verify-otp"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <GlassCard>
+                  <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+                    Check your email
+                  </h2>
+                  <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+                    We sent a 6-digit code to <strong>{email}</strong>
+                  </p>
+
+                  <form onSubmit={handleOtpSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        Verification Code
+                      </label>
+                      <input
+                        type="text"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                        placeholder="000000"
+                        maxLength={6}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-center text-2xl tracking-widest font-mono focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+
+                    <GlassButton
+                      type="submit"
+                      variant="primary"
+                      disabled={isProcessing || otp.length !== 6}
+                      loading={isProcessing}
+                      className="w-full"
+                    >
+                      {isProcessing ? 'Verifying...' : 'Verify code'}
+                    </GlassButton>
+
+                    <button
+                      type="button"
+                      onClick={() => setStep('email')}
+                      className="w-full text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 transition-colors"
+                    >
+                      Wrong email? Go back
+                    </button>
+                  </form>
+                </GlassCard>
+              </motion.div>
+            )}
+
+            {/* Step 2: Select Payment Method */}
             {step === 'select-method' && (
               <motion.div
                 key="select-method"
