@@ -200,7 +200,7 @@ function CheckoutContent() {
                   setPaymentMethod(null);
                 }
               }}
-              className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6 transition-colors"
+              className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-sage-600 mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -214,9 +214,9 @@ function CheckoutContent() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6"
             >
-              <GlassCard className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 border-primary-200 dark:border-primary-700">
+              <GlassCard className="bg-gradient-to-r from-sage-50 to-sage-100 dark:from-sage-900/20 dark:to-sage-800/20 border-sage-200 dark:border-sage-700">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary-500 rounded-xl">
+                  <div className="p-3 bg-sage-500 rounded-xl">
                     <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">
@@ -226,7 +226,7 @@ function CheckoutContent() {
                     <p className="text-sm text-neutral-500">{plan.nameMs}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                    <p className="text-2xl font-bold text-sage-600 dark:text-sage-400">
                       {formatPrice(plan.price)}
                     </p>
                     <p className="text-xs text-neutral-500">
@@ -266,7 +266,7 @@ function CheckoutContent() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                       />
                     </div>
 
@@ -312,7 +312,7 @@ function CheckoutContent() {
                         placeholder="000000"
                         maxLength={6}
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-center text-2xl tracking-widest font-mono focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-center text-2xl tracking-widest font-mono focus:outline-none focus:ring-2 focus:ring-sage-500"
                       />
                     </div>
 
@@ -329,7 +329,7 @@ function CheckoutContent() {
                     <button
                       type="button"
                       onClick={() => setStep('email')}
-                      className="w-full text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 transition-colors"
+                      className="w-full text-sm text-neutral-600 dark:text-neutral-400 hover:text-sage-600 transition-colors"
                     >
                       Wrong email? Go back
                     </button>
@@ -355,7 +355,7 @@ function CheckoutContent() {
                     {/* Card Payment */}
                     <button
                       onClick={() => handleSelectMethod('card')}
-                      className="w-full p-4 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 hover:border-primary-400 dark:hover:border-primary-500 transition-all flex items-center gap-4 text-left group"
+                      className="w-full p-4 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 hover:border-sage-400 dark:hover:border-sage-500 transition-all flex items-center gap-4 text-left group"
                     >
                       <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40 transition-colors">
                         <CreditCard className="w-6 h-6 text-blue-600" />
@@ -381,7 +381,7 @@ function CheckoutContent() {
                     {/* FPX Payment */}
                     <button
                       onClick={() => handleSelectMethod('fpx')}
-                      className="w-full p-4 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 hover:border-primary-400 dark:hover:border-primary-500 transition-all flex items-center gap-4 text-left group"
+                      className="w-full p-4 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 hover:border-sage-400 dark:hover:border-sage-500 transition-all flex items-center gap-4 text-left group"
                     >
                       <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl group-hover:bg-green-200 dark:group-hover:bg-green-800/40 transition-colors">
                         <Building2 className="w-6 h-6 text-green-600" />
@@ -445,7 +445,7 @@ function CheckoutContent() {
                             number: formatCardNumber(e.target.value),
                           })
                         }
-                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-sage-500 focus:border-transparent transition-all"
                       />
                     </div>
 
@@ -461,7 +461,7 @@ function CheckoutContent() {
                         onChange={(e) =>
                           setCardDetails({ ...cardDetails, name: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-sage-500 focus:border-transparent transition-all"
                       />
                     </div>
 
@@ -482,7 +482,7 @@ function CheckoutContent() {
                               expiry: formatExpiry(e.target.value),
                             })
                           }
-                          className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                          className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-sage-500 focus:border-transparent transition-all"
                         />
                       </div>
                       <div>
@@ -500,7 +500,7 @@ function CheckoutContent() {
                               cvc: e.target.value.replace(/\D/g, ''),
                             })
                           }
-                          className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                          className="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-sage-500 focus:border-transparent transition-all"
                         />
                       </div>
                     </div>
@@ -601,7 +601,7 @@ function CheckoutContent() {
                       transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                       className="w-16 h-16 mx-auto mb-6"
                     >
-                      <Loader2 className="w-16 h-16 text-primary-500" />
+                      <Loader2 className="w-16 h-16 text-sage-500" />
                     </motion.div>
                     <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
                       Processing Payment...

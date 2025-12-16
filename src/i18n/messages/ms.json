@@ -53,6 +53,8 @@
       "button": "Jom Mula"
     },
     "conditions": {
+      "title": "Keadaan Yang Kami Sokong",
+      "subtitle": "Ambil penilaian kendiri untuk lebih memahami kesihatan mental anda. Setiap saringan adalah sulit dan hanya mengambil beberapa minit.",
       "anxiety": {
         "title": "Kebimbangan",
         "description": "Kebimbangan berlebihan, kegelisahan, atau ketakutan yang mengganggu aktiviti harian."

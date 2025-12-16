@@ -243,7 +243,7 @@ export default function AccountPage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-24 pb-12 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-sage-500" />
         </main>
         <Footer />
       </div>
@@ -295,7 +295,7 @@ export default function AccountPage() {
             <GlassCard>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-                  <User className="w-5 h-5 text-primary-500" />
+                  <User className="w-5 h-5 text-sage-500" />
                   {t('profile')}
                 </h2>
                 {!isEditing && (
@@ -312,7 +312,7 @@ export default function AccountPage() {
               <div className="space-y-4">
                 {/* Avatar */}
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full bg-primary-500 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-sage-500 flex items-center justify-center">
                     <span className="text-2xl font-bold text-white">
                       {formData.full_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                     </span>
@@ -365,7 +365,7 @@ export default function AccountPage() {
                     <select
                       value={formData.gender}
                       onChange={(e) => updateFormField('gender', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                     >
                       {GENDER_OPTIONS.map(opt => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -410,7 +410,7 @@ export default function AccountPage() {
                     <select
                       value={formData.marital_status}
                       onChange={(e) => updateFormField('marital_status', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                     >
                       {MARITAL_STATUS_OPTIONS.map(opt => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -452,7 +452,7 @@ export default function AccountPage() {
                     <select
                       value={formData.education}
                       onChange={(e) => updateFormField('education', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                     >
                       {EDUCATION_OPTIONS.map(opt => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -510,7 +510,7 @@ export default function AccountPage() {
           >
             <GlassCard>
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2 mb-6">
-                <Globe className="w-5 h-5 text-primary-500" />
+                <Globe className="w-5 h-5 text-sage-500" />
                 {t('preferences')}
               </h2>
 
@@ -540,7 +540,7 @@ export default function AccountPage() {
                       // Set locale cookie and reload to apply new language
                       setLocale(newLang);
                     }}
-                    className="px-4 py-2 rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="px-4 py-2 rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                   >
                     <option value="en">English</option>
                     <option value="ms">Bahasa Malaysia</option>
@@ -559,7 +559,7 @@ export default function AccountPage() {
           >
             <GlassCard>
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2 mb-6">
-                <Shield className="w-5 h-5 text-primary-500" />
+                <Shield className="w-5 h-5 text-sage-500" />
                 {t('security')}
               </h2>
 

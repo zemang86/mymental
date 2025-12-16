@@ -144,7 +144,7 @@ export default function ResourcesPage() {
             className="mb-12"
           >
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
-              <BookOpen className="w-6 h-6 text-primary-500" />
+              <BookOpen className="w-6 h-6 text-sage-500" />
               Self-Help Courses
             </h2>
             <p className="text-neutral-500 mb-6">
@@ -159,7 +159,7 @@ export default function ResourcesPage() {
                   transition={{ delay: 0.2 + index * 0.05 }}
                 >
                   <GlassCard
-                    className="h-full cursor-pointer hover:border-primary-400 transition-colors"
+                    className="h-full cursor-pointer hover:border-sage-400 transition-colors"
                     onClick={() => window.location.href = topic.link}
                   >
                     <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
@@ -183,7 +183,7 @@ export default function ResourcesPage() {
             className="mb-12"
           >
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
-              <Globe className="w-6 h-6 text-primary-500" />
+              <Globe className="w-6 h-6 text-sage-500" />
               Online Resources
             </h2>
             <p className="text-neutral-500 mb-6">
@@ -209,7 +209,7 @@ export default function ResourcesPage() {
                         href={resource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-primary-600 hover:text-primary-700"
+                        className="flex items-center gap-1 text-sage-600 hover:text-sage-700"
                       >
                         Visit <ExternalLink className="w-4 h-4" />
                       </a>
@@ -227,7 +227,7 @@ export default function ResourcesPage() {
             transition={{ delay: 0.4 }}
           >
             <GlassCard variant="elevated" className="text-center">
-              <MessageCircle className="w-12 h-12 text-primary-500 mx-auto mb-4" />
+              <MessageCircle className="w-12 h-12 text-sage-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
                 Need Someone to Talk To?
               </h3>

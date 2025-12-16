@@ -427,7 +427,7 @@ function TestItemComponent({
           className="mt-0.5 flex-shrink-0"
         >
           {checked ? (
-            <CheckCircle2 className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+            <CheckCircle2 className="w-5 h-5 text-sage-600 dark:text-sage-400" />
           ) : (
             <Circle className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
           )}
@@ -613,7 +613,7 @@ export default function ProgressPage() {
 
       <main className="flex-1 pt-16">
         {/* Hero Section */}
-        <section className="py-16 bg-gradient-to-br from-primary-50 to-teal-50 dark:from-neutral-900 dark:to-neutral-800">
+        <section className="py-16 bg-gradient-to-br from-sage-50 to-teal-50 dark:from-neutral-900 dark:to-neutral-800">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -633,7 +633,7 @@ export default function ProgressPage() {
                   <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                     Platform Implementation Status
                   </span>
-                  <span className="text-sm font-bold text-primary-600 dark:text-primary-400">
+                  <span className="text-sm font-bold text-sage-600 dark:text-sage-400">
                     86% Complete
                   </span>
                 </div>
@@ -690,14 +690,14 @@ export default function ProgressPage() {
                 </div>
               </div>
 
-              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-xl p-6 border border-primary-200 dark:border-primary-800">
+              <div className="bg-sage-50 dark:bg-sage-900/20 rounded-xl p-6 border border-sage-200 dark:border-sage-800">
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">
                   🎯 Recent Updates (December 16, 2025)
                 </h3>
 
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-primary-700 dark:text-primary-400 mb-2">✅ Dark Mode Implementation</h4>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Dark Mode Implementation</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
                       <li>Full dark mode support with theme toggle</li>
                       <li>Floating theme toggle button (bottom-right corner)</li>
@@ -707,7 +707,7 @@ export default function ProgressPage() {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-primary-700 dark:text-primary-400 mb-2">✅ Email Domain Configuration</h4>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Email Domain Configuration</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
                       <li>Updated to verified domain: noreply@kitamen.my</li>
                       <li>All email functions updated (OTP, results)</li>
@@ -715,7 +715,7 @@ export default function ProgressPage() {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-primary-700 dark:text-primary-400 mb-2">✅ Emergency Modal Updates</h4>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Emergency Modal Updates</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
                       <li>Emergency modal now closable at all risk levels</li>
                       <li>Users can save progress while viewing crisis resources</li>
@@ -860,16 +860,16 @@ export default function ProgressPage() {
                       <strong className="text-yellow-700 dark:text-yellow-400">⚠️ PLANNED (NOT YET IMPLEMENTED):</strong> After completing social functioning assessment,<br />users must pay to see full 2nd screening results
                     </p>
                     <div className="grid md:grid-cols-3 gap-3 text-xs">
-                      <div className="p-2 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 rounded-lg border border-primary-300 dark:border-primary-700">
-                        <p className="font-bold text-primary-700 dark:text-primary-400">FREE</p>
+                      <div className="p-2 bg-gradient-to-br from-sage-50 to-sage-100 dark:from-sage-950/50 dark:to-sage-900/50 rounded-lg border border-sage-300 dark:border-sage-700">
+                        <p className="font-bold text-sage-700 dark:text-sage-400">FREE</p>
                         <p className="text-neutral-700 dark:text-neutral-300">Initial assessments</p>
                       </div>
-                      <div className="p-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/70 dark:to-primary-800/70 rounded-lg border-2 border-primary-500 dark:border-primary-600">
-                        <p className="font-bold text-primary-700 dark:text-primary-300">RM29 / 6 months</p>
+                      <div className="p-2 bg-gradient-to-br from-sage-100 to-sage-200 dark:from-sage-900/70 dark:to-sage-800/70 rounded-lg border-2 border-sage-500 dark:border-sage-600">
+                        <p className="font-bold text-sage-700 dark:text-sage-300">RM29 / 6 months</p>
                         <p className="text-neutral-700 dark:text-neutral-300">Premium - 6 Months</p>
                       </div>
-                      <div className="p-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/70 dark:to-primary-800/70 rounded-lg border-2 border-primary-500 dark:border-primary-600">
-                        <p className="font-bold text-primary-700 dark:text-primary-300">RM45 / year</p>
+                      <div className="p-2 bg-gradient-to-br from-sage-100 to-sage-200 dark:from-sage-900/70 dark:to-sage-800/70 rounded-lg border-2 border-sage-500 dark:border-sage-600">
+                        <p className="font-bold text-sage-700 dark:text-sage-300">RM45 / year</p>
                         <p className="text-neutral-700 dark:text-neutral-300">Premium - Yearly</p>
                       </div>
                     </div>
@@ -938,9 +938,9 @@ export default function ProgressPage() {
                 </GlassCard>
 
                 {/* Premium Tier */}
-                <GlassCard className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 border-2 border-primary-500 dark:border-primary-600 shadow-lg">
+                <GlassCard className="bg-gradient-to-br from-sage-50 to-sage-100 dark:from-sage-950/50 dark:to-sage-900/50 border-2 border-sage-500 dark:border-sage-600 shadow-lg">
                   <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-full mb-3">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-sage-500 to-sage-600 text-white rounded-full mb-3">
                       <Crown className="w-6 h-6" />
                     </div>
                     <h4 className="text-lg font-bold text-neutral-900 dark:text-white mb-3">
@@ -948,35 +948,35 @@ export default function ProgressPage() {
                     </h4>
                     <div className="text-left space-y-2 text-xs">
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>All assessments</strong> (9 instruments)</span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>Full detailed results</strong> with insights</span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>Email results delivery</strong></span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>All interventions</strong> (videos, quizzes)</span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>Unlimited AI chat</strong></span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>AI-generated insights</strong></span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>Progress tracking</strong></span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-sage-600 dark:text-sage-400 mt-0.5 flex-shrink-0" />
                         <span className="text-neutral-700 dark:text-neutral-300"><strong>Priority support</strong></span>
                       </div>
                     </div>
@@ -1257,9 +1257,9 @@ export default function ProgressPage() {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
+              <div className="mt-6 p-4 bg-sage-50 dark:bg-sage-900/20 rounded-lg border border-sage-200 dark:border-sage-800">
                 <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                  <strong className="text-primary-700 dark:text-primary-400">Production Ready:</strong> Assessment system, Referrals, Interventions (user-facing), Email delivery
+                  <strong className="text-sage-700 dark:text-sage-400">Production Ready:</strong> Assessment system, Referrals, Interventions (user-facing), Email delivery
                 </p>
                 <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-2">
                   <strong className="text-orange-700 dark:text-orange-400">Requires Work:</strong> Real payment processing integration, Admin content creation tools
@@ -1372,11 +1372,11 @@ export default function ProgressPage() {
                     <p className="font-semibold text-neutral-900 dark:text-white">Free Tier</p>
                     <p className="text-sm text-neutral-600 dark:text-neutral-400">Basic assessments</p>
                   </div>
-                  <div className="bg-primary-100 dark:bg-primary-900/30 rounded-lg p-3">
+                  <div className="bg-sage-100 dark:bg-sage-900/30 rounded-lg p-3">
                     <p className="font-semibold text-neutral-900 dark:text-white">Premium - 6 Months</p>
                     <p className="text-sm text-neutral-600 dark:text-neutral-400">RM29 (6 months access)</p>
                   </div>
-                  <div className="bg-primary-100 dark:bg-primary-900/30 rounded-lg p-3">
+                  <div className="bg-sage-100 dark:bg-sage-900/30 rounded-lg p-3">
                     <p className="font-semibold text-neutral-900 dark:text-white">Premium - Yearly</p>
                     <p className="text-sm text-neutral-600 dark:text-neutral-400">RM45/year</p>
                   </div>
@@ -1418,13 +1418,13 @@ export default function ProgressPage() {
                   Public Pages
                 </h3>
                 <div className="space-y-2 text-sm">
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/about</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/pricing</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/resources</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/emergency</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/login</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/register</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/about</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/pricing</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/resources</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/emergency</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/login</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/register</div>
                 </div>
               </GlassCard>
 
@@ -1434,12 +1434,12 @@ export default function ProgressPage() {
                   Assessment Flow
                 </h3>
                 <div className="space-y-2 text-sm">
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/start</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/screening</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/social</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/results/preliminary</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/test/[type]</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/test/[type]/results</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/start</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/screening</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/social</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/results/preliminary</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/test/[type]</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/test/[type]/results</div>
                 </div>
               </GlassCard>
 
@@ -1449,12 +1449,12 @@ export default function ProgressPage() {
                   User Dashboard
                 </h3>
                 <div className="space-y-2 text-sm">
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/my-assessments</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/chat</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/interventions</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/account</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/billing</div>
-                  <div className="font-mono text-primary-600 dark:text-primary-400">/checkout</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/my-assessments</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/chat</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/interventions</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/account</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/billing</div>
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/checkout</div>
                 </div>
               </GlassCard>
             </div>

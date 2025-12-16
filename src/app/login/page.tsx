@@ -144,7 +144,7 @@ function LoginForm() {
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
+                      className="w-4 h-4 rounded border-neutral-300 text-sage-500 focus:ring-sage-500"
                     />
                     <span className="text-neutral-600 dark:text-neutral-400">
                       Remember me
@@ -152,7 +152,7 @@ function LoginForm() {
                   </label>
                   <Link
                     href="/forgot-password"
-                    className="text-primary-600 hover:underline"
+                    className="text-sage-600 hover:underline"
                   >
                     Forgot password?
                   </Link>
@@ -211,7 +211,7 @@ function LoginForm() {
                 Don&apos;t have an account?{' '}
                 <Link
                   href="/register"
-                  className="text-primary-600 font-medium hover:underline"
+                  className="text-sage-600 font-medium hover:underline"
                 >
                   Sign up
                 </Link>

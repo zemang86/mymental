@@ -157,7 +157,7 @@ export default function FullResultsPage() {
         <div className="mx-auto max-w-4xl px-4">
           {/* Header Section */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-sage-400 to-sage-600 mb-4">
               <Brain className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-3">
@@ -253,7 +253,7 @@ export default function FullResultsPage() {
           {detectedConditions && detectedConditions.length > 0 && (
             <GlassCard variant="elevated" className="mb-6">
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary-500" />
+                <Sparkles className="w-5 h-5 text-sage-500" />
                 Detected Concerns
               </h2>
               <p className="text-neutral-600 dark:text-neutral-400 mb-6">
@@ -293,7 +293,7 @@ export default function FullResultsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {/* Email Results */}
             <GlassCard variant="elevated">
-              <Mail className="w-8 h-8 text-primary-500 mb-3" />
+              <Mail className="w-8 h-8 text-sage-500 mb-3" />
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
                 Email Your Results
               </h3>
@@ -321,7 +321,7 @@ export default function FullResultsPage() {
 
             {/* View Interventions */}
             <GlassCard variant="elevated">
-              <BookOpen className="w-8 h-8 text-primary-500 mb-3" />
+              <BookOpen className="w-8 h-8 text-sage-500 mb-3" />
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
                 Self-Help Interventions
               </h3>

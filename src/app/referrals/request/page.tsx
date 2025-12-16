@@ -129,7 +129,7 @@ function ReferralRequestForm() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-sage-600 animate-spin" />
       </div>
     );
   }
@@ -183,7 +183,7 @@ function ReferralRequestForm() {
           >
             <button
               onClick={() => router.back()}
-              className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 transition-colors"
+              className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-sage-600 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               {locale === 'ms' ? 'Kembali' : 'Back'}
@@ -250,13 +250,13 @@ function ReferralRequestForm() {
                       {['in_person', 'phone', 'video'].map((type) => (
                         <label
                           key={type}
-                          className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-primary-300 transition-colors cursor-pointer"
+                          className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-sage-300 transition-colors cursor-pointer"
                         >
                           <input
                             type="checkbox"
                             checked={contactPreferences.includes(type)}
                             onChange={() => handleContactPreferenceToggle(type)}
-                            className="w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                            className="w-4 h-4 rounded border-neutral-300 text-sage-600 focus:ring-sage-500"
                           />
                           <span className="text-neutral-900 dark:text-white">
                             {type === 'in_person' && (locale === 'ms' ? 'Secara Bersemuka' : 'In-Person')}
@@ -278,13 +278,13 @@ function ReferralRequestForm() {
                       {['English', 'Malay', 'Mandarin', 'Tamil'].map((lang) => (
                         <label
                           key={lang}
-                          className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-primary-300 transition-colors cursor-pointer"
+                          className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-sage-300 transition-colors cursor-pointer"
                         >
                           <input
                             type="checkbox"
                             checked={preferredLanguages.includes(lang)}
                             onChange={() => handleLanguageToggle(lang)}
-                            className="w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                            className="w-4 h-4 rounded border-neutral-300 text-sage-600 focus:ring-sage-500"
                           />
                           <span className="text-neutral-900 dark:text-white">{lang}</span>
                         </label>
@@ -305,7 +305,7 @@ function ReferralRequestForm() {
                           ? 'Beritahu kami jika anda mempunyai keperluan atau pilihan khusus...'
                           : 'Let us know if you have any specific requirements or preferences...'
                       }
-                      className="w-full p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 resize-none focus:outline-none focus:ring-2 focus:ring-sage-500"
                       rows={4}
                     />
                   </div>
@@ -345,7 +345,7 @@ export default function ReferralRequestPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-sage-600 animate-spin" />
       </div>
     }>
       <ReferralRequestForm />

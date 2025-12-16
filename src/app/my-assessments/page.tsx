@@ -188,8 +188,8 @@ export default function MyAssessmentsPage() {
             </GlassCard>
 
             <GlassCard className="text-center">
-              <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl w-fit mx-auto mb-3">
-                <FileText className="w-6 h-6 text-primary-600" />
+              <div className="p-3 bg-sage-100 dark:bg-sage-900/30 rounded-xl w-fit mx-auto mb-3">
+                <FileText className="w-6 h-6 text-sage-600" />
               </div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {assessments.length}
@@ -268,7 +268,7 @@ export default function MyAssessmentsPage() {
               animate={{ opacity: 1 }}
               className="flex items-center justify-center py-12"
             >
-              <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-sage-500" />
             </motion.div>
           )}
 
@@ -301,7 +301,7 @@ export default function MyAssessmentsPage() {
                   onClick={() => setActiveTab('screenings')}
                   className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === 'screenings'
-                      ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                      ? 'border-sage-500 text-sage-600 dark:text-sage-400'
                       : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
                   }`}
                 >
@@ -312,7 +312,7 @@ export default function MyAssessmentsPage() {
                   onClick={() => setActiveTab('assessments')}
                   className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === 'assessments'
-                      ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                      ? 'border-sage-500 text-sage-600 dark:text-sage-400'
                       : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
                   }`}
                 >
@@ -422,7 +422,7 @@ export default function MyAssessmentsPage() {
                         transition={{ delay: 0.2 + index * 0.05 }}
                       >
                         <GlassCard
-                          className="cursor-pointer hover:border-primary-400 transition-colors"
+                          className="cursor-pointer hover:border-sage-400 transition-colors"
                           onClick={() =>
                             router.push(
                               `/test/${assessment.assessment_type}/results?id=${assessment.id}&score=${assessment.total_score}&severity=${severity}`
@@ -430,8 +430,8 @@ export default function MyAssessmentsPage() {
                           }
                         >
                           <div className="flex items-center gap-4">
-                            <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-                              <IconComponent className="w-6 h-6 text-primary-600" />
+                            <div className="p-2 bg-sage-100 dark:bg-sage-900/30 rounded-lg">
+                              <IconComponent className="w-6 h-6 text-sage-600" />
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
@@ -474,10 +474,10 @@ export default function MyAssessmentsPage() {
                         <button
                           key={type}
                           onClick={() => router.push(`/test/${type}`)}
-                          className="flex items-center gap-3 p-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 hover:border-primary-400 transition-colors text-left"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 hover:border-sage-400 transition-colors text-left"
                         >
-                          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-                            <IconComponent className="w-5 h-5 text-primary-600" />
+                          <div className="p-2 bg-sage-100 dark:bg-sage-900/30 rounded-lg">
+                            <IconComponent className="w-5 h-5 text-sage-600" />
                           </div>
                           <div className="flex-1">
                             <p className="font-medium text-neutral-900 dark:text-white text-sm">
@@ -519,10 +519,10 @@ export default function MyAssessmentsPage() {
                       <button
                         key={type}
                         onClick={() => router.push(`/test/${type}`)}
-                        className="flex items-center gap-3 p-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 hover:border-primary-400 transition-colors text-left"
+                        className="flex items-center gap-3 p-3 rounded-xl bg-white/50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 hover:border-sage-400 transition-colors text-left"
                       >
-                        <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-                          <IconComponent className="w-5 h-5 text-primary-600" />
+                        <div className="p-2 bg-sage-100 dark:bg-sage-900/30 rounded-lg">
+                          <IconComponent className="w-5 h-5 text-sage-600" />
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-neutral-900 dark:text-white text-sm">
@@ -537,7 +537,7 @@ export default function MyAssessmentsPage() {
                 <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700 text-center">
                   <button
                     onClick={() => router.push('/start')}
-                    className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
+                    className="text-sm text-sage-600 hover:text-sage-700 dark:text-sage-400"
                   >
                     {t('fullScreeningAgain')} →
                   </button>

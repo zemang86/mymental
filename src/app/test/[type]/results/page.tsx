@@ -222,7 +222,7 @@ function ResultsContent() {
                           ? 'bg-red-500'
                           : scorePercentage > 40
                           ? 'bg-orange-500'
-                          : 'bg-primary-500'
+                          : 'bg-sage-500'
                       }`}
                       initial={{ width: 0 }}
                       animate={{ width: `${scorePercentage}%` }}
@@ -276,9 +276,9 @@ function ResultsContent() {
                 transition={{ delay: 0.15 }}
                 className="mb-6"
               >
-                <GlassCard className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 border-primary-200 dark:border-primary-700/30">
+                <GlassCard className="bg-gradient-to-br from-sage-50 to-sage-100 dark:from-sage-900/20 dark:to-sage-800/20 border-sage-200 dark:border-sage-700/30">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 bg-primary-500 rounded-lg flex-shrink-0">
+                    <div className="p-2 bg-sage-500 rounded-lg flex-shrink-0">
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -301,7 +301,7 @@ function ResultsContent() {
                 className="mb-6"
               >
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-primary-500" />
+                  <Brain className="w-5 h-5 text-sage-500" />
                   {isMalay ? 'Penemuan Utama' : 'Key Findings'}
                 </h2>
                 <div className="space-y-3">
@@ -328,7 +328,7 @@ function ResultsContent() {
                 className="mb-6"
               >
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-primary-500" />
+                  <Target className="w-5 h-5 text-sage-500" />
                   {isMalay ? 'Cadangan' : 'Recommendations'}
                 </h2>
                 <div className="space-y-3">
@@ -388,7 +388,7 @@ function ResultsContent() {
                   className="mb-6"
                 >
                   <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Target className="w-5 h-5 text-primary-500" />
+                    <Target className="w-5 h-5 text-sage-500" />
                     {isMalay ? 'Latihan yang Disyorkan' : 'Recommended Exercises'}
                   </h2>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
@@ -455,7 +455,7 @@ function ResultsContent() {
                 className="mb-6"
               >
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-primary-500" />
+                  <Heart className="w-5 h-5 text-sage-500" />
                   {isMalay ? 'Langkah Seterusnya' : 'Next Steps'}
                 </h2>
                 <div className="space-y-3">
@@ -521,12 +521,12 @@ function ResultsContent() {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <GlassCard
-                className="hover:border-primary-400 transition-colors cursor-pointer"
+                className="hover:border-sage-400 transition-colors cursor-pointer"
                 onClick={() => router.push('/chat')}
               >
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl">
-                    <MessageCircle className="w-6 h-6 text-primary-600" />
+                  <div className="p-3 bg-sage-100 dark:bg-sage-900/30 rounded-xl">
+                    <MessageCircle className="w-6 h-6 text-sage-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-white">
@@ -540,12 +540,12 @@ function ResultsContent() {
               </GlassCard>
 
               <GlassCard
-                className="hover:border-primary-400 transition-colors cursor-pointer"
+                className="hover:border-sage-400 transition-colors cursor-pointer"
                 onClick={() => router.push('/interventions')}
               >
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl">
-                    <Brain className="w-6 h-6 text-primary-600" />
+                  <div className="p-3 bg-sage-100 dark:bg-sage-900/30 rounded-xl">
+                    <Brain className="w-6 h-6 text-sage-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 dark:text-white">

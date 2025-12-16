@@ -144,7 +144,7 @@ export default function ReferralsPage() {
             <GlassCard className="mb-8">
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <Filter className="w-5 h-5 text-primary-600" />
+                  <Filter className="w-5 h-5 text-sage-600" />
                   <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
                     {locale === 'ms' ? 'Tapis' : 'Filters'}
                   </h2>
@@ -159,7 +159,7 @@ export default function ReferralsPage() {
                       placeholder={locale === 'ms' ? 'Cari...' : 'Search...'}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-sage-500"
                     />
                   </div>
 
@@ -169,7 +169,7 @@ export default function ReferralsPage() {
                     <select
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                     >
                       <option value="">{locale === 'ms' ? 'Semua Lokasi' : 'All Locations'}</option>
                       {uniqueLocations.map((loc) => (
@@ -186,7 +186,7 @@ export default function ReferralsPage() {
                     <select
                       value={selectedSpecialization}
                       onChange={(e) => setSelectedSpecialization(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                     >
                       <option value="">{locale === 'ms' ? 'Semua Kepakaran' : 'All Specializations'}</option>
                       {uniqueSpecializations.map((spec) => (
@@ -203,7 +203,7 @@ export default function ReferralsPage() {
                     <select
                       value={selectedLanguage}
                       onChange={(e) => setSelectedLanguage(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sage-500"
                     >
                       <option value="">{locale === 'ms' ? 'Semua Bahasa' : 'All Languages'}</option>
                       {uniqueLanguages.map((lang) => (
@@ -222,7 +222,7 @@ export default function ReferralsPage() {
                       type="checkbox"
                       checked={acceptingOnly}
                       onChange={(e) => setAcceptingOnly(e.target.checked)}
-                      className="w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                      className="w-4 h-4 rounded border-neutral-300 text-sage-600 focus:ring-sage-500"
                     />
                     {locale === 'ms' ? 'Menerima pesakit sahaja' : 'Accepting patients only'}
                   </label>
@@ -238,7 +238,7 @@ export default function ReferralsPage() {
           {/* Results */}
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+              <Loader2 className="w-8 h-8 text-sage-600 animate-spin" />
             </div>
           ) : filteredProfessionals.length === 0 ? (
             <motion.div

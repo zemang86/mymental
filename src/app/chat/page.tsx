@@ -160,8 +160,8 @@ export default function ChatPage() {
             className="mb-4"
           >
             <GlassCard className="flex items-center gap-4">
-              <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl">
-                <Bot className="w-6 h-6 text-primary-600" />
+              <div className="p-3 bg-sage-100 dark:bg-sage-900/30 rounded-xl">
+                <Bot className="w-6 h-6 text-sage-600" />
               </div>
               <div>
                 <h1 className="font-semibold text-neutral-900 dark:text-white">
@@ -199,12 +199,12 @@ export default function ChatPage() {
                           href={`tel:${hotline.number.replace(/\s|-/g, '')}`}
                           className="flex items-center gap-3 p-3 bg-white dark:bg-neutral-800 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
                         >
-                          <Phone className="w-5 h-5 text-primary-600" />
+                          <Phone className="w-5 h-5 text-sage-600" />
                           <div>
                             <p className="font-medium text-neutral-900 dark:text-white">
                               {hotline.name}
                             </p>
-                            <p className="text-primary-600 font-semibold">
+                            <p className="text-sage-600 font-semibold">
                               {hotline.number}
                             </p>
                           </div>
@@ -233,7 +233,7 @@ export default function ChatPage() {
                   <div
                     className={`max-w-[80%] ${
                       message.role === 'user'
-                        ? 'bg-primary-500 text-white rounded-2xl rounded-br-md'
+                        ? 'bg-sage-500 text-white rounded-2xl rounded-br-md'
                         : message.role === 'system'
                         ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 rounded-2xl border border-red-200 dark:border-red-800'
                         : 'glass rounded-2xl rounded-bl-md'
@@ -241,8 +241,8 @@ export default function ChatPage() {
                   >
                     {message.role === 'assistant' && (
                       <div className="flex items-center gap-2 mb-2">
-                        <Bot className="w-4 h-4 text-primary-500" />
-                        <span className="text-xs font-medium text-primary-600">
+                        <Bot className="w-4 h-4 text-sage-500" />
+                        <span className="text-xs font-medium text-sage-600">
                           Assistant
                         </span>
                       </div>
@@ -282,7 +282,7 @@ export default function ChatPage() {
               >
                 <div className="glass rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 text-primary-500 animate-spin" />
+                    <Loader2 className="w-4 h-4 text-sage-500 animate-spin" />
                     <span className="text-sm text-neutral-500">Thinking...</span>
                   </div>
                 </div>

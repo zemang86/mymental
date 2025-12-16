@@ -53,6 +53,8 @@
       "button": "Let's Get Started"
     },
     "conditions": {
+      "title": "Conditions We Support",
+      "subtitle": "Take a self-assessment to better understand your mental health. Each screening is confidential and takes just a few minutes.",
       "anxiety": {
         "title": "Anxiety",
         "description": "Excessive worry, nervousness, or fear that interferes with daily activities."

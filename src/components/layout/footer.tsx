@@ -65,7 +65,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-sage-600 dark:hover:text-sage-400 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -84,7 +84,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-sage-600 dark:hover:text-sage-400 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -103,7 +103,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-sage-600 dark:hover:text-sage-400 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -122,7 +122,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-sage-600 dark:hover:text-sage-400 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -142,7 +142,7 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
           {/* Bottom Bar */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-primary-400 to-primary-600 rounded-md flex items-center justify-center">
+              <div className="w-6 h-6 bg-gradient-to-br from-sage-400 to-sage-600 rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-xs">M</span>
               </div>
               <span className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -151,13 +151,13 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
             </div>
 
             <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
-              <Link href="/terms" className="hover:text-primary-600 transition-colors">
+              <Link href="/terms" className="hover:text-sage-600 transition-colors">
                 {t('links.termsOfService')}
               </Link>
-              <Link href="/privacy" className="hover:text-primary-600 transition-colors">
+              <Link href="/privacy" className="hover:text-sage-600 transition-colors">
                 {t('links.privacyPolicy')}
               </Link>
-              <Link href="/cookies" className="hover:text-primary-600 transition-colors">
+              <Link href="/cookies" className="hover:text-sage-600 transition-colors">
                 {t('links.cookies')}
               </Link>
             </div>

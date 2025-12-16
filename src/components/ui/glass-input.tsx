@@ -53,10 +53,10 @@ const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
               'bg-[var(--input-bg)] text-[var(--input-text)]',
               'border border-[var(--input-border)]',
               'backdrop-blur-lg',
-              // Focus states
-              'focus:outline-none focus:ring-2 focus:ring-primary-500/50',
-              'focus:border-primary-500',
-              'focus:bg-white/90 dark:focus:bg-neutral-800',
+              // Focus states - Sage wellness theme
+              'focus:outline-none focus:ring-2 focus:ring-sage-400/50',
+              'focus:border-sage-500',
+              'focus:bg-warm-50/90 dark:focus:bg-neutral-800',
               // Placeholder
               'placeholder:text-neutral-400 dark:placeholder:text-neutral-500',
               // Error state

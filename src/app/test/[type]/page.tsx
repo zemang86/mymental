@@ -222,7 +222,7 @@ export default function DetailedAssessmentPage() {
           >
             {(() => {
               const IconComponent = ICON_MAP[typeInfo.icon] || Brain;
-              return <IconComponent className="w-12 h-12 mx-auto mb-2 text-primary-500" />;
+              return <IconComponent className="w-12 h-12 mx-auto mb-2 text-sage-500" />;
             })()}
             <h1 className="text-xl font-bold text-neutral-900 dark:text-white">
               {instrument.name}
@@ -246,15 +246,15 @@ export default function DetailedAssessmentPage() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 rounded-xl bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800"
+              className="mb-6 p-4 rounded-xl bg-sage-50 dark:bg-sage-900/20 border border-sage-200 dark:border-sage-800"
             >
               <div className="flex items-start gap-3">
-                <Info className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5" />
+                <Info className="w-5 h-5 text-sage-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-primary-800 dark:text-primary-200">
+                  <p className="text-sm text-sage-800 dark:text-sage-200">
                     {instrument.timeframe}
                   </p>
-                  <p className="text-xs text-primary-600 dark:text-primary-300 mt-1">
+                  <p className="text-xs text-sage-600 dark:text-sage-300 mt-1">
                     {instrument.timeframeMs}
                   </p>
                 </div>
@@ -292,8 +292,8 @@ export default function DetailedAssessmentPage() {
                         onClick={() => handleAnswer(option.value)}
                         className={`p-4 rounded-xl text-left transition-all duration-300 border-2 ${
                           currentAnswer === option.value
-                            ? 'bg-primary-500 border-primary-500 text-white'
-                            : 'bg-white/50 dark:bg-neutral-800/50 border-white/20 dark:border-neutral-700/30 text-neutral-700 dark:text-neutral-300 hover:border-primary-400'
+                            ? 'bg-sage-500 border-sage-500 text-white'
+                            : 'bg-white/50 dark:bg-neutral-800/50 border-white/20 dark:border-neutral-700/30 text-neutral-700 dark:text-neutral-300 hover:border-sage-400'
                         }`}
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
@@ -303,7 +303,7 @@ export default function DetailedAssessmentPage() {
                             className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium ${
                               currentAnswer === option.value
                                 ? 'bg-white/20 text-white'
-                                : 'bg-primary-100 dark:bg-primary-900/30 text-primary-600'
+                                : 'bg-sage-100 dark:bg-sage-900/30 text-sage-600'
                             }`}
                           >
                             {option.value}

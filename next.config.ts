@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '*.googleusercontent.com', // Google profile pictures (wildcard)
       },
+      {
+        protocol: 'https',
+        hostname: 'mymental.online', // Partner logos
+      },
     ],
   },
 };

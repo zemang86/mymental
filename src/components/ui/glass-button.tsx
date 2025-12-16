@@ -50,34 +50,36 @@ const GlassButton = forwardRef<HTMLButtonElement, GlassButtonProps>(
           },
           // Variant styles
           {
-            // Primary - Green gradient (same in both modes)
-            'bg-gradient-to-r from-primary-500 to-primary-600 text-white border-primary-400/50':
-              variant === 'primary',
-            'hover:from-primary-600 hover:to-primary-700 focus:ring-primary-500/50':
-              variant === 'primary' && !isDisabled,
+            // Primary & Wellness - Sage gradient (calm wellness feel)
+            'bg-gradient-to-r from-sage-500 to-sage-600 text-white border-sage-400/50':
+              variant === 'primary' || variant === 'wellness',
+            'hover:from-sage-600 hover:to-sage-700 focus:ring-sage-500/50':
+              (variant === 'primary' || variant === 'wellness') && !isDisabled,
 
-            // Secondary - Glass effect
-            'bg-white/80 text-neutral-900 border-white/30':
+            // Secondary - Glass effect with warm tint
+            'bg-warm-50/80 text-neutral-900 border-warm-200/50':
               variant === 'secondary',
             'dark:bg-neutral-800/80 dark:text-white dark:border-neutral-600/30':
               variant === 'secondary',
-            'hover:bg-white/95 dark:hover:bg-neutral-700/90 focus:ring-neutral-400/50':
+            'hover:bg-warm-100/90 dark:hover:bg-neutral-700/90 focus:ring-sage-400/50':
               variant === 'secondary' && !isDisabled,
 
-            // Outline
-            'bg-transparent border-2 border-primary-500 text-primary-600':
+            // Outline & Wellness Outline - Sage bordered
+            'bg-transparent border-2 border-sage-400 text-sage-700':
+              variant === 'outline' || variant === 'wellness-outline',
+            'dark:border-sage-500 dark:text-sage-400':
               variant === 'outline',
-            'dark:border-primary-400 dark:text-primary-400':
-              variant === 'outline',
-            'hover:bg-primary-50 dark:hover:bg-primary-950/50 focus:ring-primary-500/50':
-              variant === 'outline' && !isDisabled,
+            'dark:border-sage-500 dark:text-sage-300':
+              variant === 'wellness-outline',
+            'hover:bg-sage-50 dark:hover:bg-sage-950/50 focus:ring-sage-500/50':
+              (variant === 'outline' || variant === 'wellness-outline') && !isDisabled,
 
             // Ghost
             'bg-transparent border-transparent text-neutral-700':
               variant === 'ghost',
             'dark:text-neutral-200':
               variant === 'ghost',
-            'hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 focus:ring-neutral-400/50':
+            'hover:bg-warm-100/80 dark:hover:bg-neutral-800/80 focus:ring-sage-400/50':
               variant === 'ghost' && !isDisabled,
 
             // Danger
@@ -86,19 +88,8 @@ const GlassButton = forwardRef<HTMLButtonElement, GlassButtonProps>(
             'hover:from-red-600 hover:to-red-700 focus:ring-red-500/50':
               variant === 'danger' && !isDisabled,
 
-            // Wellness - Soft sage gradient, rounded, calm feel
-            'bg-gradient-to-r from-sage-500 to-sage-600 text-white border-sage-400/50 rounded-2xl':
-              variant === 'wellness',
-            'hover:from-sage-600 hover:to-sage-700 focus:ring-sage-500/50':
-              variant === 'wellness' && !isDisabled,
-
-            // Wellness Outline - Soft bordered button
-            'bg-transparent border-2 border-sage-400 text-sage-700 rounded-2xl':
-              variant === 'wellness-outline',
-            'dark:border-sage-500 dark:text-sage-300':
-              variant === 'wellness-outline',
-            'hover:bg-sage-50 dark:hover:bg-sage-950/50 focus:ring-sage-400/50':
-              variant === 'wellness-outline' && !isDisabled,
+            // Rounded corners for wellness variants
+            'rounded-2xl': variant === 'wellness' || variant === 'wellness-outline',
           },
           className
         )}

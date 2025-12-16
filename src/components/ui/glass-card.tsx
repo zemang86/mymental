@@ -42,8 +42,9 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
           },
           // Variant styles
           {
-            'p-6': variant === 'default',
-            'p-8 shadow-xl rounded-3xl': variant === 'elevated',
+            // Default - subtle warm tint for wellness feel
+            'p-6 bg-warm-50/50 dark:bg-neutral-900/80 border-warm-100 dark:border-neutral-800': variant === 'default',
+            'p-8 shadow-xl rounded-3xl bg-warm-50 dark:bg-neutral-900 border-warm-200 dark:border-neutral-800': variant === 'elevated',
             'p-4 rounded-xl opacity-80': variant === 'subtle',
             // Wellness - Warm, soft card with rounded corners
             'p-6 rounded-3xl bg-warm-50 border-warm-200 dark:bg-neutral-900 dark:border-sage-800/30':

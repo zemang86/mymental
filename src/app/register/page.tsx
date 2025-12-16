@@ -170,8 +170,8 @@ export default function RegisterPage() {
             >
               <GlassCard variant="elevated">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mx-auto mb-4">
-                    <Mail className="w-8 h-8 text-primary-600" />
+                  <div className="w-16 h-16 rounded-full bg-sage-100 dark:bg-sage-900/30 flex items-center justify-center mx-auto mb-4">
+                    <Mail className="w-8 h-8 text-sage-600" />
                   </div>
                   <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
                     Check Your Email
@@ -220,7 +220,7 @@ export default function RegisterPage() {
                       type="button"
                       onClick={handleResendOTP}
                       disabled={isLoading}
-                      className="text-primary-600 font-medium hover:underline disabled:opacity-50"
+                      className="text-sage-600 font-medium hover:underline disabled:opacity-50"
                     >
                       Resend
                     </button>
@@ -317,7 +317,7 @@ export default function RegisterPage() {
                     <div
                       className={`flex items-center gap-2 ${
                         passwordValidation.minLength
-                          ? 'text-green-600'
+                          ? 'text-sage-600'
                           : 'text-neutral-500'
                       }`}
                     >
@@ -331,7 +331,7 @@ export default function RegisterPage() {
                     <div
                       className={`flex items-center gap-2 ${
                         passwordValidation.hasNumber
-                          ? 'text-green-600'
+                          ? 'text-sage-600'
                           : 'text-neutral-500'
                       }`}
                     >
@@ -364,20 +364,20 @@ export default function RegisterPage() {
                     type="checkbox"
                     checked={acceptTerms}
                     onChange={(e) => setAcceptTerms(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
+                    className="mt-1 w-4 h-4 rounded border-neutral-300 text-sage-500 focus:ring-sage-500"
                   />
                   <span className="text-sm text-neutral-600 dark:text-neutral-400">
                     I agree to the{' '}
                     <Link
                       href="/terms"
-                      className="text-primary-600 hover:underline"
+                      className="text-sage-600 hover:underline"
                     >
                       Terms of Service
                     </Link>{' '}
                     and{' '}
                     <Link
                       href="/privacy"
-                      className="text-primary-600 hover:underline"
+                      className="text-sage-600 hover:underline"
                     >
                       Privacy Policy
                     </Link>
@@ -399,7 +399,7 @@ export default function RegisterPage() {
                 Already have an account?{' '}
                 <Link
                   href="/login"
-                  className="text-primary-600 font-medium hover:underline"
+                  className="text-sage-600 font-medium hover:underline"
                 >
                   Sign in
                 </Link>

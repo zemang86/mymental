@@ -90,7 +90,7 @@ export default function BillingPage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-24 pb-12 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-sage-500" />
         </main>
         <Footer />
       </div>
@@ -261,13 +261,13 @@ export default function BillingPage() {
           >
             <GlassCard>
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2 mb-6">
-                <CreditCard className="w-5 h-5 text-primary-500" />
+                <CreditCard className="w-5 h-5 text-sage-500" />
                 Payment History
               </h2>
 
               {isLoadingPayments ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-primary-500" />
+                  <Loader2 className="w-6 h-6 animate-spin text-sage-500" />
                 </div>
               ) : payments.length > 0 ? (
                 <div className="overflow-x-auto">
@@ -323,7 +323,7 @@ export default function BillingPage() {
                             </span>
                           </td>
                           <td className="py-3 px-4 text-right">
-                            <button className="text-primary-600 hover:text-primary-700">
+                            <button className="text-sage-600 hover:text-sage-700">
                               <Download className="w-4 h-4" />
                             </button>
                           </td>
@@ -351,7 +351,7 @@ export default function BillingPage() {
             >
               <GlassCard
                 variant="elevated"
-                className="text-center bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20"
+                className="text-center bg-gradient-to-r from-sage-50 to-sage-100 dark:from-sage-900/20 dark:to-sage-800/20"
               >
                 <Crown className="w-12 h-12 text-amber-500 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">

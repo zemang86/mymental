@@ -83,8 +83,8 @@ export default function AboutPage() {
           >
             <GlassCard variant="elevated">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-xl">
-                  <Target className="w-8 h-8 text-primary-600" />
+                <div className="p-3 bg-sage-100 dark:bg-sage-900/30 rounded-xl">
+                  <Target className="w-8 h-8 text-sage-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
@@ -125,8 +125,8 @@ export default function AboutPage() {
                 >
                   <GlassCard className="h-full">
                     <div className="flex items-start gap-4">
-                      <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-                        <value.icon className="w-6 h-6 text-primary-600" />
+                      <div className="p-2 bg-sage-100 dark:bg-sage-900/30 rounded-lg">
+                        <value.icon className="w-6 h-6 text-sage-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
@@ -158,7 +158,7 @@ export default function AboutPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-sage-500 flex-shrink-0 mt-0.5" />
                     <span className="text-neutral-700 dark:text-neutral-300">
                       {feature}
                     </span>

@@ -92,7 +92,7 @@ export function Header({ className }: HeaderProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-sage-400 to-sage-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">M</span>
             </div>
             <span className="text-xl font-bold text-neutral-900 dark:text-white">
@@ -106,7 +106,7 @@ export function Header({ className }: HeaderProps) {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-neutral-600 hover:text-primary-600 dark:text-neutral-300 dark:hover:text-primary-400 transition-colors"
+                className="text-sm font-medium text-neutral-600 hover:text-sage-600 dark:text-neutral-300 dark:hover:text-sage-400 transition-colors"
               >
                 {item.name}
               </Link>
@@ -116,7 +116,7 @@ export function Header({ className }: HeaderProps) {
             <div className="relative">
               <button
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                className="flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-primary-600 dark:text-neutral-300 transition-colors"
+                className="flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-sage-600 dark:text-neutral-300 transition-colors"
               >
                 <Globe className="w-4 h-4" />
                 <span className="uppercase">{currentLang}</span>
@@ -137,8 +137,8 @@ export function Header({ className }: HeaderProps) {
                         onClick={() => handleLanguageChange(lang.code)}
                         className={cn(
                           'w-full px-4 py-2 text-left text-sm flex items-center gap-2',
-                          'hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors',
-                          currentLang === lang.code && 'bg-primary-50 dark:bg-primary-900/20 text-primary-600'
+                          'hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors',
+                          currentLang === lang.code && 'bg-sage-50 dark:bg-sage-900/20 text-sage-600'
                         )}
                       >
                         <span>{lang.flag}</span>
@@ -168,7 +168,7 @@ export function Header({ className }: HeaderProps) {
                       className="w-7 h-7 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-7 h-7 rounded-full bg-primary-500 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-full bg-sage-500 flex items-center justify-center">
                       <span className="text-white text-sm font-medium">
                         {user.email?.charAt(0).toUpperCase()}
                       </span>
@@ -197,7 +197,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/my-assessments"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
                           {t('assessments')}
@@ -205,7 +205,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/interventions"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <BookOpen className="w-4 h-4" />
                           {t('resources')}
@@ -213,7 +213,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/activities"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <Sparkles className="w-4 h-4" />
                           Activities
@@ -221,7 +221,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/chat"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
                           AI Chat
@@ -231,7 +231,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/account"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <User className="w-4 h-4" />
                           {t('account')}
@@ -239,7 +239,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/billing"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <CreditCard className="w-4 h-4" />
                           {t('billing')}
@@ -294,7 +294,7 @@ export function Header({ className }: HeaderProps) {
                     key={item.name}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-4 py-2 text-base font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                    className="block px-4 py-2 text-base font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -310,8 +310,8 @@ export function Header({ className }: HeaderProps) {
                         className={cn(
                           'px-3 py-1 rounded-full text-sm',
                           currentLang === lang.code
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white/50 dark:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300'
+                            ? 'bg-sage-500 text-white'
+                            : 'bg-warm-50 dark:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300'
                         )}
                       >
                         {lang.flag}
@@ -332,7 +332,7 @@ export function Header({ className }: HeaderProps) {
                               className="w-10 h-10 rounded-full object-cover"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-full bg-sage-500 flex items-center justify-center">
                               <span className="text-white font-medium">
                                 {user.email?.charAt(0).toUpperCase()}
                               </span>
@@ -348,7 +348,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/my-assessments"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
                           {t('assessments')}
@@ -356,7 +356,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/interventions"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <BookOpen className="w-4 h-4" />
                           {t('resources')}
@@ -364,7 +364,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/activities"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <Sparkles className="w-4 h-4" />
                           Activities
@@ -372,7 +372,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/chat"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
                           AI Chat
@@ -381,7 +381,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/account"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <User className="w-4 h-4" />
                           {t('account')}
@@ -389,7 +389,7 @@ export function Header({ className }: HeaderProps) {
                         <Link
                           href="/billing"
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <CreditCard className="w-4 h-4" />
                           {t('billing')}

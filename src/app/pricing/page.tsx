@@ -102,7 +102,7 @@ export default function PricingPage() {
                 onClick={() => setBillingInterval('6_months')}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   billingInterval === '6_months'
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-sage-500 text-white'
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                 }`}
               >
@@ -112,12 +112,12 @@ export default function PricingPage() {
                 onClick={() => setBillingInterval('yearly')}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
                   billingInterval === 'yearly'
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-sage-500 text-white'
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                 }`}
               >
                 Yearly
-                <span className="ml-2 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full">
+                <span className="ml-2 text-xs bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-400 px-2 py-0.5 rounded-full">
                   Save 35%
                 </span>
               </button>
@@ -136,12 +136,12 @@ export default function PricingPage() {
                 <GlassCard
                   variant={plan.popular ? 'elevated' : 'default'}
                   className={`relative h-full ${
-                    plan.popular ? 'ring-2 ring-primary-500' : ''
+                    plan.popular ? 'ring-2 ring-sage-500' : ''
                   }`}
                 >
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="bg-primary-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      <span className="bg-sage-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
                         Most Popular
                       </span>
                     </div>
@@ -178,12 +178,12 @@ export default function PricingPage() {
                         )}
                       </div>
                       {plan.interval === '6_months' && (
-                        <p className="text-sm text-primary-600 dark:text-primary-400 mt-1">
+                        <p className="text-sm text-sage-600 dark:text-sage-400 mt-1">
                           For 6 months access
                         </p>
                       )}
                       {plan.interval === 'yearly' && (
-                        <p className="text-sm text-green-600 dark:text-green-400 mt-1">
+                        <p className="text-sm text-sage-600 dark:text-sage-400 mt-1">
                           {formatPrice(Math.round(plan.price / 12))}/month billed yearly
                         </p>
                       )}
@@ -193,7 +193,7 @@ export default function PricingPage() {
                     <ul className="space-y-3 mb-6">
                       {plan.features.map((feature, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <Check className="w-5 h-5 text-sage-500 flex-shrink-0 mt-0.5" />
                           <span className="text-sm text-neutral-600 dark:text-neutral-400">
                             {feature}
                           </span>
@@ -245,15 +245,15 @@ export default function PricingPage() {
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 text-sm text-neutral-500">
                   <span className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-500" />
+                    <Check className="w-4 h-4 text-sage-500" />
                     Secure & confidential
                   </span>
                   <span className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-500" />
+                    <Check className="w-4 h-4 text-sage-500" />
                     Cancel anytime
                   </span>
                   <span className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-500" />
+                    <Check className="w-4 h-4 text-sage-500" />
                     Malaysian support
                   </span>
                 </div>

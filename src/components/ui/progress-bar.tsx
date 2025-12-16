@@ -61,11 +61,11 @@ export function ProgressBar({
         <motion.div
           className={cn(
             'h-full rounded-full',
-            // Gradient variants
+            // Gradient variants - Wellness sage theme
             {
-              'bg-gradient-to-r from-primary-400 to-primary-600': variant === 'default',
-              'bg-gradient-to-r from-green-400 to-green-600': variant === 'success',
-              'bg-gradient-to-r from-yellow-400 to-orange-500': variant === 'warning',
+              'bg-gradient-to-r from-sage-400 to-sage-600': variant === 'default',
+              'bg-gradient-to-r from-sage-400 to-sage-500': variant === 'success',
+              'bg-gradient-to-r from-warm-400 to-warm-500': variant === 'warning',
               'bg-gradient-to-r from-red-400 to-red-600': variant === 'danger',
             }
           )}
@@ -116,8 +116,8 @@ export function ProgressSteps({
                     className={cn(
                       'absolute left-0 right-1/2 h-0.5 -translate-y-1/2 top-1/2',
                       isCompleted || isCurrent
-                        ? 'bg-primary-500'
-                        : 'bg-neutral-200 dark:bg-neutral-700'
+                        ? 'bg-sage-500'
+                        : 'bg-warm-200 dark:bg-neutral-700'
                     )}
                   />
                 )}
@@ -130,12 +130,12 @@ export function ProgressSteps({
                     'transition-colors duration-300',
                     {
                       // Completed
-                      'bg-primary-500 border-primary-500 text-white': isCompleted,
+                      'bg-sage-500 border-sage-500 text-white': isCompleted,
                       // Current
-                      'bg-white dark:bg-neutral-900 border-primary-500 text-primary-600':
+                      'bg-warm-50 dark:bg-neutral-900 border-sage-500 text-sage-600':
                         isCurrent,
                       // Upcoming
-                      'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-400':
+                      'bg-warm-50 dark:bg-neutral-900 border-warm-200 dark:border-neutral-700 text-neutral-400':
                         !isCompleted && !isCurrent,
                     }
                   )}
@@ -166,8 +166,8 @@ export function ProgressSteps({
                     className={cn(
                       'absolute left-1/2 right-0 h-0.5 -translate-y-1/2 top-1/2',
                       isCompleted
-                        ? 'bg-primary-500'
-                        : 'bg-neutral-200 dark:bg-neutral-700'
+                        ? 'bg-sage-500'
+                        : 'bg-warm-200 dark:bg-neutral-700'
                     )}
                   />
                 )}
@@ -179,7 +179,7 @@ export function ProgressSteps({
                   className={cn(
                     'mt-2 text-xs font-medium text-center',
                     isCurrent
-                      ? 'text-primary-600 dark:text-primary-400'
+                      ? 'text-sage-600 dark:text-sage-400'
                       : 'text-neutral-500'
                   )}
                 >

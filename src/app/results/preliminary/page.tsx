@@ -169,8 +169,8 @@ export default function PreliminaryResultsPage() {
             >
               <div className="flex flex-col sm:flex-row items-center gap-6">
                 {/* Image placeholder - in production use actual image */}
-                <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 flex items-center justify-center flex-shrink-0">
-                  <Brain className="w-16 h-16 text-primary-600 dark:text-primary-400" />
+                <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-sage-100 to-sage-200 dark:from-sage-900/30 dark:to-sage-800/30 flex items-center justify-center flex-shrink-0">
+                  <Brain className="w-16 h-16 text-sage-600 dark:text-sage-400" />
                 </div>
 
                 <div className="flex-1 text-center sm:text-left">
@@ -243,7 +243,7 @@ export default function PreliminaryResultsPage() {
                   >
                     <GlassCard className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-primary-500" />
+                        <div className="w-2 h-2 rounded-full bg-sage-500" />
                         <div>
                           <span className="font-medium text-neutral-900 dark:text-white">
                             {CONDITION_NAMES[condition]?.name || condition}
@@ -279,7 +279,7 @@ export default function PreliminaryResultsPage() {
               className="mb-8"
             >
               <GlassCard className="text-center py-8">
-                <CheckCircle className="w-12 h-12 text-primary-500 mx-auto mb-4" />
+                <CheckCircle className="w-12 h-12 text-sage-500 mx-auto mb-4" />
                 <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">
                   No immediate concerns detected
                 </h3>
@@ -369,11 +369,11 @@ export default function PreliminaryResultsPage() {
 
           <p className="text-xs text-neutral-500 text-center">
             By clicking &quot;Get my result&quot; you agree to our{' '}
-            <a href="/terms" className="text-primary-600 hover:underline">
+            <a href="/terms" className="text-sage-600 hover:underline">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="/privacy" className="text-primary-600 hover:underline">
+            <a href="/privacy" className="text-sage-600 hover:underline">
               Privacy Policy
             </a>
           </p>

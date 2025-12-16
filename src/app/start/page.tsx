@@ -124,7 +124,7 @@ export default function StartPage() {
                 type="checkbox"
                 checked={hasAcceptedTerms}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="mt-1 w-5 h-5 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
+                className="mt-1 w-5 h-5 rounded border-neutral-300 text-sage-500 focus:ring-sage-500"
               />
               <div>
                 <span className="font-medium text-neutral-900 dark:text-white">
@@ -132,7 +132,7 @@ export default function StartPage() {
                 </span>
                 <p className="text-sm text-neutral-500 mt-1">
                   I have read and agree to the{' '}
-                  <a href="/terms" className="text-primary-600 hover:underline">
+                  <a href="/terms" className="text-sage-600 hover:underline">
                     Terms of Service
                   </a>
                 </p>
@@ -144,7 +144,7 @@ export default function StartPage() {
                 type="checkbox"
                 checked={hasAcceptedPrivacy}
                 onChange={(e) => setPrivacyAccepted(e.target.checked)}
-                className="mt-1 w-5 h-5 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
+                className="mt-1 w-5 h-5 rounded border-neutral-300 text-sage-500 focus:ring-sage-500"
               />
               <div>
                 <span className="font-medium text-neutral-900 dark:text-white">
@@ -152,7 +152,7 @@ export default function StartPage() {
                 </span>
                 <p className="text-sm text-neutral-500 mt-1">
                   I have read and agree to the{' '}
-                  <a href="/privacy" className="text-primary-600 hover:underline">
+                  <a href="/privacy" className="text-sage-600 hover:underline">
                     Privacy Policy
                   </a>
                 </p>
@@ -160,8 +160,8 @@ export default function StartPage() {
             </label>
           </div>
 
-          <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-800">
-            <p className="text-sm text-primary-800 dark:text-primary-200">
+          <div className="p-4 bg-sage-50 dark:bg-sage-900/20 rounded-xl border border-sage-200 dark:border-sage-800">
+            <p className="text-sm text-sage-800 dark:text-sage-200">
               <strong>Disclaimer:</strong> This screening is not a diagnosis. Only a
               licensed professional can provide a complete assessment. This is simply
               an initial step to help you understand your mental well-being better.
@@ -220,8 +220,8 @@ export default function StartPage() {
                 onClick={() => setDemographics({ [field.key]: option.value })}
                 className={`p-4 rounded-xl text-left transition-all duration-300 border-2 ${
                   demographics[field.key as keyof typeof demographics] === option.value
-                    ? 'bg-primary-500 border-primary-500 text-white'
-                    : 'bg-white/50 dark:bg-neutral-800/50 border-white/20 dark:border-neutral-700/30 text-neutral-700 dark:text-neutral-300 hover:border-primary-400'
+                    ? 'bg-sage-500 border-sage-500 text-white'
+                    : 'bg-white/50 dark:bg-neutral-800/50 border-white/20 dark:border-neutral-700/30 text-neutral-700 dark:text-neutral-300 hover:border-sage-400'
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -242,7 +242,7 @@ export default function StartPage() {
               onClick={() => setDemographics({ [field.key]: true })}
               className={`flex-1 p-4 rounded-xl font-medium transition-all duration-300 border-2 ${
                 demographics[field.key as keyof typeof demographics] === true
-                  ? 'bg-primary-500 border-primary-500 text-white'
+                  ? 'bg-sage-500 border-sage-500 text-white'
                   : 'bg-white/50 dark:bg-neutral-800/50 border-white/20 dark:border-neutral-700/30'
               }`}
               whileHover={{ scale: 1.02 }}
@@ -287,11 +287,11 @@ export default function StartPage() {
           {/* Info badges */}
           <div className="flex flex-wrap gap-3 justify-center mb-8">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 dark:bg-neutral-800/50 text-sm text-neutral-600 dark:text-neutral-400">
-              <Shield className="w-4 h-4 text-primary-500" />
+              <Shield className="w-4 h-4 text-sage-500" />
               Private & Secure
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 dark:bg-neutral-800/50 text-sm text-neutral-600 dark:text-neutral-400">
-              <Clock className="w-4 h-4 text-primary-500" />
+              <Clock className="w-4 h-4 text-sage-500" />
               ~2 minutes
             </div>
           </div>
