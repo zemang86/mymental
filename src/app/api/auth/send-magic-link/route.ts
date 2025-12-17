@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 <body>
   <div class="container">
     <h1>🔐 Your Verification Code</h1>
-    <p style="color: #6b7280; font-size: 16px;">Enter this code to continue with your MyMental purchase:</p>
+    <p style="color: #6b7280; font-size: 16px;">Enter this code to continue with your Serini purchase:</p>
 
     <div class="code">${code}</div>
 
@@ -52,8 +52,8 @@ export async function POST(request: NextRequest) {
     </div>
 
     <div class="footer">
-      MyMental - Your Mental Health Companion
-      <br>© ${new Date().getFullYear()} MyMental. All rights reserved.
+      Serini - Your Mental Health Companion
+      <br>© ${new Date().getFullYear()} Serini. All rights reserved.
     </div>
   </div>
 </body>
@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
 
     // Send OTP via Resend
     const { error } = await resend.emails.send({
-      from: 'MyMental <noreply@kitamen.my>',
+      from: 'Serini <noreply@kitamen.my>',
       to: [email],
-      subject: `Your MyMental verification code: ${code}`,
+      subject: `Your Serini verification code: ${code}`,
       html: emailHtml,
     });
 

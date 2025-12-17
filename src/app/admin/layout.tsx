@@ -4,8 +4,8 @@ import { AdminSidebar } from '@/components/admin/sidebar';
 import { AdminHeader } from '@/components/admin/header';
 
 export const metadata = {
-  title: 'Admin Dashboard | MyMental',
-  description: 'MyMental Administration Dashboard',
+  title: 'Admin Dashboard | Serini',
+  description: 'Serini Administration Dashboard',
 };
 
 export default async function AdminLayout({

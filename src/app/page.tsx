@@ -68,15 +68,15 @@ const IMAGES = {
 // Testimonials
 const TESTIMONIALS = [
   {
-    quote: 'Ujian saringan MyMental buat saya sedar yang kekuatan saya sebenarnya lebih dan yang saya sangka. Tiap la bagi saya perpustakaan dan keyakinan untuk dapatkan sokongan yang tepat.',
+    quote: 'Ujian saringan Serini buat saya sedar yang kekuatan saya sebenarnya lebih dan yang saya sangka. Tiap la bagi saya perpustakaan dan keyakinan untuk dapatkan sokongan yang tepat.',
     author: 'Anonymous User',
   },
   {
-    quote: 'MyMental buat saya sedar yang jaga kesihatan mental tu sebenarnya satu kekuatan. Setiap soal baris saya berkembang sebagai diri sendiri dan hadapi hidup dengan lebih yakin.',
+    quote: 'Serini buat saya sedar yang jaga kesihatan mental tu sebenarnya satu kekuatan. Setiap soal baris saya berkembang sebagai diri sendiri dan hadapi hidup dengan lebih yakin.',
     author: 'Anonymous User',
   },
   {
-    quote: 'Ujian saringan MyMental buat saya lebih faham diri sendiri dan jadi titik mula untuk saya mengubah ke arah kesihatan mental yang lebih baik.',
+    quote: 'Ujian saringan Serini buat saya lebih faham diri sendiri dan jadi titik mula untuk saya mengubah ke arah kesihatan mental yang lebih baik.',
     author: 'Anonymous User',
   },
 ];
@@ -86,6 +86,7 @@ export default function HomePage() {
   const faqItems = t.raw('faq.items') as Array<{ question: string; answer: string }>;
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -132,7 +133,7 @@ export default function HomePage() {
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-tight">
                   {t('hero.title')}{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-sage-600 to-sage-400">
+                  <span className="text-sage-600 dark:text-sage-400">
                     {t('hero.titleHighlight')}
                   </span>
                 </h1>
@@ -197,7 +198,7 @@ export default function HomePage() {
                 {/* Partner logos */}
                 <div className="h-12 px-4 bg-white/90 rounded-lg flex items-center justify-center">
                   <Image
-                    src="https://mymental.online/assets/images/home/az_zahrah_logo_landing.svg"
+                    src="/logos/az_zahrah_logo_landing.svg"
                     alt="Az-Zahrah"
                     width={100}
                     height={40}
@@ -206,7 +207,7 @@ export default function HomePage() {
                 </div>
                 <div className="h-12 px-4 bg-white/90 rounded-lg flex items-center justify-center">
                   <Image
-                    src="https://mymental.online/assets/images/home/ukm_logo_landing.svg"
+                    src="/logos/ukm_logo_landing.svg"
                     alt="UKM"
                     width={100}
                     height={40}
@@ -215,8 +216,8 @@ export default function HomePage() {
                 </div>
                 <div className="h-12 px-4 bg-white/90 rounded-lg flex items-center justify-center">
                   <Image
-                    src="https://mymental.online/assets/images/home/logo_hk.png"
-                    alt="HK"
+                    src="/logos/logo_hk.png"
+                    alt="Hikmah Vision"
                     width={100}
                     height={40}
                     className="h-8 w-auto object-contain"
@@ -236,17 +237,32 @@ export default function HomePage() {
               viewport={{ once: true }}
             >
               <GlassCard variant="elevated" className="overflow-hidden">
-                <div className="relative aspect-video bg-neutral-200 dark:bg-neutral-800 rounded-xl flex items-center justify-center group cursor-pointer overflow-hidden">
-                  <Image
-                    src={IMAGES.video}
-                    alt="Why MyMental video"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-                  <button className="relative z-10 w-20 h-20 rounded-full bg-white dark:bg-neutral-900 shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 text-sage-600 ml-1" fill="currentColor" />
-                  </button>
+                <div className="relative aspect-video bg-neutral-200 dark:bg-neutral-800 rounded-xl flex items-center justify-center overflow-hidden">
+                  {isVideoPlaying ? (
+                    <iframe
+                      src="https://www.youtube.com/embed/inpok4MKVLM?autoplay=1&rel=0"
+                      title="Why Mental Health Matters"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full rounded-xl"
+                    />
+                  ) : (
+                    <div
+                      className="relative w-full h-full group cursor-pointer"
+                      onClick={() => setIsVideoPlaying(true)}
+                    >
+                      <Image
+                        src="https://img.youtube.com/vi/inpok4MKVLM/maxresdefault.jpg"
+                        alt="Why Mental Health Matters"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+                      <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-20 h-20 rounded-full bg-white dark:bg-neutral-900 shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Play className="w-8 h-8 text-sage-600 ml-1" fill="currentColor" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </GlassCard>
             </motion.div>
@@ -397,8 +413,36 @@ export default function HomePage() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 bg-sage-700 dark:bg-sage-800">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="py-24 bg-gradient-to-b from-warm-50 via-white to-sage-50/30 dark:from-neutral-900 dark:via-neutral-950 dark:to-sage-950/20 relative overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-10 left-10 opacity-20 pointer-events-none">
+            <BreathingCircle size="lg" color="sage" />
+          </div>
+          <div className="absolute bottom-10 right-10 opacity-15 pointer-events-none">
+            <BreathingCircle size="md" color="lavender" />
+          </div>
+
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Section Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Heart className="w-5 h-5 text-sage-500" />
+                <span className="text-sm font-medium text-sage-600 dark:text-sage-400">Real Stories</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+                What Our Users Say
+              </h2>
+              <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+                Hear from people who have taken the first step towards understanding their mental health
+              </p>
+            </motion.div>
+
+            {/* Testimonial Cards */}
             <div className="grid md:grid-cols-3 gap-8">
               {TESTIMONIALS.map((testimonial, index) => (
                 <motion.div
@@ -408,31 +452,40 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 h-full">
-                    <Quote className="w-10 h-10 text-sage-300 mb-4" />
-                    <p className="text-white/90 text-sm leading-relaxed mb-4">
-                      {testimonial.quote}
-                    </p>
-                    <p className="text-sage-300 text-sm font-medium">
-                      - {testimonial.author}
-                    </p>
+                  <div className="relative bg-white dark:bg-neutral-800/50 rounded-3xl p-8 border border-sage-100 dark:border-sage-800/30 shadow-sm hover:shadow-md transition-all duration-300 h-full group">
+                    {/* Quote icon */}
+                    <div className="absolute -top-4 left-8">
+                      <div className="w-10 h-10 bg-gradient-to-br from-sage-400 to-sage-500 rounded-2xl flex items-center justify-center shadow-lg">
+                        <Quote className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="pt-4">
+                      <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-6 italic">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </p>
+
+                      {/* Author */}
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sage-100 to-lavender-100 dark:from-sage-800 dark:to-lavender-800 flex items-center justify-center">
+                          <span className="text-sage-600 dark:text-sage-400 font-medium text-sm">
+                            {testimonial.author.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900 dark:text-white text-sm">
+                            {testimonial.author}
+                          </p>
+                          <p className="text-xs text-sage-600 dark:text-sage-400">
+                            Verified User
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </motion.div>
-              ))}
-            </div>
-
-            {/* Testimonial dots */}
-            <div className="flex justify-center gap-2 mt-8">
-              {TESTIMONIALS.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentTestimonial === index
-                      ? 'bg-white'
-                      : 'bg-white/30 hover:bg-white/50'
-                  }`}
-                />
               ))}
             </div>
           </div>

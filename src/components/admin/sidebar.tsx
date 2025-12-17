@@ -109,7 +109,7 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
           <Brain className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="font-bold text-white">MyMental</h1>
+          <h1 className="font-bold text-white">Serini</h1>
           <p className="text-xs text-neutral-400">Admin Portal</p>
         </div>
       </div>

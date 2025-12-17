@@ -42,12 +42,12 @@ export default function AssessmentResultsEmail({
       <Head />
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Your MyMental Assessment Results</Heading>
+          <Heading style={h1}>Your Serini Assessment Results</Heading>
 
           <Text style={text}>Dear {userName},</Text>
 
           <Text style={text}>
-            Thank you for completing your mental health assessment with MyMental.
+            Thank you for completing your mental health assessment with Serini.
             Below is a summary of your results.
           </Text>
 
@@ -118,9 +118,9 @@ export default function AssessmentResultsEmail({
           </Text>
 
           <Text style={footer}>
-            MyMental - Your Mental Health Companion
+            Serini - Your Mental Health Companion
             <br />
-            © {new Date().getFullYear()} MyMental. All rights reserved.
+            © {new Date().getFullYear()} Serini. All rights reserved.
           </Text>
         </Container>
       </Body>

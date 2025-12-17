@@ -141,12 +141,14 @@ export function Footer({ showEmergencyBanner = true, className }: FooterProps) {
 
           {/* Bottom Bar */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-sage-400 to-sage-600 rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-xs">M</span>
-              </div>
+            <div className="flex items-center gap-3">
+              <img
+                src="/logos/b36623dc-179c-4457-8580-7e9fd3505cc6.svg"
+                alt="Serini"
+                className="h-8 w-auto"
+              />
               <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                {currentYear} MyMental
+                © {currentYear}
               </span>
             </div>
 

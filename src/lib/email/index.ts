@@ -38,12 +38,12 @@ export async function sendAssessmentResults({
 
     // Use verified kitamen.my domain
     const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'noreply@kitamen.my';
-    const fromName = 'MyMental';
+    const fromName = 'Serini';
 
     const { data, error } = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,
       to: [to],
-      subject: 'Your MyMental Assessment Results',
+      subject: 'Your Serini Assessment Results',
       html: emailHtml,
     });
 
@@ -73,7 +73,7 @@ export async function sendEmail({
 }) {
   try {
     const fromEmail = process.env.NEXT_PUBLIC_FROM_EMAIL || 'noreply@kitamen.my';
-    const fromName = 'MyMental';
+    const fromName = 'Serini';
 
     const { data, error } = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,

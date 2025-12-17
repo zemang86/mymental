@@ -1,13 +1,20 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@500;600;700&family=Nunito:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 /* Configure dark mode variant for Tailwind v4 */
 @variant dark (.dark &);
 
 /* ============================================
-   MyMental Design System - Glassmorphism 2025
+   Serini Design System - Glassmorphism 2025
    ============================================ */
 
 :root {
+  /* Typography */
+  --font-display: 'Albert Sans', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+
   /* Primary Colors - Soft Greens */
   --primary-50: #f0fdf4;
   --primary-100: #dcfce7;
@@ -219,8 +226,9 @@
   --color-ocean-900: var(--wellness-ocean-900);
 
   /* Fonts */
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono), monospace;
+  --font-display: var(--font-display);
 }
 
 /* ============================================
@@ -234,8 +242,22 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   min-height: 100vh;
+}
+
+/* Typography - Display font for headings, nav, buttons */
+h1, h2, h3, h4, h5, h6,
+.logo, nav, button, .btn,
+[class*="font-semibold"],
+[class*="font-bold"] {
+  font-family: var(--font-display);
+}
+
+/* Typography - Body font for text content */
+p, li, span, label, input, textarea, select,
+.prose, .text-body {
+  font-family: var(--font-body);
 }
 
 /* Input placeholder styling */

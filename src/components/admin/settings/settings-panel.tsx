@@ -32,8 +32,8 @@ interface SystemSettings {
 }
 
 const defaultSettings: SystemSettings = {
-  platform_name: 'MyMental',
-  support_email: 'support@mymental.com',
+  platform_name: 'Serini',
+  support_email: 'support@serini.app',
   default_language: 'en',
   maintenance_mode: false,
   notify_crisis_alerts: true,

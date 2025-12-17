@@ -66,7 +66,7 @@ export default function AboutPage() {
             className="text-center mb-12"
           >
             <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-              About MyMental
+              About Serini
             </h1>
             <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
               Making mental health support accessible to all Malaysians through
@@ -179,7 +179,7 @@ export default function AboutPage() {
                 Important Note
               </h3>
               <p className="text-sm text-amber-700 dark:text-amber-300">
-                MyMental is not a substitute for professional medical advice, diagnosis,
+                Serini is not a substitute for professional medical advice, diagnosis,
                 or treatment. Our screenings are for informational purposes only. If you
                 are experiencing a mental health crisis, please contact emergency services
                 or call Talian Kasih at 15999.

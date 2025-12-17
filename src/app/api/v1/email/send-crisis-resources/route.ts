@@ -92,8 +92,8 @@ export async function POST(request: NextRequest) {
 
     // Email content
     const subject = isUrgent
-      ? locale === 'ms' ? 'Sumber Kecemasan - MyMental' : 'Emergency Resources - MyMental'
-      : locale === 'ms' ? 'Sumber Sokongan Mental - MyMental' : 'Mental Health Resources - MyMental';
+      ? locale === 'ms' ? 'Sumber Kecemasan - Serini' : 'Emergency Resources - Serini'
+      : locale === 'ms' ? 'Sumber Sokongan Mental - Serini' : 'Mental Health Resources - Serini';
 
     const htmlContent = `
 <!DOCTYPE html>
@@ -162,9 +162,9 @@ export async function POST(request: NextRequest) {
 
     <div class="footer">
       <p>
-        ${locale === 'ms' 
-          ? 'Anda menerima emel ini kerana anda melengkapkan penilaian di MyMental. Rujukan anda adalah sulit.'
-          : 'You are receiving this email because you completed an assessment at MyMental. Your referral is confidential.'}
+        ${locale === 'ms'
+          ? 'Anda menerima emel ini kerana anda melengkapkan penilaian di Serini. Rujukan anda adalah sulit.'
+          : 'You are receiving this email because you completed an assessment at Serini. Your referral is confidential.'}
       </p>
       <p>
         ${locale === 'ms' ? 'ID Rujukan' : 'Referral ID'}: ${referralId || 'N/A'}

@@ -183,7 +183,7 @@ export default function PreliminaryResultsPage() {
                     <p className="text-sm text-neutral-600 dark:text-neutral-400">
                       You are advised to stay calm and are encouraged to reach out to
                       family, friends, or trusted people to talk. If you feel the need
-                      for professional help, you can continue using the MyMental
+                      for professional help, you can continue using the Serini
                       platform for guidance in managing your situation.
                     </p>
                   ) : (

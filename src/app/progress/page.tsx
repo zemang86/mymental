@@ -621,7 +621,7 @@ export default function ProgressPage() {
               className="text-center"
             >
               <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 dark:text-white">
-                MyMental Platform Summary
+                Serini Platform Summary
               </h1>
               <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
                 Complete platform overview, features, and QA testing progress
@@ -661,7 +661,7 @@ export default function ProgressPage() {
                 📱 Project Overview
               </h2>
               <p className="text-lg text-neutral-700 dark:text-neutral-300 mb-6">
-                MyMental is a comprehensive mental health assessment and support platform built for the Malaysian population. It provides culturally-appropriate mental health screening tools, AI-powered insights, and self-help interventions.
+                Serini is a comprehensive mental health assessment and support platform built for the Malaysian population. It provides culturally-appropriate mental health screening tools, AI-powered insights, and self-help interventions.
               </p>
 
               <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">

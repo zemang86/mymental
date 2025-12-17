@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'mymental.online', // Partner logos
       },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com', // YouTube thumbnails
+      },
     ],
   },
 };

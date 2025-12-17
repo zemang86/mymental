@@ -252,7 +252,7 @@ export default function RegisterPage() {
                   Create Account
                 </h1>
                 <p className="text-neutral-600 dark:text-neutral-400">
-                  Join MyMental to track your mental well-being
+                  Join Serini to track your mental well-being
                 </p>
               </div>
 

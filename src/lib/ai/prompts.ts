@@ -1,5 +1,5 @@
 /**
- * AI Prompts for MyMental
+ * AI Prompts for Serini
  * Contains all system prompts and prompt templates with safety guardrails
  */
 
@@ -8,7 +8,7 @@ export const SYSTEM_PROMPTS = {
    * Main system prompt for the chat assistant
    * Includes strict safety guardrails
    */
-  chatAssistant: `You are MyMental's supportive AI assistant for mental health education and support in Malaysia.
+  chatAssistant: `You are Serini's supportive AI assistant for mental health education and support in Malaysia.
 
 ## Your Role
 - Provide emotional support and psychoeducation
@@ -48,7 +48,7 @@ Use the provided context to give accurate, relevant information. If the context 
   /**
    * System prompt for generating assessment results
    */
-  resultGeneration: `You are generating personalized mental health screening results for MyMental users in Malaysia.
+  resultGeneration: `You are generating personalized mental health screening results for Serini users in Malaysia.
 
 ## Your Task
 Based on the user's assessment scores and detected conditions, provide:

@@ -20,16 +20,16 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mymental-vert.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://serini.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'MyMental - Mental Health Screening Platform',
-    template: '%s | MyMental',
+    default: 'Serini - Mental Health Screening Platform',
+    template: '%s | Serini',
   },
   description:
-    'MyMental is a mental health screening platform that helps you understand your mental well-being through validated assessments and personalized insights. Take free depression, anxiety, and other mental health tests.',
+    'Serini is a mental health screening platform that helps you understand your mental well-being through validated assessments and personalized insights. Take free depression, anxiety, and other mental health tests.',
   keywords: [
     'mental health',
     'mental health screening',
@@ -46,16 +46,17 @@ export const metadata: Metadata = {
     'ujian kesihatan mental',
     'ujian kemurungan',
     'ujian kebimbangan',
+    'Serini',
   ],
-  authors: [{ name: 'MyMental' }],
-  creator: 'MyMental',
-  publisher: 'MyMental',
+  authors: [{ name: 'Serini' }],
+  creator: 'Serini',
+  publisher: 'Serini',
   openGraph: {
-    title: 'MyMental - Mental Health Screening Platform',
+    title: 'Serini - Mental Health Screening Platform',
     description:
       'Understand your mental well-being through validated assessments and personalized insights. Free mental health screening for Malaysians.',
     url: siteUrl,
-    siteName: 'MyMental',
+    siteName: 'Serini',
     locale: 'en_MY',
     alternateLocale: 'ms_MY',
     type: 'website',
@@ -64,13 +65,13 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MyMental - Mental Health Screening Platform',
+        alt: 'Serini - Mental Health Screening Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MyMental - Mental Health Screening Platform',
+    title: 'Serini - Mental Health Screening Platform',
     description:
       'Understand your mental well-being through validated assessments and personalized insights.',
     images: ['/og-image.png'],
