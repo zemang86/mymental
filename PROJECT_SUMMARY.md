@@ -48,12 +48,14 @@ Serini is a comprehensive mental health assessment and support platform built fo
 - ✓ Referral alerts system
 - ✓ Database schema with RLS security
 
-#### Intervention System (95% Complete)
+#### Intervention System (100% Complete)
 - ✓ Video integration (YouTube/Vimeo) with react-player
 - ✓ Complete quiz system (4 question types, grading, attempts)
 - ✓ Chapter and module-level progress tracking
 - ✓ Premium content gating (module and chapter level)
 - ✓ Exercise system with step-by-step guidance
+- ✓ Post-edited content layer (55 chapters formatted)
+- ✓ intervention_content_edited table with fallback to KB
 - ⚠ Lottie animations (database ready, library installed, UI not integrated)
 
 #### Email System (90% Complete)
@@ -124,7 +126,7 @@ Serini is a comprehensive mental health assessment and support platform built fo
 |----------|--------|-----------|
 | Core Assessment System | Complete | 100% |
 | Referral System | Complete | 100% |
-| Intervention System | Nearly Complete | 95% |
+| Intervention System | Complete | 100% |
 | Email System | Nearly Complete | 90% |
 | Admin Dashboard | Nearly Complete | 90% |
 | **Payment System** | **Infrastructure Only** | **40%** |
@@ -138,6 +140,33 @@ Serini is a comprehensive mental health assessment and support platform built fo
 ---
 
 ## Recent Updates (December 17, 2025)
+
+### 🏠 User Dashboard ✅
+- **Completed:** New user dashboard as primary landing after login
+- **Features:**
+  - Quick stats (screenings, assessments, areas tracked, last activity)
+  - Quick action cards (Take Screening, Continue Intervention, AI Chat, Activities)
+  - Risk level alerts display
+  - Auth redirects updated (login → /dashboard, OAuth → /dashboard)
+  - Added to protected routes and navigation
+
+### 📚 Intervention Content Upgrades ✅
+- **Completed:** Post-edited content layer for all 55 intervention chapters
+- **New Table:** `intervention_content_edited` for clean, formatted content
+- **Features:**
+  - Properly formatted markdown content (EN & MS)
+  - YouTube video integration per chapter
+  - Clean summaries for quick overview
+  - Falls back to KB content if no edited version exists
+- **All 8 Categories Formatted:**
+  - Anxiety (7 chapters)
+  - Depression (7 chapters)
+  - Insomnia (7 chapters)
+  - Marital Distress (6 chapters)
+  - OCD (6 chapters)
+  - PTSD (8 chapters)
+  - Sexual Addiction (7 chapters)
+  - Suicidal Prevention (7 chapters)
 
 ### 🎨 Rebrand: MyMental → Serini ✅
 - **Completed:** Full platform rebrand from MyMental to Serini

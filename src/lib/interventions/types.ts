@@ -217,6 +217,24 @@ export const SAMPLE_INTERVENTIONS: Intervention[] = [
   },
 ];
 
+// Post-edited content type
+export interface InterventionContentEdited {
+  id: string;
+  chapterId: string;
+  titleEn?: string;
+  titleMs?: string;
+  contentEn?: string;
+  contentMs?: string;
+  summaryEn?: string;
+  summaryMs?: string;
+  videoUrl?: string;
+  videoProvider?: 'youtube' | 'vimeo' | 'cloudflare';
+  videoTitle?: string;
+  videoTitleMs?: string;
+  videoDurationSeconds?: number;
+  isPublished: boolean;
+}
+
 export function formatDuration(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;

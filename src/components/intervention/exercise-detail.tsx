@@ -12,7 +12,12 @@ import {
   PlayCircle,
   PauseCircle,
   RotateCcw,
+  Video,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ReactPlayer to avoid SSR issues
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false }) as any;
 import { GlassCard, GlassButton } from '@/components/ui';
 import { QuizContainer } from './quiz';
 import { ContentRenderer } from './content-renderer';
@@ -136,6 +141,56 @@ export function ExerciseDetail({
           </span>
         )}
       </div>
+
+      {/* Video (if available) */}
+      {chapter.videoUrl && (
+        <GlassCard className="overflow-hidden p-0">
+          <div className="relative aspect-video bg-neutral-900 rounded-xl overflow-hidden">
+            <ReactPlayer
+              url={chapter.videoUrl}
+              width="100%"
+              height="100%"
+              controls
+              config={{
+                youtube: {
+                  playerVars: {
+                    modestbranding: 1,
+                    rel: 0,
+                  },
+                },
+                vimeo: {
+                  playerOptions: {
+                    byline: false,
+                    portrait: false,
+                  },
+                },
+              } as any}
+            />
+          </div>
+          {chapter.videoTitle && (
+            <div className="p-4 bg-neutral-50 dark:bg-neutral-800/50">
+              <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                <Video className="w-4 h-4" />
+                <span>{locale === 'ms' ? chapter.videoTitleMs || chapter.videoTitle : chapter.videoTitle}</span>
+                {chapter.videoDurationSeconds && (
+                  <span className="text-neutral-400">
+                    ({Math.floor(chapter.videoDurationSeconds / 60)} min)
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </GlassCard>
+      )}
+
+      {/* Summary (if available from edited content) */}
+      {chapter.summary && (
+        <GlassCard className="bg-sage-50 dark:bg-sage-900/20 border-sage-200 dark:border-sage-800">
+          <p className="text-sage-800 dark:text-sage-200 leading-relaxed">
+            {locale === 'ms' ? chapter.summaryMs || chapter.summary : chapter.summary}
+          </p>
+        </GlassCard>
+      )}
 
       {/* Content */}
       <GlassCard>

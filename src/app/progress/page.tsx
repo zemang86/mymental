@@ -634,14 +634,14 @@ export default function ProgressPage() {
                     Platform Implementation Status
                   </span>
                   <span className="text-sm font-bold text-sage-600 dark:text-sage-400">
-                    86% Complete
+                    90% Complete
                   </span>
                 </div>
                 <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden shadow-inner">
                   <motion.div
                     className="h-full bg-green-500"
                     initial={{ width: 0 }}
-                    animate={{ width: '86%' }}
+                    animate={{ width: '90%' }}
                     transition={{ duration: 0.5 }}
                   />
                 </div>
@@ -701,6 +701,26 @@ export default function ProgressPage() {
 
                 <div className="space-y-4">
                   <div>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ User Dashboard</h4>
+                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
+                      <li>New /dashboard as primary landing after login</li>
+                      <li>Quick stats: screenings, assessments, areas tracked</li>
+                      <li>Quick action cards for key features</li>
+                      <li>Risk level alerts display</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Intervention Content Upgrades</h4>
+                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
+                      <li>All 55 chapters formatted with proper markdown</li>
+                      <li>YouTube videos integrated per chapter</li>
+                      <li>New intervention_content_edited table</li>
+                      <li>8 categories: Anxiety, Depression, Insomnia, OCD, PTSD, Marital, Sexual Addiction, Suicidal</li>
+                    </ul>
+                  </div>
+
+                  <div>
                     <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Rebrand: MyMental → Serini</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
                       <li>New Serini logo throughout header and footer</li>
@@ -710,29 +730,12 @@ export default function ProgressPage() {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Calm Wellness UI Theme</h4>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Calm Wellness UI & Dark Mode</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-                      <li>New color palette: sage, lavender, ocean, warm</li>
-                      <li>Breathing circle animations as decorations</li>
-                      <li>Redesigned landing page and testimonials</li>
-                      <li>Partner logos (Az-Zahrah, UKM, Hikmah Vision)</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Typography Update</h4>
-                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-                      <li>Albert Sans for headings, nav, buttons</li>
-                      <li>Nunito for body text and paragraphs</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Dark Mode & Email</h4>
-                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-                      <li>Full dark mode support with theme toggle</li>
+                      <li>Sage color palette, breathing animations</li>
+                      <li>Albert Sans + Nunito typography</li>
+                      <li>Full dark mode with theme toggle</li>
                       <li>Email domain: noreply@kitamen.my</li>
-                      <li>Emergency modal closable at all risk levels</li>
                     </ul>
                   </div>
                 </div>
@@ -1121,15 +1124,19 @@ export default function ProgressPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
+                    <span><strong>Intervention System:</strong> 55 chapters, videos, quizzes, post-edited content</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
+                    <span><strong>User Dashboard:</strong> Quick stats, actions, risk alerts</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
                     <span><strong>Dark Mode & UI:</strong> Theme toggle, all components updated</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
-                    <span><strong>Database Schema:</strong> All tables, RLS, indexes</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
-                    <span><strong>Security:</strong> Row Level Security on all tables</span>
+                    <span><strong>Database & Security:</strong> All tables, RLS, indexes</span>
                   </li>
                 </ul>
               </GlassCard>
@@ -1137,12 +1144,12 @@ export default function ProgressPage() {
               {/* Nearly Complete */}
               <GlassCard className="border-l-4 border-blue-500">
                 <h3 className="text-xl font-bold text-blue-700 dark:text-blue-400 mb-4">
-                  📈 90-95% Complete
+                  📈 90% Complete
                 </h3>
                 <ul className="space-y-2 text-sm text-neutral-700 dark:text-neutral-300">
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-500">⬆</span>
-                    <span><strong>Intervention System (95%):</strong> Video, quizzes, progress tracking (Lottie animations UI pending)</span>
+                    <span className="text-green-500">✓</span>
+                    <span><strong>Intervention System (100%):</strong> Video, quizzes, 55 chapters formatted, post-edited content layer</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-500">⬆</span>
@@ -1245,7 +1252,7 @@ export default function ProgressPage() {
                 {[
                   { name: 'Core Assessment System', value: 100, color: 'bg-green-500' },
                   { name: 'Referral System', value: 100, color: 'bg-green-500' },
-                  { name: 'Intervention System', value: 95, color: 'bg-blue-500' },
+                  { name: 'Intervention System', value: 100, color: 'bg-green-500' },
                   { name: 'Email System', value: 90, color: 'bg-blue-500' },
                   { name: 'Admin Dashboard', value: 90, color: 'bg-blue-500' },
                   { name: 'Payment System', value: 40, color: 'bg-orange-500' },
@@ -1463,6 +1470,7 @@ export default function ProgressPage() {
                   User Dashboard
                 </h3>
                 <div className="space-y-2 text-sm">
+                  <div className="font-mono text-sage-600 dark:text-sage-400">/dashboard <span className="text-xs text-neutral-500">(new!)</span></div>
                   <div className="font-mono text-sage-600 dark:text-sage-400">/my-assessments</div>
                   <div className="font-mono text-sage-600 dark:text-sage-400">/chat</div>
                   <div className="font-mono text-sage-600 dark:text-sage-400">/interventions</div>

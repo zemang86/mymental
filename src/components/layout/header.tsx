@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Menu, X, User, Globe, ChevronDown, LogOut, LayoutDashboard, CreditCard, BookOpen, MessageCircle, Sparkles } from 'lucide-react';
+import { Menu, X, User, Globe, ChevronDown, LogOut, LayoutDashboard, CreditCard, BookOpen, MessageCircle, Sparkles, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { GlassButton } from '@/components/ui';
 import { createClient } from '@/lib/supabase/client';
@@ -196,11 +196,19 @@ export function Header({ className }: HeaderProps) {
                       </div>
                       <div className="py-1">
                         <Link
-                          href="/my-assessments"
+                          href="/dashboard"
                           onClick={() => setIsUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
+                          Dashboard
+                        </Link>
+                        <Link
+                          href="/my-assessments"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 transition-colors"
+                        >
+                          <FileText className="w-4 h-4" />
                           {t('assessments')}
                         </Link>
                         <Link
@@ -347,11 +355,19 @@ export function Header({ className }: HeaderProps) {
                           </div>
                         </div>
                         <Link
-                          href="/my-assessments"
+                          href="/dashboard"
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
+                          Dashboard
+                        </Link>
+                        <Link
+                          href="/my-assessments"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-sage-50 dark:hover:bg-sage-900/20 rounded-lg transition-colors"
+                        >
+                          <FileText className="w-4 h-4" />
                           {t('assessments')}
                         </Link>
                         <Link

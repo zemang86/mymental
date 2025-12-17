@@ -51,6 +51,15 @@ export interface InterventionChapter {
   exerciseSteps?: string[];
   estimatedDuration?: number;
   isCompleted?: boolean;
+  // Edited content fields
+  summary?: string;
+  summaryMs?: string;
+  videoUrl?: string;
+  videoProvider?: 'youtube' | 'vimeo' | 'cloudflare';
+  videoTitle?: string;
+  videoTitleMs?: string;
+  videoDurationSeconds?: number;
+  isEdited?: boolean;
 }
 
 export interface UserInterventionProgress {
@@ -244,25 +253,53 @@ export async function getInterventionBySlug(
     }
   }
 
+  // Fetch edited content for all chapters
+  const chapterIds = (chapters || []).map((ch: any) => ch.id);
+  const { data: editedContent } = await getSupabaseAdmin()
+    .from('intervention_content_edited')
+    .select('*')
+    .in('chapter_id', chapterIds)
+    .eq('is_published', true);
+
+  // Create a map of chapter_id to edited content
+  const editedContentMap: Record<string, any> = {};
+  if (editedContent) {
+    editedContent.forEach((ec: any) => {
+      editedContentMap[ec.chapter_id] = ec;
+    });
+  }
+
   const transformedChapters: InterventionChapter[] = (chapters || []).map(
     (ch: any) => {
       // Supabase returns kb_articles as object for one-to-one, but TS infers array
       const kbArticle = ch.kb_articles as { content?: string; exercise_steps?: string[]; estimated_duration_minutes?: number } | null;
+      const edited = editedContentMap[ch.id];
+
+      // Use edited content if available, fallback to KB content
       return {
         id: ch.id,
         interventionId: ch.intervention_id,
         kbArticleId: ch.kb_article_id,
         chapterOrder: ch.chapter_order,
-        title: ch.title,
-        titleMs: ch.title_ms || ch.title,
+        title: edited?.title_en || ch.title,
+        titleMs: edited?.title_ms || ch.title_ms || ch.title,
         description: ch.description,
         descriptionMs: ch.description_ms || ch.description,
         isFreePreview: ch.is_free_preview,
         hasQuiz: ch.has_quiz || false,
-        content: kbArticle?.content,
+        content: edited?.content_en || kbArticle?.content,
         exerciseSteps: kbArticle?.exercise_steps || [],
         estimatedDuration: kbArticle?.estimated_duration_minutes,
         isCompleted: chapterProgress[ch.id]?.completed || false,
+        // Edited content fields
+        summary: edited?.summary_en,
+        summaryMs: edited?.summary_ms,
+        videoUrl: edited?.video_url || ch.video_url,
+        videoProvider: edited?.video_provider || ch.video_provider,
+        videoTitle: edited?.video_title,
+        videoTitleMs: edited?.video_title_ms,
+        videoDurationSeconds: edited?.video_duration_seconds || ch.video_duration_seconds,
+        isEdited: !!edited,
       };
     }
   );

@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirect') || '/my-assessments';
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
   const { setUser } = useAssessmentStore();
 
   const [email, setEmail] = useState('');
