@@ -682,7 +682,11 @@ export default function ProgressPage() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">Styling</h4>
-                  <p className="text-neutral-600 dark:text-neutral-400">Glass morphism UI design system with dark mode support</p>
+                  <p className="text-neutral-600 dark:text-neutral-400">Calm wellness UI (sage palette), Glass morphism, dark mode</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">Typography</h4>
+                  <p className="text-neutral-600 dark:text-neutral-400">Albert Sans (headings) + Nunito (body)</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">i18n</h4>
@@ -692,33 +696,43 @@ export default function ProgressPage() {
 
               <div className="bg-sage-50 dark:bg-sage-900/20 rounded-xl p-6 border border-sage-200 dark:border-sage-800">
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">
-                  🎯 Recent Updates (December 16, 2025)
+                  🎯 Recent Updates (December 17, 2025)
                 </h3>
 
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Dark Mode Implementation</h4>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Rebrand: MyMental → Serini</h4>
+                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
+                      <li>New Serini logo throughout header and footer</li>
+                      <li>Updated all metadata, emails, AI prompts</li>
+                      <li>Updated translations and admin panel</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Calm Wellness UI Theme</h4>
+                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
+                      <li>New color palette: sage, lavender, ocean, warm</li>
+                      <li>Breathing circle animations as decorations</li>
+                      <li>Redesigned landing page and testimonials</li>
+                      <li>Partner logos (Az-Zahrah, UKM, Hikmah Vision)</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Typography Update</h4>
+                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
+                      <li>Albert Sans for headings, nav, buttons</li>
+                      <li>Nunito for body text and paragraphs</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Dark Mode & Email</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
                       <li>Full dark mode support with theme toggle</li>
-                      <li>Floating theme toggle button (bottom-right corner)</li>
-                      <li>Updated all UI components for dark mode</li>
-                      <li>Simplified background to solid colors</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Email Domain Configuration</h4>
-                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-                      <li>Updated to verified domain: noreply@kitamen.my</li>
-                      <li>All email functions updated (OTP, results)</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Emergency Modal Updates</h4>
-                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-                      <li>Emergency modal now closable at all risk levels</li>
-                      <li>Users can save progress while viewing crisis resources</li>
+                      <li>Email domain: noreply@kitamen.my</li>
+                      <li>Emergency modal closable at all risk levels</li>
                     </ul>
                   </div>
                 </div>

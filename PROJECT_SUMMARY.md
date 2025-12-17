@@ -1,8 +1,8 @@
-# MyMental - Mental Health Assessment Platform
+# Serini - Mental Health Assessment Platform
 
 ## Project Overview
 
-MyMental is a comprehensive mental health assessment and support platform built for the Malaysian population. It provides culturally-appropriate mental health screening tools, AI-powered insights, and self-help interventions.
+Serini is a comprehensive mental health assessment and support platform built for the Malaysian population. It provides culturally-appropriate mental health screening tools, AI-powered insights, and self-help interventions.
 
 **Tech Stack:**
 - **Frontend:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS
@@ -137,7 +137,32 @@ MyMental is a comprehensive mental health assessment and support platform built 
 
 ---
 
-## Recent Updates (December 16, 2025)
+## Recent Updates (December 17, 2025)
+
+### 🎨 Rebrand: MyMental → Serini ✅
+- **Completed:** Full platform rebrand from MyMental to Serini
+- **Changes:**
+  - New Serini logo throughout header and footer
+  - Updated all metadata (title, description, OpenGraph)
+  - Updated all email templates and AI prompts
+  - Updated translations (en.json, ms.json)
+  - Updated admin panel branding
+
+### 🎯 Calm Wellness UI Theme ✅
+- **Completed:** Sitewide wellness aesthetic (Headspace/Calm inspired)
+- **Changes:**
+  - New color palette: sage, lavender, ocean, warm
+  - Breathing circle animations as decorative elements
+  - Redesigned landing page with full-height hero
+  - Redesigned testimonials section with calm cards
+  - Partner logos section (Az-Zahrah, UKM, Hikmah Vision)
+  - YouTube video player with click-to-play
+
+### 🔤 Typography Update ✅
+- **Completed:** Custom Google Fonts implementation
+- **Fonts:**
+  - **Albert Sans** (500, 600, 700) - Headings, nav, buttons
+  - **Nunito** (400, 500, 600, 700) - Body text, paragraphs
 
 ### Dark Mode Implementation ✅
 - **Completed:** Full dark mode support with theme toggle
@@ -145,27 +170,21 @@ MyMental is a comprehensive mental health assessment and support platform built 
   - Added `next-themes` for theme management
   - Created `ThemeToggle` component with animated sun/moon icons
   - Floating theme toggle button (bottom-right corner)
-  - Updated all UI components (GlassButton, GlassModal, GlassCard, GlassInput) for dark mode
-  - Configured Tailwind v4 dark mode variant (`@variant dark`)
-  - Simplified background to solid colors (white for light, off-black for dark)
-  - Added global CSS overrides for text visibility in dark mode
-  - CSS variables for theming (backgrounds, text, borders, shadows)
+  - Updated all UI components for dark mode
+  - Fixed dark mode issues (hero text, testimonial cards)
 - **Default:** Light mode (system preference disabled)
-- **⚠️ REQUIRES TESTING:** Full platform testing in both light and dark modes
 
 ### Email Domain Configuration ✅
 - **Completed:** Updated email sending to use verified domain
 - **Changes:**
   - Changed from `onboarding@resend.dev` to `noreply@kitamen.my`
   - Updated all email sending functions (OTP, assessment results)
-- **⚠️ REQUIRES TESTING:** Email deliverability testing for OTP codes and results
 
 ### Emergency Modal Updates ✅
 - **Completed:** Emergency modal now closable at all risk levels
 - **Changes:**
   - Removed forced modal lock for imminent risk (suicidal ideation)
   - Users can now close emergency modal and save progress
-- **⚠️ REQUIRES TESTING:** Crisis flow testing, ensure resources are still visible
 
 ---
 
@@ -681,4 +700,4 @@ Built with culturally-validated Malaysian mental health instruments:
 
 ---
 
-*Last Updated: December 16, 2025*
+*Last Updated: December 17, 2025*
