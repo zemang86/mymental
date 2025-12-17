@@ -16,6 +16,7 @@ import {
   Brain,
   BookOpen,
   AlertTriangle,
+  UserCheck,
 } from 'lucide-react';
 import type { AdminUser } from '@/lib/admin/auth';
 
@@ -80,6 +81,11 @@ const navigation = [
     href: '/admin/crisis',
     icon: AlertTriangle,
     badge: true,
+  },
+  {
+    name: 'Referrals',
+    href: '/admin/referrals',
+    icon: UserCheck,
   },
 ];
 

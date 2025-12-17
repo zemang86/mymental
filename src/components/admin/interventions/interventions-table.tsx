@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import {
   Plus,
@@ -10,20 +12,25 @@ import {
   Edit,
   Trash2,
   BookOpen,
-  Users,
+  Settings,
 } from 'lucide-react';
+import { InterventionModal } from './intervention-modal';
+import { DeleteModal } from './delete-modal';
 
 interface Intervention {
   id: string;
   slug: string;
-  title: string;
-  title_ms: string | null;
+  name: string;
+  name_ms: string | null;
   description: string | null;
+  description_ms: string | null;
   category: string;
   difficulty: string | null;
-  estimated_duration: string | null;
+  estimated_duration_minutes: number | null;
   is_published: boolean;
   is_premium: boolean;
+  thumbnail_url: string | null;
+  video_intro_url: string | null;
   created_at: string;
   intervention_chapters: { count: number }[] | null;
 }
@@ -35,7 +42,7 @@ interface InterventionsTableProps {
 }
 
 export function InterventionsTable({
-  interventions,
+  interventions: initialInterventions,
   total,
   currentPage,
 }: InterventionsTableProps) {
@@ -43,10 +50,48 @@ export function InterventionsTable({
   const searchParams = useSearchParams();
   const totalPages = Math.ceil(total / 20);
 
+  const [interventions, setInterventions] = useState(initialInterventions);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedIntervention, setSelectedIntervention] = useState<Intervention | null>(null);
+
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', page.toString());
     router.push(`/admin/interventions?${params.toString()}`);
+  };
+
+  const handleEdit = (intervention: Intervention) => {
+    setSelectedIntervention(intervention);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = (intervention: Intervention) => {
+    setSelectedIntervention(intervention);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedIntervention) return;
+
+    try {
+      const response = await fetch(`/api/admin/interventions/${selectedIntervention.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setInterventions((prev) => prev.filter((i) => i.id !== selectedIntervention.id));
+        setShowDeleteModal(false);
+        setSelectedIntervention(null);
+      }
+    } catch (error) {
+      console.error('Failed to delete:', error);
+    }
+  };
+
+  const handleSave = () => {
+    router.refresh();
   };
 
   const getChapterCount = (intervention: Intervention) => {
@@ -60,7 +105,10 @@ export function InterventionsTable({
     <div className="space-y-4">
       {/* Actions */}
       <div className="flex gap-4">
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 rounded-lg text-white text-sm font-medium transition-colors">
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 rounded-lg text-white text-sm font-medium transition-colors"
+        >
           <Plus className="w-4 h-4" />
           Create Intervention
         </button>
@@ -90,14 +138,14 @@ export function InterventionsTable({
                         <BookOpen className="w-5 h-5 text-primary-400" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-white">{intervention.title}</p>
+                        <p className="text-sm font-medium text-white">{intervention.name}</p>
                         <p className="text-xs text-neutral-500">{intervention.slug}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     <span className="inline-flex px-2 py-1 bg-neutral-700 rounded text-xs text-neutral-300 capitalize">
-                      {intervention.category}
+                      {intervention.category.replace('-', ' ')}
                     </span>
                   </td>
                   <td className="px-4 py-3">
@@ -107,7 +155,9 @@ export function InterventionsTable({
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-sm text-neutral-400">
-                      {intervention.estimated_duration || '-'}
+                      {intervention.estimated_duration_minutes
+                        ? `${intervention.estimated_duration_minutes} min`
+                        : '-'}
                     </span>
                   </td>
                   <td className="px-4 py-3">
@@ -133,16 +183,33 @@ export function InterventionsTable({
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <button className="p-2 hover:bg-neutral-600 rounded-lg" title="View enrollments">
-                        <Users className="w-4 h-4 text-neutral-400" />
-                      </button>
-                      <button className="p-2 hover:bg-neutral-600 rounded-lg" title="Preview">
+                      <Link
+                        href={`/admin/interventions/${intervention.id}`}
+                        className="p-2 hover:bg-neutral-600 rounded-lg"
+                        title="Manage chapters"
+                      >
+                        <Settings className="w-4 h-4 text-neutral-400" />
+                      </Link>
+                      <Link
+                        href={`/interventions/${intervention.slug}`}
+                        target="_blank"
+                        className="p-2 hover:bg-neutral-600 rounded-lg"
+                        title="Preview"
+                      >
                         <Eye className="w-4 h-4 text-neutral-400" />
-                      </button>
-                      <button className="p-2 hover:bg-neutral-600 rounded-lg" title="Edit">
+                      </Link>
+                      <button
+                        onClick={() => handleEdit(intervention)}
+                        className="p-2 hover:bg-neutral-600 rounded-lg"
+                        title="Edit"
+                      >
                         <Edit className="w-4 h-4 text-neutral-400" />
                       </button>
-                      <button className="p-2 hover:bg-neutral-600 rounded-lg" title="Delete">
+                      <button
+                        onClick={() => handleDelete(intervention)}
+                        className="p-2 hover:bg-neutral-600 rounded-lg"
+                        title="Delete"
+                      >
                         <Trash2 className="w-4 h-4 text-red-400" />
                       </button>
                     </div>
@@ -184,6 +251,35 @@ export function InterventionsTable({
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <InterventionModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSave={handleSave}
+      />
+
+      <InterventionModal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedIntervention(null);
+        }}
+        onSave={handleSave}
+        intervention={selectedIntervention}
+      />
+
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedIntervention(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Intervention"
+        message="Are you sure you want to delete this intervention? All chapters and user progress will also be deleted."
+        itemName={selectedIntervention?.name}
+      />
     </div>
   );
 }
