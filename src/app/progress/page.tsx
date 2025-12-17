@@ -370,6 +370,21 @@ const TESTING_DATA: TestSection[] = [
         title: 'Data Export',
         description: 'Test data export functionality',
       },
+      {
+        id: 'admin-7',
+        title: 'Intervention CRUD',
+        description: 'Test create/edit/delete interventions',
+      },
+      {
+        id: 'admin-8',
+        title: 'Chapter Management',
+        description: 'Test chapter reordering with drag & drop',
+      },
+      {
+        id: 'admin-9',
+        title: 'Content Editor',
+        description: 'Test markdown and video URL editing',
+      },
     ],
   },
   {
@@ -634,14 +649,14 @@ export default function ProgressPage() {
                     Platform Implementation Status
                   </span>
                   <span className="text-sm font-bold text-sage-600 dark:text-sage-400">
-                    90% Complete
+                    92% Complete
                   </span>
                 </div>
                 <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden shadow-inner">
                   <motion.div
                     className="h-full bg-green-500"
                     initial={{ width: 0 }}
-                    animate={{ width: '90%' }}
+                    animate={{ width: '92%' }}
                     transition={{ duration: 0.5 }}
                   />
                 </div>
@@ -700,6 +715,16 @@ export default function ProgressPage() {
                 </h3>
 
                 <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ Admin CRUD Complete</h4>
+                    <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
+                      <li>Intervention editor (create/edit/delete modules)</li>
+                      <li>Chapter management with drag & drop reorder</li>
+                      <li>Content editor with markdown + video URL support</li>
+                      <li>6 new API routes for intervention management</li>
+                    </ul>
+                  </div>
+
                   <div>
                     <h4 className="font-semibold text-sage-700 dark:text-sage-400 mb-2">✅ User Dashboard</h4>
                     <ul className="list-disc list-inside text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
@@ -1092,7 +1117,7 @@ export default function ProgressPage() {
                     <li>❌ Premium pricing tiers (RM29/6mo, RM45/year)</li>
                     <li>❌ Payment confirmation emails</li>
                     <li>❌ Subscription upgrade/downgrade flows</li>
-                    <li>❌ Admin quiz builder & intervention editor</li>
+                    <li>❌ Admin quiz builder (KIV - quiz system works via database)</li>
                   </ul>
                 </div>
               </div>
@@ -1132,6 +1157,10 @@ export default function ProgressPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
+                    <span><strong>Admin Dashboard:</strong> Full CRUD, intervention editor, content management</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
                     <span><strong>Dark Mode & UI:</strong> Theme toggle, all components updated</span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -1156,8 +1185,8 @@ export default function ProgressPage() {
                     <span><strong>Email System (90%):</strong> Resend setup, results & crisis emails (payment emails missing)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-500">⬆</span>
-                    <span><strong>Admin Dashboard (90%):</strong> Full management (quiz builder & intervention editor missing)</span>
+                    <span className="text-green-500">✓</span>
+                    <span><strong>Admin Dashboard (100%):</strong> Full CRUD, intervention editor, chapter management</span>
                   </li>
                 </ul>
               </GlassCard>
@@ -1228,12 +1257,12 @@ export default function ProgressPage() {
                     <span>Subscription upgrade/downgrade flows</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-red-500">✗</span>
-                    <span>Admin quiz builder interface</span>
+                    <span className="text-neutral-400">⏸</span>
+                    <span className="text-neutral-500">Admin quiz builder interface (KIV)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-red-500">✗</span>
-                    <span>Intervention editor (create/edit modules)</span>
+                    <span className="text-green-500">✓</span>
+                    <span className="line-through text-neutral-500">Intervention editor (create/edit modules)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-500">✗</span>
@@ -1254,7 +1283,7 @@ export default function ProgressPage() {
                   { name: 'Referral System', value: 100, color: 'bg-green-500' },
                   { name: 'Intervention System', value: 100, color: 'bg-green-500' },
                   { name: 'Email System', value: 90, color: 'bg-blue-500' },
-                  { name: 'Admin Dashboard', value: 90, color: 'bg-blue-500' },
+                  { name: 'Admin Dashboard', value: 100, color: 'bg-green-500' },
                   { name: 'Payment System', value: 40, color: 'bg-orange-500' },
                   { name: 'Dark Mode & UI', value: 100, color: 'bg-green-500' },
                   { name: 'Database & Security', value: 100, color: 'bg-green-500' },
@@ -1280,10 +1309,10 @@ export default function ProgressPage() {
 
               <div className="mt-6 p-4 bg-sage-50 dark:bg-sage-900/20 rounded-lg border border-sage-200 dark:border-sage-800">
                 <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                  <strong className="text-sage-700 dark:text-sage-400">Production Ready:</strong> Assessment system, Referrals, Interventions (user-facing), Email delivery
+                  <strong className="text-sage-700 dark:text-sage-400">Production Ready:</strong> Assessment system, Referrals, Interventions, Email delivery, Admin Dashboard with full CRUD
                 </p>
                 <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-2">
-                  <strong className="text-orange-700 dark:text-orange-400">Requires Work:</strong> Real payment processing integration, Admin content creation tools
+                  <strong className="text-orange-700 dark:text-orange-400">Requires Work:</strong> Real payment processing integration (Stripe/Billplz)
                 </p>
               </div>
             </GlassCard>
