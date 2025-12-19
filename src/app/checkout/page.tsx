@@ -12,10 +12,29 @@ import {
   Lock,
   ArrowLeft,
   Crown,
+  Brain,
+  Sparkles,
+  FileText,
+  MessageSquare,
+  Heart,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassButton } from '@/components/ui';
 import { PRICING_PLANS, formatPrice } from '@/lib/payments';
+import { useAssessmentStore } from '@/stores/assessment-store';
+
+// Friendly names for assessment conditions
+const CONDITION_NAMES: Record<string, string> = {
+  depression: 'Depression',
+  anxiety: 'Anxiety',
+  ocd: 'OCD',
+  ptsd: 'PTSD',
+  insomnia: 'Insomnia',
+  suicidal: 'Suicidal Ideation',
+  psychosis: 'Psychosis',
+  sexual_addiction: 'Sexual Addiction',
+  marital_distress: 'Marital Distress',
+};
 
 // Malaysian banks for FPX
 const FPX_BANKS = [
@@ -36,6 +55,15 @@ function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const planId = searchParams.get('plan') || 'premium_monthly';
+
+  // Get assessment results from store
+  const {
+    detectedConditions,
+    riskLevel,
+    socialFunctionScore,
+    hasSuicidalIdeation,
+    hasPsychosisIndicators,
+  } = useAssessmentStore();
 
   const [step, setStep] = useState<CheckoutStep>('email');
   const [email, setEmail] = useState('');
@@ -207,6 +235,90 @@ function CheckoutContent() {
             </motion.button>
           )}
 
+          {/* Preliminary Results Preview */}
+          {step !== 'success' && step !== 'processing' && detectedConditions.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6"
+            >
+              <GlassCard className="border-2 border-primary-200 dark:border-primary-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+                    <Brain className="w-5 h-5 text-primary-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-neutral-900 dark:text-white">
+                      Your Assessment Results
+                    </h3>
+                    <p className="text-xs text-neutral-500">Keputusan Penilaian Anda</p>
+                  </div>
+                </div>
+
+                {/* Risk Level */}
+                {riskLevel && (
+                  <div className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg mb-3">
+                    <span className="text-sm text-neutral-600 dark:text-neutral-400">Risk Level</span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      riskLevel === 'imminent' || riskLevel === 'high'
+                        ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                        : riskLevel === 'moderate'
+                        ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+                        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                    }`}>
+                      {riskLevel.charAt(0).toUpperCase() + riskLevel.slice(1)}
+                    </span>
+                  </div>
+                )}
+
+                {/* Detected Conditions */}
+                <div className="mb-4">
+                  <p className="text-xs text-neutral-500 mb-2">Areas detected for further assessment:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {detectedConditions.slice(0, 4).map((condition) => (
+                      <span
+                        key={condition}
+                        className="px-3 py-1 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 rounded-full text-xs font-medium"
+                      >
+                        {CONDITION_NAMES[condition] || condition}
+                      </span>
+                    ))}
+                    {detectedConditions.length > 4 && (
+                      <span className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full text-xs">
+                        +{detectedConditions.length - 4} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* What You'll Unlock */}
+                <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4">
+                  <p className="text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+                    Unlock with Premium:
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                      <Sparkles className="w-3 h-3 text-sage-500" />
+                      <span>Detailed analysis</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                      <FileText className="w-3 h-3 text-sage-500" />
+                      <span>AI insights</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                      <Heart className="w-3 h-3 text-sage-500" />
+                      <span>Self-help programs</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                      <MessageSquare className="w-3 h-3 text-sage-500" />
+                      <span>Unlimited AI chat</span>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          )}
+
           {/* Order Summary */}
           {step !== 'success' && (
             <motion.div
@@ -230,7 +342,7 @@ function CheckoutContent() {
                       {formatPrice(plan.price)}
                     </p>
                     <p className="text-xs text-neutral-500">
-                      /{plan.interval === 'yearly' ? 'year' : 'month'}
+                      /{plan.interval === 'yearly' ? 'year' : '6 months'}
                     </p>
                   </div>
                 </div>

@@ -3,12 +3,13 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { AlertTriangle, Phone, Heart, ExternalLink, RotateCcw } from 'lucide-react';
+import { AlertTriangle, Phone, Heart, ExternalLink, RotateCcw, X, FastForward } from 'lucide-react';
 import { GlassButton } from '@/components/ui';
 import { MALAYSIA_HOTLINES } from '@/lib/constants/hotlines';
 import { useAssessmentStore } from '@/stores/assessment-store';
 
-const isDev = process.env.NODE_ENV === 'development';
+// TEMPORARY: Show testing controls in all environments for user testing
+const showTestingControls = true;
 
 interface EmergencyModalProps {
   isOpen: boolean;
@@ -32,6 +33,15 @@ export function EmergencyModal({
     localStorage.removeItem('mymental-assessment');
     window.location.href = '/';
   };
+
+  // Testing bypass - clears emergency state and forces continue
+  const handleTestingBypass = () => {
+    // Clear the emergency flag from the store
+    const store = useAssessmentStore.getState();
+    store.clearEmergency?.();
+    // Close modal and continue
+    onClose?.();
+  };
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -44,9 +54,9 @@ export function EmergencyModal({
     };
   }, [isOpen]);
 
-  // Prevent escape key for imminent risk
+  // Allow escape key to close during testing or when canClose is true
   useEffect(() => {
-    if (!canClose) return;
+    if (!canClose && !showTestingControls) return;
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && onClose) {
@@ -62,13 +72,13 @@ export function EmergencyModal({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
+          {/* Overlay - clickable during testing phase */}
           <motion.div
             className="fixed inset-0 z-50 bg-red-900/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={canClose ? onClose : undefined}
+            onClick={(canClose || showTestingControls) ? onClose : undefined}
           />
 
           {/* Modal */}
@@ -83,13 +93,41 @@ export function EmergencyModal({
               {/* Red header */}
               <div className="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
                 <div className="flex items-center gap-3 text-white">
-                  <AlertTriangle className="w-8 h-8" />
-                  <div>
+                  <AlertTriangle className="w-8 h-8 flex-shrink-0" />
+                  <div className="flex-1">
                     <h2 className="text-xl font-bold">{t('title')}</h2>
                     <p className="text-red-100 text-sm">
                       {t('subtitle')}
                     </p>
                   </div>
+                  {/* Testing Controls - Reset, Bypass & Close buttons in header */}
+                  {showTestingControls && (
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
+                        onClick={handleDevReset}
+                        className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+                        title="Reset (Testing)"
+                      >
+                        <RotateCcw className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={handleTestingBypass}
+                        className="p-2 bg-green-500/50 hover:bg-green-500/70 rounded-lg transition-colors"
+                        title="Force Continue (Bypass)"
+                      >
+                        <FastForward className="w-5 h-5" />
+                      </button>
+                      {onClose && (
+                        <button
+                          onClick={onClose}
+                          className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+                          title="Tutup / Close"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -161,7 +199,8 @@ export function EmergencyModal({
                     </GlassButton>
                   </a>
 
-                  {canClose && onClose && (
+                  {/* Show continue button if canClose OR during testing phase */}
+                  {(canClose || showTestingControls) && onClose && (
                     <GlassButton
                       variant="secondary"
                       className="w-full"
@@ -172,23 +211,10 @@ export function EmergencyModal({
                   )}
                 </div>
 
-                {!canClose && (
+                {!canClose && !showTestingControls && (
                   <p className="text-center text-sm text-neutral-500">
                     {t('pleaseCall')}
                   </p>
-                )}
-
-                {/* Dev Reset Button - only visible in development */}
-                {isDev && (
-                  <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                    <button
-                      onClick={handleDevReset}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 text-xs text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 rounded-lg transition-colors"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      DEV: Reset & Exit (clears session)
-                    </button>
-                  </div>
                 )}
               </div>
             </motion.div>

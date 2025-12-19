@@ -24,6 +24,7 @@ interface AssessmentState {
   hasSuicidalIdeation: boolean;
   hasPsychosisIndicators: boolean;
   isEmergency: boolean;
+  testingBypassEnabled: boolean; // TEMPORARY: Skip emergency blocks during testing
 
   // Progress
   currentStep: 'demographics' | 'screening' | 'social' | 'registration' | 'results';
@@ -46,6 +47,7 @@ interface AssessmentState {
   setSuicidalIdeation: (value: boolean) => void;
   setPsychosisIndicators: (value: boolean) => void;
   triggerEmergency: () => void;
+  clearEmergency: () => void; // Testing only - clears emergency state
   setStep: (step: AssessmentState['currentStep']) => void;
   setScreeningProgress: (progress: number) => void;
   setUser: (userId: string, email: string) => void;
@@ -66,6 +68,7 @@ const initialState = {
   hasSuicidalIdeation: false,
   hasPsychosisIndicators: false,
   isEmergency: false,
+  testingBypassEnabled: false,
   currentStep: 'demographics' as const,
   screeningProgress: 0,
   userId: null,
@@ -126,6 +129,10 @@ export const useAssessmentStore = create<AssessmentState>()(
 
       triggerEmergency: () =>
         set({ isEmergency: true, riskLevel: 'imminent' }),
+
+      // Testing only - clears emergency state to allow bypass
+      clearEmergency: () =>
+        set({ isEmergency: false, hasSuicidalIdeation: false, riskLevel: 'high', testingBypassEnabled: true }),
 
       setStep: (step) => set({ currentStep: step }),
 

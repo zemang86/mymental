@@ -30,6 +30,7 @@ export default function ScreeningPage() {
     triggerEmergency,
     setSocialFunctionAnswer,
     calculateSocialFunctionScore,
+    testingBypassEnabled,
   } = useAssessmentStore();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -44,24 +45,24 @@ export default function ScreeningPage() {
 
   const currentAnswer = initialScreeningAnswers[currentQuestion.id];
 
-  // Check for emergency state on mount
+  // Check for emergency state on mount (skip if bypass enabled)
   useEffect(() => {
-    if (isEmergency) {
+    if (isEmergency && !testingBypassEnabled) {
       // Defer state updates to avoid cascading renders
       queueMicrotask(() => {
         setShowEmergencyModal(true);
         setCanCloseEmergency(true);
       });
     }
-  }, [isEmergency]);
+  }, [isEmergency, testingBypassEnabled]);
 
   const handleAnswer = (answer: boolean) => {
     setInitialScreeningAnswer(currentQuestion.id, answer);
 
-    // Real-time triage check
+    // Real-time triage check (skip modal if bypass enabled)
     const triageResult = evaluateSingleAnswer(currentQuestion.id, answer);
 
-    if (triageResult) {
+    if (triageResult && !testingBypassEnabled) {
       if (triageResult.riskLevel === 'imminent') {
         // CRITICAL: Suicidal ideation detected
         setSuicidalIdeation(true);
@@ -109,8 +110,8 @@ export default function ScreeningPage() {
     const conditions = detectConditions(initialScreeningAnswers);
     setDetectedConditions(conditions);
 
-    // Check for emergency one more time
-    if (triageResult.shouldShowEmergency) {
+    // Check for emergency one more time (skip if testing bypass is enabled)
+    if (triageResult.shouldShowEmergency && !testingBypassEnabled) {
       setShowEmergencyModal(true);
       setCanCloseEmergency(true);
       if (triageResult.riskLevel === 'imminent') {
